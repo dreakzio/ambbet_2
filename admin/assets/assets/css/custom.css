@@ -1,0 +1,27 @@
+body {
+	font-family: 'Kanit', sans-serif !important;
+	padding-right: 0 !important;
+}
+
+.select2-container--bootstrap4 .select2-results__option--highlighted[aria-selected] {
+	color: #FFF !important;
+	background-color: #5897FB !important;
+}
+
+.select2-container--bootstrap4 .select2-dropdown {
+	border-color: #7367F0 !important;
+	border-width: 1px;
+	overflow-x: hidden;
+	margin-top: -1px;
+}
+
+.select2-container--bootstrap4.select2-container--focus .select2-selection, .select2-container--bootstrap4.select2-container--open .select2-selection {
+  border-color: #7367F0 !important;
+}
+.bg-gradient-secondary{
+	background : darkgray;
+}
+.datepicker-dropdown{
+	z-index: 10000 !important;
+	min-width: 220px !important;
+}
