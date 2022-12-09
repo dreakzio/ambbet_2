@@ -2,7 +2,6 @@
 	<div class="container text-center mt-2">
 		<p>Copyright By &copy; <?php echo date('Y'); ?> <?php echo isset($web_setting['web_name']) ? $web_setting['web_name']['value'] : ""; ?> All rights reserved.</p>
 	</div>
-
 </footer>
 <div class="fix-nav-bottom">
 	<div class="fix-nav-bottom">
@@ -70,32 +69,54 @@
 		</div>
 	</div>
 </div>
+
 <script type="text/javascript">
 	let arr_parse = [];
 	let newParse = null;
 	let text_annoument = [];
-	
- 		$.ajax({
-            url: "<?=base_url("home/get_Gamestatus")?>",
-            type: "GET", // for protect sensitive data
-			dataTyppe: 'json',
-			async : false,
-            success:function(response){
-				arr_parse = JSON.parse(response);
-            }
-        });
+
+	$.ajax({
+		url: "<?=base_url("home/get_Gamestatus")?>",
+		type: "GET", // for protect sensitive data
+		dataTyppe: 'json',
+		async : false,
+		success:function(response){
+			arr_parse = JSON.parse(response);
+		}
+	});
 	let madeAnnoument = function(){
-		 newParse = arr_parse.result.filter(function (el){
+		newParse = arr_parse.result.filter(function (el){
 			return el.active == false;
 		});
-		 for (var i = 0; i < newParse.length; i++) {
+		for (var i = 0; i < newParse.length; i++) {
 			text_annoument.push("ประกาศปิดปรับปรุงเกมส์จากค่าย:"+"'"+newParse[i].game +"'"+ " รายละเอียด:" +"'"+ newParse[i].status + "'");
 			text_annoument.toString();
 		}
 	}
 	madeAnnoument();
 	document.getElementById("postgame_Status").innerHTML = text_annoument.toString();
-	
+
+	<?php
+
+	$game_route = strpos(current_url(), 'game');
+	if($game_route !==false){
+	?>
+	function disabledGame(){
+		//console.log(arr_parse);
+		var gamelist = arr_parse.result;
+		for (var i = 0; i < gamelist.length; i++) {
+			//console.log(gamelist[i]);
+			if(gamelist[i].active==false){
+
+				gameCloseId = gamelist[i].game;
+				console.log(gameCloseId);
+				$('#'+gameCloseId).find("#overlay").css('display','block');
+				$('#'+gameCloseId).find("#text").html('<b style="font-size: 30px;">ปิดปรับปรุง</b>');
+			}
+		}
+	}
+	disabledGame();
+	<?php
+	}
+	?>
 </script>
-
-
