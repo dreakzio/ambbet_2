@@ -2,6 +2,7 @@
 	<div class="container text-center mt-2">
 		<p>Copyright By &copy; <?php echo date('Y'); ?> <?php echo isset($web_setting['web_name']) ? $web_setting['web_name']['value'] : ""; ?> All rights reserved.</p>
 	</div>
+
 </footer>
 <div class="fix-nav-bottom">
 	<div class="fix-nav-bottom">
