@@ -2,6 +2,8 @@
 error_reporting(0);
 header('Content-Type: application/json');
 class Scb{
+	private $tilesVersion='60';
+	private $useragent = 'Android/10;FastEasy/3.59.0/6231';
 	private $deviceId = '';
 	private $api_refresh = '';
 	private $accnum = '';
@@ -12,7 +14,7 @@ class Scb{
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'Android/9;FastEasy/3.58.0/6149');
+		curl_setopt($ch, CURLOPT_USERAGENT, $this->useragent);
 		//curl_setopt($ch, CURLOPT_USERAGENT, 'okhttp/3.8.0');
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -48,7 +50,7 @@ class Scb{
 			echo 'pin should have 6 digits!! : '.$this->accnum;
 		}else{
 			$this->accnum = $accnum;
-			$this->Login();
+			$this->new_Login();
 		}
 	}
 	public function Login(){
@@ -82,11 +84,11 @@ class Scb{
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => 'POST',
-			CURLOPT_POSTFIELDS =>'{"deviceId":"'.$this->deviceId.'","jailbreak":"0","tilesVersion":"39","userMode":"INDIVIDUAL"}',
+			CURLOPT_POSTFIELDS =>'{"deviceId":"'.$this->deviceId.'","jailbreak":"0","tilesVersion":"'.$this->tilesVersion.'","userMode":"INDIVIDUAL"}',
 			CURLOPT_HTTPHEADER => array(
 				'Accept-Language:  th ',
 				'scb-channel:  APP ',
-				'user-agent:  Android/9;FastEasy/3.58.0/6149 ',
+				'user-agent:  '.$this->useragent,
 				'latitude:  16.5178002 ',
 				'longitude:  104.1169243 ',
 				'accuracy:  20.0 ',
@@ -125,7 +127,7 @@ class Scb{
 				'Accept-Language:  th ',
 				'scb-channel:  APP ',
 				'Api-Auth: '.$Auth,
-				'user-agent:  Android/9;FastEasy/3.58.0/6149 ',
+				'user-agent: '.$this->useragent,
 				'latitude:  16.5178002 ',
 				'longitude:  104.1169243 ',
 				'accuracy:  20.0 ',
@@ -183,7 +185,7 @@ class Scb{
 				'Accept-Language:  th ',
 				'scb-channel:  APP ',
 				'Api-Auth: '.$Auth,
-				'user-agent:  Android/9;FastEasy/3.58.0/6149 ',
+				'user-agent: '.$this->useragent,
 				'latitude:  16.5178002 ',
 				'longitude:  104.1169243 ',
 				'accuracy:  20.0 ',
@@ -230,7 +232,7 @@ class Scb{
 		$res = $this->Curl("POST",$url,$headers,$data,false);
 		$d = json_decode($res,true);
 		if($d['status']['code'] === "1002"){
-			$this->Login();
+			$this->new_Login();
 			return $this->cnt_re_login > 1 ? null : $this->GetBalance();
 		}
 		return $res;
@@ -250,7 +252,7 @@ class Scb{
 		$res = $this->Curl("POST",$url,$headers,$data_scb,false);
 		$d = json_decode($res,true);
 		if($d['status']['code'] === "1002"){
-			$this->Login();
+			$this->new_Login();
 			return $this->cnt_re_login > 1 ? [] : $this->getTransaction();
 		}
 
@@ -316,7 +318,7 @@ class Scb{
 		$res = $this->Curl("POST",$url,$headers,$data_scb,false);
 		$d = json_decode($res,true);
 		if($d['status']['code'] === "1002"){
-			$this->Login();
+			$this->new_Login();
 			return $this->cnt_re_login > 1 ? [] : $this->getTransactionWithdraw();
 		}
 
@@ -371,7 +373,7 @@ class Scb{
 		$res = $this->Curl("POST",$url,$headers,$data,false);
 		$d = json_decode($res,true);
 		if($d['status']['code'] === "1002"){
-			$this->Login();
+			$this->new_Login();
 			return $this->cnt_re_login > 1 ? '{"status":{"code":"4000","description":"Verify failed Please check token..."}}' : $this->Verify($accountTo,$accountToBankCode,$amount);
 		}
 		return  $res;
@@ -415,7 +417,7 @@ class Scb{
 		$d = json_decode($res,true);
 
 		if($d['status']['code'] === "1002"){
-			$this->Login();
+			$this->new_Login();
 			return $this->cnt_re_login > 1 ? '{"status":{"code":"4002","description":"Transfer failed Please check token..."}}' : $this->Transfer($accountTo,$accountToBankCode,$amount);
 		}
 		return $res;
@@ -443,6 +445,166 @@ class Scb{
 		return json_decode($result, true);
 	}
 
+	//======================================================
+	# EDIT 10/12/2022
+	//======================================================
+	public function preloadandresumecheck() {
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => 'https://fasteasy.scbeasy.com:8443/v3/login/preloadandresumecheck',
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_HEADER => 1,
+			CURLOPT_TIMEOUT => 0,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_POSTFIELDS =>'{"tilesVersion":'.$this->tilesVersion.',"userMode":"INDIVIDUAL","isLoadGeneralConsent":0,"deviceId":"'.$this->deviceId.'","jailbreak":0}',
+			CURLOPT_HTTPHEADER => array(
+				'Accept-Language: th',
+				'scb-channel: APP',
+				'user-agent: '.$this->useragent,
+				'Content-Type: application/json; charset=UTF-8',
+				'Content-Length: 132',
+				'Host: fasteasy.scbeasy.com:8443',
+				'Connection: Keep-Alive',
+				'Accept-Encoding: gzip'
+			),
+		));
+		$response = curl_exec($curl);
+		$headers = array();
+		$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
 
+		foreach (explode("\r\n", $header_text) as $i => $line){
+			if ($i === 0) {
+				$headers['http_code'] = $line;
+			} else {
+				list ($key, $value) = explode(': ', $line);
+				$headers[$key] = $value;
+			}
+		}
+		return $headers;
+	}
+	public function PseudoFE($apiauth)
+	{
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => 'https://fasteasy.scbeasy.com:8443/isprint/soap/preAuth',
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 0,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_POSTFIELDS =>'{"loginModuleId":"PseudoFE"}',
+			CURLOPT_HTTPHEADER => array(
+				'Accept-Language: th',
+				'scb-channel: APP',
+				'Api-Auth: '.$apiauth,
+				'user-agent: '.$this->useragent,
+				'Content-Type: application/json;charset=UTF-8',
+				'Content-Length: 28',
+				'Host: fasteasy.scbeasy.com:8443',
+				'Connection: Keep-Alive',
+			),
+		));
+		$response = curl_exec($curl);
+		return $response;
+		curl_close($curl);
+	}
+	public function encryptscb($Sid,$ServerRandom,$pubKey,$hashType)
+	{
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => 'http://206.189.47.27:80/pin/encrypt', // ใส่ url ของคุณ
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 0,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_POSTFIELDS =>'Sid='.$Sid.'&ServerRandom='.$ServerRandom.'&pubKey='.$pubKey.'&pin='.$this->api_refresh.'&hashType='.$hashType,
+			CURLOPT_HTTPHEADER => array(
+				'Content-Type: application/x-www-form-urlencoded'
+			),
+		));
+		$response = curl_exec($curl);
+		curl_close($curl);
+		return $response;
+	}
+	public function fasteasy_login_pin($authid,$pseudoPin,$Sid)
+	{
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => 'https://fasteasy.scbeasy.com/v1/fasteasy-login',
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 0,
+			CURLOPT_HEADER => 1,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_POSTFIELDS =>'{"deviceId":"'.$this->deviceId.'","pseudoPin":"'.$pseudoPin.'","tilesVersion":"'.$this->tilesVersion.'","pseudoSid":"'.$Sid.'"}',
+			CURLOPT_HTTPHEADER => array(
+				'Accept-Language: th',
+				'scb-channel: APP',
+				'Api-Auth: '.str_replace("\r\n","",$authid),
+				'user-agent: '.$this->useragent,
+				'Content-Type: application/json;charset=UTF-8',
+				'Content-Length: 837',
+				'Host: fasteasy.scbeasy.com:8443',
+				'Connection: Keep-Alive',
+			),
+		));
+		$response = curl_exec($curl);
+		curl_close($curl);
+		$headers = array();
+		$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
+		foreach (explode("\r\n", $header_text) as $i => $line){
+			if ($i === 0) {
+				$headers['http_code'] = $line;
+			} else {
+				list ($key, $value) = explode(': ', $line);
+				$headers[$key] = $value;
+			}
+		}
+		return $headers;
+	}
+	public function new_Login()
+	{
+		$preload = $this->preloadandresumecheck();
+		$e2ee = $this->PseudoFE($preload['Api-Auth']);
+		$e2eejson = json_decode($e2ee,true);
+		$hashType = $e2eejson['e2ee']['pseudoOaepHashAlgo'];
+		$Sid = $e2eejson['e2ee']['pseudoSid'];
+		$ServerRandom = $e2eejson['e2ee']['pseudoRandom'];
+		$pubKey = $e2eejson['e2ee']['pseudoPubKey'];
+		$encryptscb = $this->encryptscb($Sid,$ServerRandom,$pubKey,$hashType);
+		$Auth1 = $this->fasteasy_login_pin($preload['Api-Auth'],$encryptscb,$Sid);
+		
+		if ($Auth1=="") {
+			echo 'error Login 2';
+			//exit();
+		}
+		$access_token = trim($Auth1["Api-Auth"]);
+		if(empty($access_token)){
+			echo 'error auth token';
+			//exit();
+		}
+		/*$strFileName = "token_".$this->accnum.".txt";
+		$objFopen = fopen($strFileName, 'w');
+		fwrite($objFopen, $access_token);*/
+		$this->api_auth = $access_token;
+
+	}
+	//======================================================
 }
 ?>
