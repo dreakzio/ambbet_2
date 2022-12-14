@@ -271,6 +271,9 @@ function get_data_report_all_day(){
 	//สมาชิกทั้งหมด
 	$member_data = $CI->Account_model->account_report_all_day();
 	$member_total = $member_data[0]['sum_account'] ;
+
+	$online_member_total = $CI->Account_model->get_total_online_user();
+
 	$data = [
 		'deposit' => $deposit,
 		'withdraw' => $withdraw,
@@ -279,6 +282,7 @@ function get_data_report_all_day(){
 		'deposit_count' => $deposit_count,
 		'withdraw_count' => $withdraw_count,
 		'member_total' =>$member_total,
+		'online_member_total' =>$online_member_total,
 	];
 	$CI->cache->file->save(base64_encode('dashboard_report'),$data, 15);
 	return $data;
