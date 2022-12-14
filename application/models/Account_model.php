@@ -363,4 +363,15 @@ class Account_model extends CI_Model
 		$cnt_row =  $query->row_array();
 		return $cnt_row != "" && isset($cnt_row['cnt_row']) && is_numeric($cnt_row['cnt_row']) ? (int)$cnt_row['cnt_row'] : 0;
 	}
+	public function  get_total_online_user()
+	{
+		$this->db->select('
+    		count(1) as total
+    	');
+		$datetime = date("Y-m-d H:i:s", strtotime('- 20 minutes'));
+		$this->db->where('last_activity >=', $datetime);
+		$query = $this->db->get('account');
+		$total_online =  $query->row_array();
+		return $total_online != "" && isset($total_online['total']) && is_numeric($total_online['total']) ? (int)$total_online['total'] : 0;
+	}
 }

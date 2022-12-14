@@ -57,6 +57,7 @@ class Check_User extends CI_Controller{
 									redirect('auth');
 									exit();
 								}else{
+
 									$_SESSION['user'] = [
 										'role' => $account['role'],
 										'id' => $account['id'],
@@ -121,6 +122,7 @@ class Check_User extends CI_Controller{
 										$this->CI->Account_model->account_update([
 											'id' => $_SESSION['user']['id'],
 											'login_process_job_date' => date('Y-m-d H:i:s'),
+											'last_activity' => date('Y-m-d H:i:s'),
 											'login_point' => $login_point,
 										]);
 									}else{
@@ -130,6 +132,7 @@ class Check_User extends CI_Controller{
 											$this->CI->Account_model->account_update([
 												'id' => $_SESSION['user']['id'],
 												'login_process_job_date' => date('Y-m-d H:i:s'),
+												'last_activity' => date('Y-m-d H:i:s'),
 												'login_point' => ($login_point + $u_login_point),
 											]);
 										}
@@ -139,6 +142,7 @@ class Check_User extends CI_Controller{
 									$this->CI->Account_model->account_update([
 										'id' => $_SESSION['user']['id'],
 										'login_process_job_date' => date('Y-m-d H:i:s'),
+										'last_activity' => date('Y-m-d H:i:s'),
 										'login_point' => $login_point,
 									]);
 								}
@@ -173,6 +177,10 @@ class Check_User extends CI_Controller{
 									'gg_2fa_chk' => isset($_SESSION['user']['gg_2fa_chk']) ? $_SESSION['user']['gg_2fa_chk'] : false,
 									'gg_2fa_secret' => isset($_SESSION['user']['gg_2fa_secret']) ? $_SESSION['user']['gg_2fa_secret'] : "",
 								];
+								$this->CI->Account_model->account_update([
+									'id' => $_SESSION['user']['id'],
+									'last_activity' => date('Y-m-d H:i:s'),
+								]);
 
 								if($account['role'] == roleMember() && empty($account['account_agent_username']) && $this->CI->router->class != "deposit"){
 									$auto_create_member = $this->CI->Setting_model->setting_find([
