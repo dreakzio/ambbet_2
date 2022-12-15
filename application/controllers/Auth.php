@@ -97,7 +97,8 @@ class Auth extends CI_Controller
 				'member_password' => $account['account_agent_password'],
 				'account_agent_id' => $account['account_agent_id']
 			];
-			$this->Account_model->update_update([
+
+			$this->Account_model->account_update([
 				'id' => $account['id'],
 				'last_activity' => date('Y-m-d H:i:s'),
 			]);
