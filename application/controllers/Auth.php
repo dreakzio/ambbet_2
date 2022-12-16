@@ -83,6 +83,7 @@ class Auth extends CI_Controller
 					'linebot_userid' => $_SESSION['line_login_user_id'],
 				]);
 			}
+
 			$_SESSION['user'] = [
 				'role' => $account['role'],
 				'id' => $account['id'],
@@ -96,6 +97,12 @@ class Auth extends CI_Controller
 				'member_password' => $account['account_agent_password'],
 				'account_agent_id' => $account['account_agent_id']
 			];
+
+			$this->Account_model->account_update([
+				'id' => $account['id'],
+				'last_activity' => date('Y-m-d H:i:s'),
+			]);
+
 			if(isset($post['redirect'])){
 				redirect('dashboard');
 				exit();

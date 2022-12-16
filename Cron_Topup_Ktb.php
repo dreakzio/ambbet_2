@@ -1,5 +1,6 @@
 <?php
 require('config.php');
+
 if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 	$sec_rand = rand(3,8);
 	sleep($sec_rand);
@@ -29,7 +30,6 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 		}
 	}
 
-
 	//Check min amount for disabled auto
 	$deposit_min_amount_for_disable_auto = null;
 	$sql_deposit_min_amount_for_disable_auto_check = "SELECT * FROM `web_setting` where name = 'deposit_min_amount_for_disable_auto'";
@@ -42,12 +42,14 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 
 	//Check bank active
 	//$sql_bank_check = "SELECT * FROM `bank` where status = '1' and deleted = '0' and bank_number = '".$scb['accnum']."'";
-	$sql_bank_check = "SELECT * FROM `bank` where status = '1' and (bank_code = '03' or bank_code = '3') and deleted = '0'";
+	//$sql_bank_check = "SELECT * FROM `bank` where status = '1' and (bank_code = '03' or bank_code = '3') and deleted = '0'";
+	$sql_bank_check = "SELECT * FROM `bank` where (bank_code = '03' or bank_code = '3') and deleted = '0'";
 	$con_bank_check = $obj_con_cron->query($sql_bank_check);
 	$chk_can_run_cron = false;
 	$chk_is_withdraw = false;
 	$chk_duplicate_date_and_hour_minute = [];
 	while($rs =$con_bank_check->fetch_assoc() ){
+
 		if(isset($_GET['force_login']) && $_GET['force_login'] == "Y" && !empty(trim($rs['api_token_3']))){
 			$obj_con_cron->query("UPDATE `bank` SET `chk_cron_login` = '1' WHERE `bank`.`bank_number` = '".$rs['bank_number']."'");
 			loginUserIdentify(trim(decrypt(base64_decode($rs['api_token_3']),SECRET_KEY_SALT)),trim($rs['bank_number']));
@@ -116,6 +118,7 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 			}
 		}
 
+
 		if($chk_can_run_cron){
 
 
@@ -144,25 +147,46 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 						$obj_con_cron->query("UPDATE `bank` SET `chk_cron_login` = '0' WHERE `bank`.`bank_number` = '".$ktb['bank_number']."'");
 					}
 
-					$UrlGetConfig	= "https://www.krungthaiconnext.ktb.co.th/KTB-Line-Balance/deposit/account-detail";
 
-					$data_en		= "accountTokenNumber=".$accountTokenNo."&userIdentity=".$userIdentity."&userTokenIdentity=".$tokenID."&channel=Krungthai+Next&language=TH";
+					$UrlGetConfig	= "https://www.krungthaiconnext.ktb.co.th/KTB-Line-Balance/deposit/statement-content";
+					$data_en		= '{"action":"UPDATE","accountTokenNumber":"'.$accountTokenNo.'","activeIndex":"0","lastSeq":"0","userIdentity":"'.$userIdentity.'","hasViewMore":false,"transaction":[]}';
 
-					$ch            	= curl_init();
+					/*$UrlGetConfig	= "https://www.krungthaiconnext.ktb.co.th/KTB-Line-Balance/deposit/account-detail";
+
+					$data_en		= "accountTokenNumber=".$accountTokenNo."&userIdentity=".$userIdentity."&userTokenIdentity=".$tokenID."&channel=Krungthai+Next&language=TH";*/
+
+					//List IP
+					$host = 'proxyprivates.com';if($socket =@fsockopen($host, 3128, $errno, $errstr, 2)) {fclose($socket);} else {echo 'offline.';exit;}
+					$proxy_array	= array(
+						'proxyprivates.com'
+					);
+//proxy
+					$loginpassw = 'proxydata:f6Hj2DBefuNd7xNs';
+					$proxy_ip = $proxy_array[array_rand($proxy_array)];
+					$proxy_port = '3128';
+
+					$ch            = curl_init();
 					curl_setopt($ch, CURLOPT_URL, $UrlGetConfig);
 					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 					curl_setopt($ch, CURLOPT_POST, 1);
-					curl_setopt($ch, CURLOPT_TIMEOUT, 45);
-					curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $data_en);
 					curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 					curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-						'Content-Type: application/x-www-form-urlencoded'
+						// 'Content-Type: application/x-www-form-urlencoded'
+						'Content-Type: application/json'
 					));
 					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+
+					curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port);
+					curl_setopt($ch, CURLOPT_PROXYTYPE, 'HTTP');
+					curl_setopt($ch, CURLOPT_PROXY, $proxy_ip);
+					curl_setopt($ch, CURLOPT_PROXYUSERPWD, $loginpassw);
+
 					$response = curl_exec($ch);
 					curl_close($ch);
+
 					preg_match_all('/{"(.*)}/', $response, $matches);
 					date_default_timezone_set("Asia/Bangkok"); //set เขตเวลา
 					$month_th = array(

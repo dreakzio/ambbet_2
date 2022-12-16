@@ -146,7 +146,14 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 						if($chk_is_withdraw && $v['type_deposit_withdraw'] == "W"){
 							//Check report sms
 
-							$sql_report_sms = "SELECT id FROM `report_smses` where DATE_FORMAT(create_date,'%Y-%m-%d') = '".$v['date']."' and DATE_FORMAT(create_time,'%H:%i') = '".explode(":",trim($v['time']))[0].":".explode(":",trim($v['time']))[1]."' and type_deposit_withdraw = 'W' and type = '".trim($v['type'])."' and amount <=> CAST('".$balance."' AS DECIMAL(15, 2)) and payment_gateway like '".explode(" | ",$payment_gateway)[0]."%' and is_bot_running = '1'";
+							$sql_report_sms = "SELECT id FROM `report_smses` 
+          										where DATE_FORMAT(create_date,'%Y-%m-%d') = '".$v['date']."' 
+          										and DATE_FORMAT(create_time,'%H:%i') = '".explode(":",trim($v['time']))[0].":".explode(":",trim($v['time']))[1]."' 
+          										and type_deposit_withdraw = 'W' 
+          										and type = '".trim($v['type'])."' 
+          										and amount <=> CAST('".$balance."' AS DECIMAL(15, 2)) 
+          										and payment_gateway like '".explode(" | ",$payment_gateway)[0]."%' 
+          										and is_bot_running = '1'";
 							$con_check_report_sms = $obj_con_cron->query($sql_report_sms);
 							$check_report_sms = $con_check_report_sms->num_rows;
 
@@ -174,7 +181,6 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 								$sql_report_sms = "SELECT id FROM `report_smses` where DATE_FORMAT(create_date,'%Y-%m-%d') = '".$v['date']."' and DATE_FORMAT(create_time,'%H:%i') = '".explode(":",trim($v['time']))[0].":".explode(":",trim($v['time']))[1]."' and type_deposit_withdraw = '".$type_deposit_withdraw."' and type = '".$v['type']."' and amount <=> CAST('".$balance."' AS DECIMAL(15, 2)) and payment_gateway = '".$payment_gateway."' and is_bot_running = '1'";
 								$con_check_report_sms = $obj_con_cron->query($sql_report_sms);
 								$check_report_sms = $con_check_report_sms->num_rows;
-
 
 								if($check_report_sms == 0){
 

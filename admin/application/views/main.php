@@ -4,6 +4,7 @@ error_reporting(0);
 $user =  $this->Account_model->account_find([
 		'id' => $_SESSION['user']['id'],
 ]);
+
 $web_name = $this->Setting_model->setting_find([
 		'name' => 'web_name'
 ]);
@@ -18,6 +19,7 @@ $web_sound_alert = $this->Setting_model->setting_find([
 
 
 $report_all_day = get_data_report_all_day();
+$total_online = $report_all_day['online_member_total'];
 ?>
 <!DOCTYPE html>
 
@@ -422,14 +424,25 @@ $report_all_day = get_data_report_all_day();
 								</div>
 								<hr>
 							<div class="card-content">
-								<div class="card-body">
-									<div class="avatar bg-rgba-info p-50 m-0 mb-1">
-										<div class="avatar-content">
-											<i class="feather icon-users text-info font-medium-5"></i>
+								<div class="card-body row text-center mx-0">
+									<div class="col-xl-6 col-md-4 col-sm-12 align-items-between flex-column">
+										<div class="avatar bg-rgba-info p-50 m-0 mb-1">
+											<div class="avatar-content spinner-grow text-success" >
+												<i class="feather icon-users text-info font-medium-5"></i>
+											</div>
 										</div>
+										<h2 class="text-bold-700" id="txt_report_online_member_total"><?php echo $total_online; ?></h2>
+										<p class="mb-0 line-ellipsis ">จำนวนสมาชิกออนไลน์</p>
 									</div>
-									<h2 class="text-bold-700" id="txt_report_all_day_member_total"><?php echo $report_all_day['member_total']; ?></h2>
-									<p class="mb-0 line-ellipsis">จำนวนสมาชิกทั้งหมด</p>
+									<div class="col-xl-6 col-md-4 col-sm-12 align-items-between flex-column">
+										<div class="avatar bg-rgba-info p-50 m-0 mb-1">
+											<div class="avatar-content">
+												<i class="feather icon-users text-info font-medium-5"></i>
+											</div>
+										</div>
+										<h2 class="text-bold-700" id="txt_report_all_day_member_total"><?php echo $report_all_day['member_total']; ?></h2>
+										<p class="mb-0 line-ellipsis">จำนวนสมาชิกทั้งหมด</p>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -591,6 +604,9 @@ $report_all_day = get_data_report_all_day();
 									}
 									if(data.member_total){
 										$("#txt_report_all_day_member_total").text(data.member_total);
+									}
+									if(data.online_member_total){
+										$("#txt_report_online_member_total").text(data.online_member_total);
 									}
 								},
 								error: function() {
