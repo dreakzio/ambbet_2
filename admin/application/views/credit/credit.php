@@ -23,6 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 	</div>
 	<div class="content-body">
+		<form method="post" id="upload_form" align="center" enctype="multipart/form-data">
 		<section class="card">
 			<div class="card-header">
 				<h4 class="card-title">ทำรายการ</h4>
@@ -78,6 +79,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</select>
 							</div>
 						</div>
+						<div class="col-md-4 col-sm-4" id="div_upload_slip">
+							<div class="form-group">
+								<label class="control-label">upload slip</label>
+								<input type="file" id="image_file" name="image_file" size="20" class="form-control"  onchange="return fileValidation()"/>
+								<div id="imagePreview" class="imagePreview"></div>
+							</div>
+						</div>
 					</div>
 					<div class="row" id="div_date" style=" display: none;">
 						<div class="col-md-4 col-sm-4">
@@ -115,13 +123,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<div class="row">
 						<div class="col-md-12">
 							<div class="text-right m-b-10">
-								<button  id="btn_create" type="button" class=" btn bg-gradient-success waves-effect waves-light"><span><i class="fa fa-save mr-1"></i></span>บันทึก</button>
+								<button  id="btn_create" type="submit" class=" btn bg-gradient-success waves-effect waves-light"><span><i class="fa fa-save mr-1"></i></span>บันทึก</button>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
+		</form>
 	</div>
 	<div class="content-body">
 		<section class="card">
@@ -169,6 +178,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 										<th class="text-center">ทำรายการโดย</th>
 										<th class="text-center" >วัน-เวลาสลิป</th>
 										<th class="text-center" >วันที่สร้าง</th>
+										<th class="text-center" >สลิป</th>
 									</tr>
 									</thead>
 									<tbody>
@@ -203,3 +213,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <script type="text/javascript">
 	var bank_list = JSON.parse('<?php echo json_encode(getBankList()); ?>');
 </script>
+<style>
+	.imagePreview{
+		max-height: 600px;
+	}
+	.imagePreview img{
+		max-height: 600px;
+		max-width: 300px;
+	}
+</style>

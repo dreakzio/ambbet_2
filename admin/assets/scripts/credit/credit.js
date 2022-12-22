@@ -404,6 +404,25 @@ function dataTable() {
 					return html;
 				}
 			}
+			,
+			{
+				className: 'text-center',
+				render: function(data, type, full, meta) {
+					let html = "";
+					let image = "";
+					let {
+						slip_image
+					} = full;
+					if (slip_image !== null) {
+						image = BaseURL + 'assets/images/slip/'+slip_image;
+						html = '<ul class="list-unstyled users-list m-0 align-items-center">\n' +
+							'<img class="media-object rounded" src="'+image+'" alt="Avatar" height="40" width="40" onClick="showImage(\''+image+'\')" style="cursor: pointer;"></li></ul>';
+					}else{
+						html ='';
+					}
+					return html;
+				}
+			}
 		],
 		drawCallback: function(settings) {
 			let api = this.api();
@@ -488,7 +507,43 @@ $(document).on('keyup', '#process', function(e) {
 	}
 });
 var loadding_credit_add = false;
-$(document).on('click', '#btn_create', function() {
+function fileValidation() {
+	var fileInput =
+		document.getElementById('image_file');
+
+	var filePath = fileInput.value;
+
+	// Allowing file type
+	var allowedExtensions =
+		/(\.jpg|\.jpeg|\.png|\.gif)$/i;
+
+	if (!allowedExtensions.exec(filePath)) {
+		//alert('Invalid file type');
+		sweetAlert2('warning', 'กรุณาเลือกไฟล์รูปภาพเท่านั้น ขนาดไม่เกิน 300px X 600px');
+		fileInput.value = '';
+		return false;
+	}
+	else
+	{
+
+		// Image preview
+		if (fileInput.files && fileInput.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				document.getElementById(
+					'imagePreview').innerHTML =
+					'<img src="' + e.target.result
+					+ '"/>';
+			};
+
+			reader.readAsDataURL(fileInput.files[0]);
+		}
+	}
+}
+
+//$(document).on('click', '#btn_create', function() {
+$('#upload_form').on('submit', function(e){
+	e.preventDefault();
 	if(!loadding_credit_add){
 		let value = $('#username').val();
 		if (value == "") {
@@ -531,6 +586,11 @@ $(document).on('click', '#btn_create', function() {
 			sweetAlert2('warning', 'เครดิตคงเหลือไม่เพียงพอ');
 			return;
 		}
+		if($('#image_file').val() == '')
+		{
+			sweetAlert2('warning', 'กรุณาแนบสลิปโอนเงิน');
+			return;
+		}
 		let transaction = $('#transaction').val();
 		let date = $('#date').val();
 		let time = $('#time').val();
@@ -555,20 +615,37 @@ $(document).on('click', '#btn_create', function() {
 			allowOutsideClick: false,
 			allowEscapeKey: false,
 			confirmButtonText: '',
-		}),
-			Swal.showLoading();
+		});
+		Swal.showLoading();
+
+		//console.log(fileUpload);
+		var d = $('#image_file')[0].files[0]
+		let formData = new FormData();
+		formData.append('account_id', username);
+		formData.append('process', process);
+		formData.append('type', type);
+		formData.append('date', date);
+		formData.append('time', time);
+		formData.append('transaction', transaction);
+		formData.append('image_file', d);
+
 		$.ajax({
 			url: BaseURL + "credit/credit_history_create",
 			method: "POST",
-			data: {
+			/*data: {
 				account_id: username,
 				process,
 				type,
 				date,
 				time,
 				transaction
-			},
+			},*/
+			data : formData,
 			dataType: 'json',
+			contentType: false,
+			cache: false,
+			processData:false,
+			enctype: 'multipart/form-data',
 			success: function(response) {
 				loadding_credit_add = false;
 				if (response.result) {
@@ -694,6 +771,17 @@ function calCulateCredit() {
 			$('#credit_after').val(numeral(sum).format('0,0.00'));
 		}
 	}
+}
+
+function showImage(url){
+	Swal.fire({
+		title: null,
+		text: null,
+		imageUrl: url,
+		imageWidth: 800,
+		imageHeight: 600,
+		imageAlt: 'Custom image',
+	})
 }
 /*$('.clockpicker').clockpicker({
 	donetext: 'Done',

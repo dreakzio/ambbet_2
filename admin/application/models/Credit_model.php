@@ -16,7 +16,8 @@ class Credit_model extends CI_Model
          credit_history.date_bank,
          credit_history.transaction,
          credit_history.created_at,
-           credit_history.username
+         credit_history.username,
+         credit_history.slip_image
          ');
 		if (isset($search['id'])) {
 			$this->db->where('credit_history.id', $search['id']);
