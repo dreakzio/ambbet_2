@@ -27,7 +27,7 @@ class Promotion_model extends CI_Model
         promotion.id,
         promotion.max_use,
         promotion.type,
-				promotion.start_time,
+		promotion.start_time,
         promotion.end_time,
         promotion.number_of_deposit_days,
         promotion.image,
