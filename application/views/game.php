@@ -122,13 +122,6 @@
 		border-bottom-left-radius: 12px;
 	}
 </style>
-<?php
-//print_r($_SESSION);
-if($_SESSION['user']['username']=='0826539264'){
-	//echo "test";
-	//print_r($Game_status);
-}
-?>
 <link rel="stylesheet" href="https://member.aba444.com/assets/css/custom.css?=2022-12-19" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js" integrity="sha512-zJYu9ICC+mWF3+dJ4QC34N9RA0OVS1XtPbnf6oXlvGrLGNB8egsEzu/5wgG90I61hOOKvcywoLzwNmPqGAdATA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>

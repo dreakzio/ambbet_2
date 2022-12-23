@@ -780,7 +780,7 @@ function showImage(url){
 		imageUrl: url,
 		imageWidth: 800,
 		imageHeight: 600,
-		imageAlt: 'Custom image',
+		imageAlt: 'สลิปโอนเงิน',
 	})
 }
 /*$('.clockpicker').clockpicker({
