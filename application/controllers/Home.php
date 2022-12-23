@@ -657,7 +657,7 @@ class Home extends CI_Controller
 					}else if(strpos($this->config->item('api_domain'),"scc777") !== false){
 						redirect('https://scc777.net/login/auto/?username='.$data['user']['account_agent_username'].'&password='.$data['user']['account_agent_password'].'&url=https://'.$this->config->item('domain_name').'&hash='.$this->config->item('api_hash').'&state=sport&lang=th');
 					}else{
-						redirect('https://ambbet.com/login/auto/?username='.$data['user']['account_agent_username'].'&password='.$data['user']['account_agent_password'].'&url=https://'.$this->config->item('domain_name').'&hash='.$this->config->item('api_hash').'&state=sport&lang=th');
+						redirect('https://ambbets.cloud/login/auto/?username='.$data['user']['account_agent_username'].'&password='.$data['user']['account_agent_password'].'&url=https://'.$this->config->item('domain_name').'&hash='.$this->config->item('api_hash').'&state=sport&lang=th');
 					}
 				}
 			}else{
