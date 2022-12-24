@@ -621,6 +621,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								<div class="row ">
 									<div class="col-md-4">
 										<div class="form-group">
+											<label class="control-label">เปิด/ปิด ระบบรับโบนัส auto</label>
+											<?php $deposit_with_bonus_auto = $this->Setting_model->setting_find([
+													'name' => 'deposit_with_bonus_auto'
+											]); ?>
+											<select class="form-control" name="web_setting[deposit_with_bonus_auto]" id="deposit_with_bonus_auto">
+												<option value="0">ปิดใช้งาน</option>
+												<option value="1" <?php if ($deposit_with_bonus_auto['value']==1): ?>
+													selected
+												<?php endif; ?>>เปิดใช้งาน</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="col-md-4">
+										<div class="form-group">
 											<label class="control-label">สถานะ</label>
 											<?php $ref_return_balance_status = $this->Setting_model->setting_find([
 													'name' => 'ref_return_balance_status'

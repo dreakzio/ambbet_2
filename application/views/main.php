@@ -136,6 +136,7 @@ error_reporting(0);
 			background-color: var(--base-color-main) !important;
 			color: white !important;
 		}
+
 		.play-button,.fix-nav-bottom-play,.btn-red{
 			background-color: var(--base-color-main) !important;
 			border-color: var(--base-color-main-border) !important;
@@ -148,6 +149,10 @@ error_reporting(0);
 			background-color: var(--base-color-main) !important;
 			border-color: var(--base-color-main-border) !important;
 		 }
+		.btn-green{
+			background-color: #118F33 !important;
+			border-color: #067924 !important;
+		}
 	</style>
 	<link rel="stylesheet" href="<?php echo base_url('/'); ?>assets/css/css-style.css" />
 	<link rel="stylesheet" href="<?php echo base_url('/'); ?>assets/css/css-style-dashboardv5.css" />

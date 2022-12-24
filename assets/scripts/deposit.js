@@ -13,6 +13,7 @@ new Vue({
             amount_deposit: amount_deposit,
             loading_wallet: false,
             promotion: promotion_active,
+			auto_accept_bonus: auto_accept_bonus_active,
             loading_amount_auto_deposit: false,
             loading_chk_bank_can_deposit: false,
             loading_chk_username_exist: false,
@@ -169,6 +170,54 @@ new Vue({
                 }
             }
         },
+		change_accept_bonus() {
+			let app = this;
+			if (!app.pre_loader) {
+
+					Swal.fire({
+						text: 'แก้ไขสถานะรับโบนัส auto ' ,
+						confirmButtonText: 'ตกลง',
+						confirmButtonColor: '#2ABA66',
+						showCancelButton: true,
+						cancelButtonText: 'ยกเลิก',
+						cancelButtonColor: 'red',
+						reverseButtons: true,
+					})
+						.then((result) => {
+							if (result.value) {
+								app.pre_loader = true;
+								axios.post(BaseURL + "account/change_accept_bonus",
+									Qs.stringify({
+										auto_accept_bonus: app.auto_accept_bonus
+									}), {
+										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+									})
+									.then(function(response) {
+										app.pre_loader = false
+										if (response.data.result) {
+
+											Swal.fire({
+												type: 'success',
+												text: 'แก้ไขสถานะเรียบร้อยแล้ว',
+												confirmButtonText: 'ตกลง',
+												confirmButtonColor: '#2ABA66',
+												allowOutsideClick: false
+											})
+												.then((result) => {
+													location.reload();
+												});
+										}
+									}).catch(err => {
+									app.pre_loader = false
+									sweetAlert2('warning', 'แก้ไขสถานะไม่สำเร็จ');
+								});
+							} else {
+								app.pre_loader = false
+							}
+						});
+
+			}
+		},
         doUpload() {
             let app = this;
             if (!app.pre_loader) {

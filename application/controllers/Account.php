@@ -34,6 +34,7 @@ class Account extends CI_Controller
         	if(!empty($user['member_username'])){
 				$user['account_agent_username'] = $user['member_username'];
 				$balance_credit = $this->game_api_librarie->balanceCredit($user);
+				//print_r($balance_credit);
 				echo json_encode([
 					'message' => 'success',
 					'result' => $balance_credit]);
@@ -851,5 +852,32 @@ class Account extends CI_Controller
 				'remaining_login_point' => $data['login_point']
 			]
 		]);
+	}
+	public function change_accept_bonus()
+	{
+
+		$this->check_login();
+		header('Content-Type: application/json');
+		$user = $_SESSION['user'];
+		check_parameter([
+			'auto_accept_bonus'
+		], 'POST');
+		$post = $this->input->post();
+		//print_r($post['auto_accept_bonus']);
+		$new_status='';
+		if($post['auto_accept_bonus']==1){
+			$new_status =0;
+		}else{
+			$new_status =1;
+		}
+		$this->Account_model->account_update([
+			'auto_accept_bonus' => $new_status,
+			'id' => $user['id']
+		]);
+		echo json_encode([
+			'message' => 'success',
+			'result' => true,
+		]);
+
 	}
 }

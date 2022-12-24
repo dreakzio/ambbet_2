@@ -33,6 +33,7 @@ class Deposit extends CI_Controller
         $data['user'] = $this->Account_model->account_find([
           'id' => $_SESSION['user']['id']
         ]);
+		//print_r($data['user']);
 		$this->Account_model->account_update([
 			'id' => $_SESSION['user']['id'],
 			'active_deposit_date' => date('Y-m-d H:i:s')
@@ -2340,7 +2341,7 @@ class Deposit extends CI_Controller
           }
         }
         $data['promotion'] = $promotion_data;
-		var_dump($data['promotion']);
+		//var_dump($data['promotion']);
 		$finance_current = $this->Finance_model->finance_list([
 			'account' => $_SESSION['user']['id'],
 			'type' => 1,

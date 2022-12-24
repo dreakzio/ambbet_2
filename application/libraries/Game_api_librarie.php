@@ -44,6 +44,7 @@ class Game_api_librarie
 	{
 		$initParams = $this->initParamsAndUrl();
 		$response = $this->curl($initParams['url'].'/v0.1/partner/member/credit/'.$initParams['params']['api_key'].'/'. $user['account_agent_username']);
+		//print_r($response);
 		$response = json_decode($response,true);
 		if(isset($response['code']) && $response['code'] == 0 && isset($response['result']) && isset($response['result']['credit'])){
 			return (float)str_replace(",","",$response['result']['credit']);
