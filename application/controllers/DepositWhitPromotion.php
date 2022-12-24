@@ -295,9 +295,9 @@ class DepositWhitPromotion extends CI_Controller
 				'promotion_name' =>$promotion_name,
 			]);
 
-			print_r($form_data);
+			//print_r($form_data);
 			$response = $this->game_api_librarie->deposit($form_data);
-			print_r($response);
+			//print_r($response);
 			if (isset($response['ref'])) {
 
 				if((float)$form_data["amount"] > (float)$users[$i]['amount_deposit_auto']){
@@ -437,7 +437,7 @@ class DepositWhitPromotion extends CI_Controller
 				if($log_deposit_withdraw!=""){
 					$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 						'id' => $log_deposit_withdraw_id,
-						'description' => $log_deposit_withdraw['description']." | ทำรายการสำเร็จ",
+						'description' => $log_deposit_withdraw['description']." (Add Credit Auto) | ทำรายการสำเร็จ",
 					]);
 				}
 
