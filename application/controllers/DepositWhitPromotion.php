@@ -509,7 +509,7 @@ class DepositWhitPromotion extends CI_Controller
 		//เช็คว่าลูกค้าได้รับโปรโมชั่นนี้ไปหรือยัง
 		switch ($promotion_data['type']) {
 			case '1':
-				$use_promotion = $this->Use_promotion_model->use_promotion_count(['user_id'=>$user_id, "id"=>$promotion_data['id']]);
+				$use_promotion = $this->Use_promotion_model->use_promotion_count(['account'=>$user_id, "promotion"=>$promotion_data['id']]);
 				if ($use_promotion<$promotion_data['max_use']) {
 					$remaining = ($promotion_data['max_use']-$use_promotion);
 					$canUsePro = 1;
@@ -520,8 +520,8 @@ class DepositWhitPromotion extends CI_Controller
 				break;
 			case '2':
 				$use_promotion = $this->Use_promotion_model->use_promotion_count([
-					'user_id' => $user_id,
-					'id' => $promotion_data['id'],
+					'account' => $user_id,
+					'promotion' => $promotion_data['id'],
 					'date_from' =>  date('Y-m-d'),
 					'date_to' =>  date('Y-m-d'),
 				]);
@@ -541,8 +541,8 @@ class DepositWhitPromotion extends CI_Controller
 				$end_date_pro = new DateTime();
 				$end_date_pro->modify('Sunday this week');
 				$use_promotion = $this->Use_promotion_model->use_promotion_count([
-					'user_id' => $user_id,
-					'id' => $promotion_data['id'],
+					'account' => $user_id,
+					'promotion' => $promotion_data['id'],
 					'date_from' =>  $start_date_pro->format('Y-m-d'),
 					'date_to' =>  $end_date_pro->format('Y-m-d'),
 				]);
@@ -562,8 +562,8 @@ class DepositWhitPromotion extends CI_Controller
 				$end_date_pro = new DateTime();
 				$end_date_pro->modify('last day of this month');
 				$use_promotion = $this->Use_promotion_model->use_promotion_count([
-					'user_id' => $user_id,
-					'id' => $promotion_data['id'],
+					'account' => $user_id,
+					'promotion' => $promotion_data['id'],
 					'date_from' =>  $start_date_pro->format('Y-m-d'),
 					'date_to' =>  $end_date_pro->format('Y-m-d'),
 				]);
@@ -583,8 +583,8 @@ class DepositWhitPromotion extends CI_Controller
 				$end_time = date('Y-m-d H:i:s',strtotime("today {$promotion_data['end_time']}"));
 				if ($current_time >= $start_time && $current_time <= $end_time) {
 					$use_promotion = $this->Use_promotion_model->use_promotion_count([
-						'user_id' => $user_id,
-						'id' => $promotion_data['id'],
+						'account' => $user_id,
+						'promotion' => $promotion_data['id'],
 						'start_time' =>  $start_time,
 						'end_time' =>  $end_time,
 					]);
@@ -613,8 +613,8 @@ class DepositWhitPromotion extends CI_Controller
 				$countDay = count($result_intersect);
 				if ($countDay >= $days_deposit) {
 					$use_promotion = $this->Use_promotion_model->use_promotion_count([
-						'user_id' => $user_id,
-						'id' => $promotion_data['id'],
+						'account' => $user_id,
+						'promotion' => $promotion_data['id'],
 					]);
 					if ($use_promotion<$promotion_data['max_use']) {
 						$remaining = ($promotion_data['max_use']-$use_promotion);
