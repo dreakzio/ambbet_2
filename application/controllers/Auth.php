@@ -113,6 +113,7 @@ class Auth extends CI_Controller
 				'result' => true
 			]);
 		} else {
+
 			if(isset($post['redirect'])) {
 				$data['header_menu'] = 'header_menu';
 				$data['middle_bar'] = 'middle_bar';

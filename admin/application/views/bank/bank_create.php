@@ -121,10 +121,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </div>
 					<div class="col-md-4">
 						<div class="form-group">
-							<label class="control-label">บัญชีที่ใช้ถอน</label>
+							<label class="control-label">ประเภทบัญชี</label>
 							<select class="form-control" name="status_withdraw" id="status_withdraw">
-								<option value="0">ปิด</option>
-								<option value="1">เปิด</option>
+								<option value="0">ฝาก</option>
+								<option value="1">ถอน</option>
 							</select>
 						</div>
 					</div>

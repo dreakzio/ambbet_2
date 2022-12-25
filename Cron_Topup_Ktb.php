@@ -118,9 +118,7 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 			}
 		}
 
-
 		if($chk_can_run_cron){
-
 
 			try{
 				$ktb = $rs;
@@ -138,107 +136,20 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 					$obj_con_cron->autocommit(true);
 					//01:00-01:05
 					//18:00-18:05
+					require('lib/ktb.php');
+
+					$api = new Ktb($accountTokenNo,$tokenID,$userIdentity,$ktb['bank_number']);
+
 					if(!empty($userIdentity) && in_array(date('H:i'),["18:00","18:01","18:02","18:03","18:04","18:05","01:00","01:01","01:02","01:03","01:04","01:05"])){
 						if($ktb['chk_cron_login'] == "0"){
 							$obj_con_cron->query("UPDATE `bank` SET `chk_cron_login` = '1' WHERE `bank`.`bank_number` = '".$ktb['bank_number']."'");
-							loginUserIdentify($userIdentity,$ktb['bank_number']);
+							$api->loginUserIdentify();
 						}
 					}else if($ktb['chk_cron_login'] == "1"){
 						$obj_con_cron->query("UPDATE `bank` SET `chk_cron_login` = '0' WHERE `bank`.`bank_number` = '".$ktb['bank_number']."'");
 					}
 
-
-					$UrlGetConfig	= "https://www.krungthaiconnext.ktb.co.th/KTB-Line-Balance/deposit/statement-content";
-					$data_en		= '{"action":"UPDATE","accountTokenNumber":"'.$accountTokenNo.'","activeIndex":"0","lastSeq":"0","userIdentity":"'.$userIdentity.'","hasViewMore":false,"transaction":[]}';
-
-					/*$UrlGetConfig	= "https://www.krungthaiconnext.ktb.co.th/KTB-Line-Balance/deposit/account-detail";
-
-					$data_en		= "accountTokenNumber=".$accountTokenNo."&userIdentity=".$userIdentity."&userTokenIdentity=".$tokenID."&channel=Krungthai+Next&language=TH";*/
-
-					//List IP
-					$host = 'proxyprivates.com';if($socket =@fsockopen($host, 3128, $errno, $errstr, 2)) {fclose($socket);} else {echo 'offline.';exit;}
-					$proxy_array	= array(
-						'proxyprivates.com'
-					);
-//proxy
-					$loginpassw = 'proxydata:f6Hj2DBefuNd7xNs';
-					$proxy_ip = $proxy_array[array_rand($proxy_array)];
-					$proxy_port = '3128';
-
-					$ch            = curl_init();
-					curl_setopt($ch, CURLOPT_URL, $UrlGetConfig);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-					curl_setopt($ch, CURLOPT_POST, 1);
-					curl_setopt($ch, CURLOPT_POSTFIELDS, $data_en);
-					curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-					curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-						// 'Content-Type: application/x-www-form-urlencoded'
-						'Content-Type: application/json'
-					));
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-
-					curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port);
-					curl_setopt($ch, CURLOPT_PROXYTYPE, 'HTTP');
-					curl_setopt($ch, CURLOPT_PROXY, $proxy_ip);
-					curl_setopt($ch, CURLOPT_PROXYUSERPWD, $loginpassw);
-
-					$response = curl_exec($ch);
-					curl_close($ch);
-
-					preg_match_all('/{"(.*)}/', $response, $matches);
-					date_default_timezone_set("Asia/Bangkok"); //set เขตเวลา
-					$month_th = array(
-						"ม.ค." => "01",
-						"ก.พ." => "02",
-						"มี.ค." => "03",
-						"เม.ย." => "04",
-						"พ.ค." => "05",
-						"มิ.ย." => "06",
-						"ก.ค." => "07",
-						"ส.ค." => "08",
-						"ก.ย." => "09",
-						"ต.ค." => "10",
-						"พ.ย." => "11",
-						"ธ.ค." => "12",
-					);
-					$json=[];
-					$balance = null;
-					if(!empty($matches[0]) && !empty($matches[0][0])){
-						$reData		= json_decode($matches[0][0], true);
-						if(!is_null($reData)  && isset($reData['availableBalance'])){
-							$balance = trim(str_replace(",","",$reData['availableBalance']));
-						}
-						if(!is_null($reData) && isset($reData['transactions'])){
-							foreach ($reData['transactions'] as $index => $transaction){
-								$date_time = explode(" ",trim($transaction['dateTime']));
-								if(date('m') == "01" && $month_th[$date_time[1]] == "12"){
-									$reData['transactions'][$index]['transDate'] = date('Y',strtotime ( '-1 year'))."-".$month_th[$date_time[1]]."-".$date_time[0];
-								}else{
-									$reData['transactions'][$index]['transDate'] = date('Y')."-".$month_th[$date_time[1]]."-".$date_time[0];
-								}
-								$reData['transactions'][$index]['transTime'] = $date_time[2].":00";
-								$reData['transactions'][$index]['transCmt'] = $transaction['cmt'];
-								$reData['transactions'][$index]['transAmt'] = $transaction['balance'];
-								$reData['transactions'][$index]['transCmt_full'] = $transaction['cmt'];
-								if(strpos($transaction['cmt'],"-") !== false){
-									$reData['transactions'][$index]['bank_code'] = codeMatchDb(explode("-",trim($transaction['cmt']))[0]);
-								}else if(strpos(strtoupper($transaction['cmt']),"TR") !== false){
-									$reData['transactions'][$index]['bank_code'] = codeMatchDb("TR");
-								}else{
-									$reData['transactions'][$index]['bank_code'] = codeMatchDb("");
-								}
-							}
-							$json = $reData['transactions'];
-						}
-					}else{
-						loginUserIdentify($userIdentity,$ktb['bank_number']);
-					}
-					$master = array(
-						"Balance" => str_replace(",","",$balance),
-						"Transactions" => $json
-					);
+					$master = $api->getBalanceAndTransactions();
 
 					if(!empty($master) && isset($master['Balance']) && is_numeric($master['Balance'])){
 						$obj_con_cron->query("UPDATE `bank` SET `balance` = '".$master['Balance']."' WHERE `bank`.`bank_number` = '".$ktb['bank_number']."'");

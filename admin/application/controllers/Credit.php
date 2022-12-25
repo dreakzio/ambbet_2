@@ -7,13 +7,14 @@ class Credit extends CI_Controller
     {
         date_default_timezone_set('Asia/Bangkok');
         parent::__construct();
+		$this->load->helper('form','url');
         if (!isset($_SESSION['user'])  || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
             redirect('../auth');
         }
     }
     public function index()
     {
-		$this->load->helper('url');
+
 		$currentURL = current_url();
 		$log_page_id = $this->Log_page_model->log_page_create([
 			'ip' => isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $this->input->ip_address(),
@@ -145,13 +146,16 @@ class Credit extends CI_Controller
 	}
     public function credit_history_create()
     {
+		//var_dump($_FILES);
         check_parameter([
           'account_id',
           'process',
           'type',
           'transaction',
         ], 'POST');
+
         $post = $this->input->post();
+		//print_r($post);
         $process = explode(',', $post['process']);
         $process = implode($process);
         $user = $this->User_model->user_find([
@@ -164,7 +168,11 @@ class Credit extends CI_Controller
             ]);
             exit();
         }
-        $credit_before = $user['amount_deposit_auto'];
+
+		//die();
+		$slip_image  = $this->slip_image('image_file');
+
+		$credit_before = $user['amount_deposit_auto'];
         $credit_after = $post['type']==1?($user['amount_deposit_auto']+$process):($user['amount_deposit_auto']-$process);
         $create = [
             'process' => $process,
@@ -175,6 +183,7 @@ class Credit extends CI_Controller
             'admin' => $_SESSION['user']['id'],
 			'username' => $user['username'],
             'transaction' => $post['transaction'],
+            'slip_image' => $slip_image,
             ];
 		$log_deposit_withdraw_id = "";
         if ($post['transaction']==1) {
@@ -322,4 +331,38 @@ class Credit extends CI_Controller
         'result' => true
         ]);
     }
+	public function slip_image($name){
+		$type_file = pathinfo($_FILES[$name]["name"], PATHINFO_EXTENSION);
+		$random_string = random_string('alnum', 5);
+		$rename = "slip_".date('YmdHis').'_'.$random_string.".".$type_file;
+		$config['upload_path']          = 'assets/images/slip/';
+		$config['allowed_types']        = 'gif|jpg|png|jpeg';
+		// $config['max_size']             = 60000;
+		// $config['max_width']            = 4000;
+		// $config['max_height']           = 4000;
+		$config['file_name']           = $rename;
+		//resize
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = $config['upload_path'].$rename;
+		// $config['create_thumb'] = TRUE;
+		$config['quality'] = '60%';
+		$config['maintain_ratio'] = TRUE;
+		$config['width']     = 270;
+		$config['height']   = 468;
+		// $this->upload->clear();
+		$this->upload->initialize($config);
+		$this->load->library('upload', $config);
+		if ($_FILES[$name]['error']==0) {
+			if($this->upload->do_upload($name)){
+				$this->image_lib->clear();
+				$this->image_lib->initialize($config);
+				$this->load->library('image_lib', $config);
+				$this->image_lib->resize();
+				return $rename;
+			}else{
+				echo $this->upload->display_errors();
+				exit();
+			}
+		}
+	}
 }

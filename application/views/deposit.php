@@ -10,6 +10,24 @@
 	<hr style="margin-top: 15px">
 </section>
 <section class="">
+	<?php
+		$auto_accept_bonus = $user['auto_accept_bonus'];
+		if($auto_accept_bonus=='1'){
+			$classbg  ='btn-green';
+			$color = '#ffffff';
+			$text ='รับโบนัสออโต้';
+		}else{
+			$classbg  ='btn-red';
+			$color = '#ffffff';
+			$text ='ไม่ได้รับโบนัสออโต้ กดรับโบนัสออโต้';
+		}
+	?>
+	<div class=" mx-auto mb-1 text-center">
+		<div class="mt-12">
+			<a  href="#" @click.prevent="change_accept_bonus()" class="btn <?php echo $classbg;?> btn-md" style="color: <?php echo $color;?>;" id="change_accept_bonus">
+				<i class="fa fa-check-circle" style="color: <?php echo $color;?>"></i> <?php echo $text; ?></a>
+		</div>
+	</div>
 	<div class="mx-auto mb-4 form-withdraw" v-if="amount_deposit > 0">
 		<?php if (!empty($promotion)): ?>
 			<div class="card  mt-4">
@@ -425,6 +443,7 @@
 	const amount_deposit = '<?php echo $user['amount_deposit_auto']; ?>';
 	// const promotion = '<?php echo json_encode($promotion); ?>';
 	const promotion_active = '<?php echo $promotion_active; ?>';
+	const auto_accept_bonus_active ='<?php echo $auto_accept_bonus;?>';
 	const bank_start_time_can_not_deposit = '<?php echo $bank!="" && isset($bank['start_time_can_not_deposit']) ? $bank['start_time_can_not_deposit'] : null; ?>';
 	const bank_end_time_can_not_deposit = '<?php echo $bank!="" && isset($bank['end_time_can_not_deposit']) ? $bank['end_time_can_not_deposit'] : null; ?>';
 	const message_can_not_deposit = '<?php echo $bank!="" && isset($bank['message_can_not_deposit']) ? preg_replace("/[\n\r]/","", $bank['message_can_not_deposit'] ) : null; ?>';

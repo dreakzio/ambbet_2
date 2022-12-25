@@ -13,7 +13,7 @@ class Account_model extends CI_Model
         account.bank_name,
         account.role,
         account.turn_date,
-            account.turn_before,
+         account.turn_before,
          account.turn_before_football,
          account.turn_before_step,
          account.turn_before_parlay,
@@ -49,6 +49,7 @@ class Account_model extends CI_Model
         account.amount_deposit_auto,
         account.amount_wallet as amount_wallet,
         account.amount_wallet_ref,
+        account.auto_accept_bonus,
         account.rank
         ');
         if (isset($search['id'])) {
@@ -77,6 +78,9 @@ class Account_model extends CI_Model
 
 		}else{
 			$this->db->where('account.deleted', 0);
+		}
+		if (isset($search['amount_deposit_auto'])) {
+			$this->db->where('account.amount_deposit_auto >', $search['amount_deposit_auto']);
 		}
         //$this->db->join('account_agent', 'account_agent.account_id = account.id','left');
 		$this->db->limit(1);
@@ -112,7 +116,8 @@ class Account_model extends CI_Model
 		$data['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : date('Y-m-d H:i:s');
         $this->db->where('id', $data['id']);
         $this->db->update('account', $data);
-    }
+		//print_r($this->db->last_query());
+	}
 
 	public function account_max_id()
 	{
@@ -180,6 +185,72 @@ class Account_model extends CI_Model
 		foreach($results as $user){
 			$user_id_list[] = $user['id'];
 		}
+		$user_account_agents = count($user_id_list) == 0 ? $user_id_list :  $this->getAccountAgentByAccountIdIn($user_id_list);
+		foreach($results as $index => $result){
+			if(array_key_exists($result['id'],$user_account_agents)){
+				$results[$index]['account_agent_username'] = $user_account_agents[$result['id']]['account_agent_username'];
+				$results[$index]['account_agent_password'] = $user_account_agents[$result['id']]['account_agent_password'];
+			}else{
+				$results[$index]['account_agent_username'] = null;
+				$results[$index]['account_agent_password'] = null;
+			}
+		}
+
+		return $results;
+	}
+
+	public function account_list_for_deposit_promotion($search = [])
+	{
+		$this->db->select('
+			account.id,
+			account.username,
+			account.agent,
+			 account.turn_before,
+			 account.turn_before_football,
+			 account.turn_before_step,
+			 account.turn_before_parlay,
+			 account.turn_before_game,
+			 account.turn_before_casino,
+			 account.turn_before_lotto,
+			 account.turn_before_m2,
+			 account.turn_before_multi_player,
+			 account.turn_before_trading,
+			 account.turn_before_keno,
+			 account.turn_over,
+			 account.turn_over_football,
+			 account.turn_over_step,
+			 account.turn_over_parlay,
+			 account.turn_over_game,
+			 account.turn_over_casino,
+			 account.turn_over_lotto,
+			 account.turn_over_m2,
+			 account.turn_over_multi_player,
+			 account.turn_over_trading,
+			 account.turn_over_keno,
+			account.turn_date,
+			account.login_point,
+            account.point_for_return_balance,
+			account.is_active_return_balance,
+			account.rank,
+			account.amount_deposit_auto,
+			account.rank_point_sum
+        ');
+		if (isset($search['limit'])) {
+			$this->db->limit($search['limit']);
+		}
+		$this->db->where('deleted', 0);
+		$this->db->where('is_active_return_balance', 1);
+		$this->db->where('auto_accept_bonus', 1);
+		$this->db->where('amount_deposit_auto >', 0);
+
+		$this->db->order_by('id asc');
+		$query = $this->db->get('account');
+		$results = $query->result_array();
+		$user_id_list = [];
+		foreach($results as $user){
+			$user_id_list[] = $user['id'];
+		}
+
 		$user_account_agents = count($user_id_list) == 0 ? $user_id_list :  $this->getAccountAgentByAccountIdIn($user_id_list);
 		foreach($results as $index => $result){
 			if(array_key_exists($result['id'],$user_account_agents)){

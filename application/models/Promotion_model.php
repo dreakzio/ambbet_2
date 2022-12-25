@@ -27,7 +27,7 @@ class Promotion_model extends CI_Model
         promotion.id,
         promotion.max_use,
         promotion.type,
-				promotion.start_time,
+		promotion.start_time,
         promotion.end_time,
         promotion.number_of_deposit_days,
         promotion.image,
@@ -93,5 +93,48 @@ class Promotion_model extends CI_Model
 		// }
 		$query = $this->db->get('promotion');
 		return $query->row_array();
+	}
+	public function promotion_find_best($search = [])
+	{
+		$this->db->select('
+          promotion.name,
+          promotion.percent,
+          promotion.turn,
+          promotion.turn_football,
+          promotion.turn_step,
+          promotion.turn_parlay,
+          promotion.turn_game,
+          promotion.turn_casino,
+          promotion.turn_lotto,
+          promotion.turn_m2,
+          promotion.turn_multi_player,
+          promotion.turn_trading,
+          promotion.turn_keno,
+          promotion.max_value,
+          promotion.category,
+          promotion.fix_amount_deposit_bonus,
+          promotion.fix_amount_deposit,
+          promotion.status,
+          promotion.id,
+          promotion.max_use,
+          promotion.type,
+			promotion.start_time,
+	        promotion.end_time,
+	        promotion.number_of_deposit_days,
+          promotion.image,
+         IF(category=1,(percent*'.$search['amount_deposit_auto'].')/100,if(fix_amount_deposit='.$search['amount_deposit_auto'].',fix_amount_deposit_bonus,0)) as pro_cal
+         ');
+
+		$this->db->where('promotion.deleted', 0);
+
+		$this->db->where('promotion.status', 1);
+		$this->db->where('IF(category=1,(percent*'.$search['amount_deposit_auto'].')/100,if(fix_amount_deposit='.$search['amount_deposit_auto'].',fix_amount_deposit_bonus,0)) > ', 0);
+		// if ($search['max_value']) {
+		//     $this->db->where('promotion.max_value', $search['max_value']);
+		// }
+		$this->db->order_by('pro_cal DESC');
+		$query = $this->db->get('promotion');
+		//print_r($this->db->last_query());
+		return $query->result_array();
 	}
 }
