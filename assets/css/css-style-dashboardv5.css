@@ -1483,6 +1483,11 @@ h2.ql-align-center {
     .navbar {
         padding: 0px;
     }
+      
+    .nav-mobile{
+        position: absolute;
+        top: 80px;
+     }
     .container.content {
         margin-top: -40px;
         min-height: 300px;

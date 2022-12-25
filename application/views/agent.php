@@ -5,19 +5,19 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('dashboard') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-handshake"></i>&nbsp;พันธมิตร</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-handshake"></i>&nbsp;<?php echo $this->lang->line('alliance'); ?></span>
 	<hr style="margin-top: 15px">
 </section>
 <section class="">
 	<div class="text-center pb-3">
-		<h5 class="mt-3 text-success"><i class="fa fa-credit-card mr-2"></i>ยอดเงินรวมที่ท่านจะได้รับ : <vue-numeric  :read-only="true"  v-bind:precision="2" v-bind:value="results.commission.result_totals.sum_amount < 0 ? 0 : results.commission.result_totals.sum_amount" separator=","></vue-numeric><span class="ml-2">บาท</span>
+		<h5 class="mt-3 text-success"><i class="fa fa-credit-card mr-2"></i><?php echo $this->lang->line('money_result'); ?> : <vue-numeric  :read-only="true"  v-bind:precision="2" v-bind:value="results.commission.result_totals.sum_amount < 0 ? 0 : results.commission.result_totals.sum_amount" separator=","></vue-numeric><span class="ml-2"><?php echo $this->lang->line('bath'); ?></span>
 		</h5>
-		<h6 class="mt-3 text-dark">งวดวันที่ : {{search.all.date_start != '' ? moment(search.all.date_start).format('DD/MM/YYYY')+' ถึง '+moment(search.all.date_end).format('DD/MM/YYYY') : '-'}}
+		<h6 class="mt-3 text-dark"><?php echo $this->lang->line('installment_date'); ?> : {{search.all.date_start != '' ? moment(search.all.date_start).format('DD/MM/YYYY')+' <?php echo $this->lang->line('to'); ?> '+moment(search.all.date_end).format('DD/MM/YYYY') : '-'}}
 		</h6>
-		<h6 class="mt-3 text-dark">ค่าคอมมิชชั่น : <?php echo $user['commission_percent']; ?> %
+		<h6 class="mt-3 text-dark"><?php echo $this->lang->line('commission'); ?> : <?php echo $user['commission_percent']; ?> %
 		</h6>
-		<h6 class="mt-3 text-dark"><i class="fa fa-users mr-2"></i>ยูสภายใต้รวมทั้งหมด : <vue-numeric  :read-only="true" v-bind:value="results.ref.total" separator=","></vue-numeric><span class="ml-2">คน</span>
+		<h6 class="mt-3 text-dark"><i class="fa fa-users mr-2"></i><?php echo $this->lang->line('userundertotal'); ?> : <vue-numeric  :read-only="true" v-bind:value="results.ref.total" separator=","></vue-numeric><span class="ml-2"><?php echo $this->lang->line('people'); ?></span>
 		</h6>
 	</div>
 	<div class="red-line mb-2" style="width:10%; margin:auto;"></div>
@@ -27,13 +27,13 @@
 				<div class="d-flex justify-content-center">
 					<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 						<li class="nav-item mx-1 mt-2" role="presentation">
-							<a class="nav-link text-center active" id="pills-commission-tab" data-toggle="pill" href="#pills-commission" role="tab" aria-controls="pills-commission" aria-selected="true"><i class="fa fa-gift  mr-1" ></i>Commission</a>
+							<a class="nav-link text-center active" id="pills-commission-tab" data-toggle="pill" href="#pills-commission" role="tab" aria-controls="pills-commission" aria-selected="true"><i class="fa fa-gift  mr-1" ></i><?php echo $this->lang->line('commission'); ?></a>
 						</li>
 						<li class="nav-item mx-1 mt-2" role="presentation">
-							<a class="nav-link text-center" id="pills-report-tab" data-toggle="pill" href="#pills-report" role="tab" aria-controls="pills-report" aria-selected="false"><i class="fa fa-history  mr-1" ></i>สรุปฝาก-ถอนยูส</a>
+							<a class="nav-link text-center" id="pills-report-tab" data-toggle="pill" href="#pills-report" role="tab" aria-controls="pills-report" aria-selected="false"><i class="fa fa-history  mr-1" ></i><?php echo $this->lang->line('deposit_withdraw_summary'); ?></a>
 						</li>
 						<li class="nav-item mx-1 mt-2" role="presentation">
-							<a class="nav-link text-center" id="pills-ref-tab" data-toggle="pill" href="#pills-ref" role="tab" aria-controls="pills-ref" aria-selected="false"><i class="fa fa-handshake mr-1" ></i>ประวัติการแนะนำ</a>
+							<a class="nav-link text-center" id="pills-ref-tab" data-toggle="pill" href="#pills-ref" role="tab" aria-controls="pills-ref" aria-selected="false"><i class="fa fa-handshake mr-1" ></i><?php echo $this->lang->line('his_recommend'); ?></a>
 						</li>
 						<li class="nav-item mx-1 mt-2" role="presentation">
 							<a class="nav-link text-center" id="pills-qrcode-tab" data-toggle="pill" href="#pills-qrcode" role="tab" aria-controls="pills-qrcode" aria-selected="false"><i class="fa  text-dark mr-1" ></i>QR Code</a>
@@ -49,11 +49,11 @@
 									<div class="input-group input-group-sm mb-3">
 										<div class="input-daterange input-group input-group-sm" id="datepicker">
 											<div class="input-group-prepend">
-												<span class="input-group-text" id="basic-addon1">วันที่ (จาก)</span>
+												<span class="input-group-text" id="basic-addon1"><?php echo $this->lang->line('date_from'); ?></span>
 											</div>
 											<input type="text" class="input-sm form-control" v-model="search.all.date_start" id="date_start_commission" name="start" />
 											<div class="input-group-prepend">
-												<span class="input-group-text" id="basic-addon1">วันที่ (ถึง)</span>
+												<span class="input-group-text" id="basic-addon1"><?php echo $this->lang->line('date_to'); ?></span>
 											</div>
 											<input type="text" class="input-sm form-control" v-model="search.all.date_end" id="date_end_commission" name="end" />
 										</div>
@@ -61,7 +61,7 @@
 								</div>
 								<div class="col-12 col-md-2 mx-auto">
 									<div class="form-group">
-										<button type="button" @click.prevent="getCommissionAndReportList(true,1)" name="button" class="btn btb-light btn-block border-0 btn-sm"><span class="text-silver">ค้นหา</span></button>
+										<button type="button" @click.prevent="getCommissionAndReportList(true,1)" name="button" class="btn btb-light btn-block border-0 btn-sm"><span class="text-silver"><?php echo $this->lang->line('search'); ?></span></button>
 									</div>
 								</div>
 							</div>
@@ -71,10 +71,10 @@
 										<table class="table table-striped">
 											<thead class="bg-darkred-2">
 											<tr class="text-white bg-success">
-												<th class="text-center">วันที่</th>
-												<th class="text-right">ยอดฝาก</th>
-												<th class="text-right">ยอดถอน</th>
-												<th class="text-right">ยอดเสีย</th>
+												<th class="text-center"><?php echo $this->lang->line('date'); ?></th>
+												<th class="text-right"><?php echo $this->lang->line('deposit_amount'); ?></th>
+												<th class="text-right"><?php echo $this->lang->line('deposit_withdraw'); ?></th>
+												<th class="text-right"><?php echo $this->lang->line('bad_amount'); ?></th>
 											</tr>
 											</thead>
 											<tbody class="bg-white">
@@ -85,7 +85,7 @@
 												<td class="text-right"><vue-numeric  :read-only="true"  v-bind:precision="2" v-bind:value="result.sum" separator=","></vue-numeric></td>
 											</tr>
 											<tr v-if="results.commission.results.length == 0">
-												<td colspan="4" class="text-center">ไม่มีข้อมูล</td>
+												<td colspan="4" class="text-center"><?php echo $this->lang->line('nodata'); ?></td>
 											</tr>
 											</tbody>
 											<tfoot>
@@ -109,11 +109,11 @@
 									<div class="input-group input-group-sm mb-3">
 										<div class="input-daterange input-group input-group-sm" id="datepicker">
 											<div class="input-group-prepend">
-												<span class="input-group-text" id="basic-addon1">วันที่ (จาก)</span>
+												<span class="input-group-text" id="basic-addon1"><?php echo $this->lang->line('date_from'); ?></span>
 											</div>
 											<input type="text" class="input-sm form-control" v-model="search.all.date_start" id="date_start_report" name="start" />
 											<div class="input-group-prepend">
-												<span class="input-group-text" id="basic-addon1">วันที่ (ถึง)</span>
+												<span class="input-group-text" id="basic-addon1"><?php echo $this->lang->line('date_to'); ?></span>
 											</div>
 											<input type="text" class="input-sm form-control" v-model="search.all.date_end" id="date_end_report" name="end" />
 										</div>
@@ -121,7 +121,7 @@
 								</div>
 								<div class="col-12 col-md-2 mx-auto">
 									<div class="form-group">
-										<button type="button" @click.prevent="getCommissionAndReportList(true,1)" name="button" class="btn btn-block btn-custom border-0 btn-sm"><span class="text-silver">ค้นหา</span></button>
+										<button type="button" @click.prevent="getCommissionAndReportList(true,1)" name="button" class="btn btn-block btn-custom border-0 btn-sm"><span class="text-silver"><?php echo $this->lang->line('search'); ?></span></button>
 									</div>
 								</div>
 							</div>
@@ -131,10 +131,10 @@
 										<table class="table table-striped">
 											<thead class="bg-darkred-2">
 											<tr class="text-white bg-success">
-												<th class="text-center">ยูสเซอร์</th>
-												<th class="text-right">ยอดฝาก</th>
-												<th class="text-right">ยอดถอน</th>
-												<th class="text-right">ยอดเสีย</th>
+												<th class="text-center"><?php echo $this->lang->line('user'); ?></th>
+												<th class="text-right"><?php echo $this->lang->line('deposit_amount'); ?></th>
+												<th class="text-right"><?php echo $this->lang->line('deposit_withdraw'); ?></th>
+												<th class="text-right"><?php echo $this->lang->line('bad_amount'); ?></th>
 											</tr>
 											</thead>
 											<tbody class="bg-white">
@@ -145,7 +145,7 @@
 												<td class="text-right"><vue-numeric  :read-only="true"  v-bind:precision="2" v-bind:value="result.sum" separator=","></vue-numeric></td>
 											</tr>
 											<tr v-if="results.report.results.length == 0">
-												<td colspan="4" class="text-center">ไม่มีข้อมูล</td>
+												<td colspan="4" class="text-center"><?php echo $this->lang->line('nodata'); ?></td>
 											</tr>
 											</tbody>
 											<tfoot>
@@ -180,7 +180,7 @@
 								</paginate>
 							</div>
 							<div class="row mb-4 justify-content-center">
-								<p style="font-size: .9em" class="mb-0 text-muted mt-1 mr-2">แสดง {{results.report.from || 0}} ถึง {{results.report.to || 0}} จาก {{results.report.total}} รายการ</p>
+								<p style="font-size: .9em" class="mb-0 text-muted mt-1 mr-2"><?php echo $this->lang->line('display'); ?> {{results.report.from || 0}} <?php echo $this->lang->line('to'); ?> {{results.report.to || 0}} <?php echo $this->lang->line('from'); ?> {{results.report.total}} <?php echo $this->lang->line('list'); ?></p>
 							</div>
 						</div>
 					</div>
@@ -192,8 +192,8 @@
 										<table class="table table-striped">
 											<thead class="bg-darkred-2">
 											<tr class="text-white bg-success">
-												<th class="text-center">ยูส</th>
-												<th class="text-center">วันที่สมัคร</th>
+												<th class="text-center"><?php echo $this->lang->line('user'); ?></th>
+												<th class="text-center"><?php echo $this->lang->line('registered_date'); ?></th>
 											</tr>
 											</thead>
 											<tbody class="bg-white">
@@ -202,7 +202,7 @@
 												<td class="text-center">{{result.created_at}}</td>
 											</tr>
 											<tr v-if="results.ref.results.length == 0">
-												<td colspan="2" class="text-center">ไม่มีข้อมูล</td>
+												<td colspan="2" class="text-center"><?php echo $this->lang->line('nodata'); ?></td>
 											</tr>
 											</tbody>
 										</table>
@@ -229,9 +229,8 @@
 								</paginate>
 							</div>
 							<div class="row mb-4 justify-content-center">
-								<p style="font-size: .9em" class="mb-0 text-muted mt-1 mr-2">แสดง {{results.ref.from || 0}} ถึง {{results.ref.to || 0}} จาก {{results.ref.total}} รายการ</p>
+							<p style="font-size: .9em" class="mb-0 text-muted mt-1 mr-2"><?php echo $this->lang->line('display'); ?> {{results.report.from || 0}} <?php echo $this->lang->line('to'); ?> {{results.report.to || 0}} <?php echo $this->lang->line('from'); ?> {{results.report.total}} <?php echo $this->lang->line('list'); ?></p>
 							</div>
-
 						</div>
 					</div>
 					<div class="tab-pane fade" id="pills-qrcode" role="tabpanel" aria-labelledby="pills-qrcode-tab">
@@ -241,7 +240,7 @@
 									<center class="">
 										<div id="qrcode"></div>
 										<button type="button"  @click.prevent="copyLinkRef('<?php echo base_url('register?ref=').$user['id'] ?>')"  class="btn btn-custom border-0 mt-3" name="button">
-											<span  class="text-silver"><i class="fa fa-clipboard"></i>&nbsp;คัดลอกลิงค์</span>
+											<span  class="text-silver"><i class="fa fa-clipboard"></i>&nbsp;<?php echo $this->lang->line('copylink'); ?></span>
 										</button>
 									</center>
 								</div>

@@ -19,50 +19,50 @@
 			<ul>
 				<li>
 					<a href="<?php echo base_url('dashboard'); ?>" class="hvr-buzz-out"><i class="fa fa-home"></i>
-						<p>หน้าหลัก</p>
+						<p><?php echo $this->lang->line('main'); ?></p>
 					</a>
 				</li>
 
 				<?php if(isset($_SESSION['user'])): ?>
 					<li>
 						<a href="<?php echo base_url('promotions'); ?>" class="hvr-buzz-out"><i class="fa fa-gift"></i>
-							<p>โปรโมชั่น</p>
+							<p><?php echo $this->lang->line('promotion'); ?></p>
 						</a>
 					</li>
 					<li class="fix-nav-bottom-play">
 						<a href="<?php echo base_url('game'); ?>" class="hvr-buzz-out"><i class="fa fa-play"></i>
-							<p>เล่นเกม</p>
+							<p><?php echo $this->lang->line('playgame'); ?></p>
 						</a>
 					</li>
 					<li>
 						<a href="<?php echo base_url('profile'); ?>" class="hvr-buzz-out"><i class="fa fa-user"></i>
-							<p>บัญชีผู้ใช้</p>
+							<p><?php echo $this->lang->line('account'); ?></p>
 						</a>
 					</li>
 				<?php else: ?>
 					<li>
 						<a href="<?php echo base_url('auth'); ?>" class="hvr-buzz-out"><i class="fa fa-sign-in-alt"></i>
 							<p>
-								เข้าสู่ระบบ
+								<?php echo $this->lang->line('login'); ?>
 							</p>
 						</a>
 					</li>
 					<li class="fix-nav-bottom-play">
 						<a href="<?php echo base_url('register'); ?>" class="hvr-buzz-out"><i class="fa fa-user-plus"></i>
 							<p>
-								สมัครสมาชิก
+							<?php echo $this->lang->line('register'); ?>
 							</p>
 						</a>
 					</li>
 					<li>
 						<a href="<?php echo base_url('promotions'); ?>" class="hvr-buzz-out"><i class="fa fa-gift"></i>
-							<p>โปรโมชั่น</p>
+							<p><?php echo $this->lang->line('promotion'); ?></p>
 						</a>
 					</li>
 				<?php endif; ?>
 				<li>
 					<a href="<?php echo $web_setting['line_url']['value']; ?>" class="hvr-buzz-out"><i class="fab fa-line"></i>
-						<p>ติดต่อเรา</p>
+						<p><?php echo $this->lang->line('contactus'); ?></p>
 					</a>
 				</li>
 			</ul>

@@ -5,21 +5,21 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('dashboard') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fas fa-life-ring mb-2"></i>&nbsp;วงล้อพารวย</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fas fa-life-ring mb-2"></i>&nbsp;<?php echo $this->lang->line('event_wheel'); ?></span>
 	<hr style="margin-top: 15px">
 	<div class="text-center pb-0">
-		<h5 class="mt-3 text-dark">ทุกๆยอดฝากเงินท่านจะได้รับเหรียญสะสม (<?php echo number_format($web_setting['wheel_amount_per_point']['value']); ?> บาท / 1 เหรียญ)
+		<h5 class="mt-3 text-dark"><?php echo $this->lang->line('getwheeleverydeposit'); ?> (<?php echo number_format($web_setting['wheel_amount_per_point']['value']); ?> <?php echo $this->lang->line('bath_per_1coin'); ?>)
 		</h5>
-		<p class="text-danger mb-1 font-weight-bold">** ท่านต้องทำเทิร์นให้ครบตามยอดฝากรวมของวันนั้นๆ</p>
+		<p class="text-danger mb-1 font-weight-bold">** <?php echo $this->lang->line('doturn_deposit_belong_day'); ?></p>
 	</div>
 	<div class="container" >
 		<div class="mb-2 p-0">
 			<div class="d-flex justify-content-center profile-box-top">
 				<div class="p-0 align-self-center text-center" >
 					<div class="user-name  text-silver text-center mb-1">
-						<h4 class="text-success text-bold-700 mb-0">เหรียญ :	<span id="point_for_wheel"><?php echo number_format($user['point_for_wheel']); ?></span></h4>
-						<small class="mb-0 text-danger">*หากหมุนวงล้อเหรียญจะถูกหัก (<?php echo number_format($web_setting['wheel_point_for_spin']['value']); ?> เหรียญ / 1 ครั้ง)</small>
+						<h4 class="text-success text-bold-700 mb-0"><?php echo $this->lang->line('coin'); ?> :	<span id="point_for_wheel"><?php echo number_format($user['point_for_wheel']); ?></span></h4>
+						<small class="mb-0 text-danger">*<?php echo $this->lang->line('used_coin'); ?> (<?php echo number_format($web_setting['wheel_point_for_spin']['value']); ?> <?php echo $this->lang->line('coin_per_1time'); ?>)</small>
 					</div>
 				</div>
 			</div>

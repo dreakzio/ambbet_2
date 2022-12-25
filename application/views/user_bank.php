@@ -5,8 +5,8 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('profile') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-university"></i>&nbsp;ข้อมูลธนาคาร</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-university"></i>&nbsp;<?php echo $this->lang->line('bank_detail'); ?></span>
 	<hr style="margin-top: 15px">
 </section>
 <div class="row">
@@ -36,9 +36,9 @@
 			<br>
 			<br>
 			<p style="font-size: 22px;">
-				ธนาคาร : <?php echo array_key_exists($user['bank'],getBankList()) ? getBankList()[$user['bank']] : '-'; ?><br />
-				ชื่อบัญชี : <?php echo $user['full_name']; ?><br />
-				เลขบัญชี : <?php echo getBankNumberFormat($user['bank_number']); ?>
+				<?php echo $this->lang->line('bank_code'); ?> : <?php echo array_key_exists($user['bank'],getBankList()) ? getBankList()[$user['bank']] : '-'; ?><br />
+				<?php echo $this->lang->line('bank_name'); ?> : <?php echo $user['full_name']; ?><br />
+				<?php echo $this->lang->line('bank_number'); ?> : <?php echo getBankNumberFormat($user['bank_number']); ?>
 			</p>
 		</center>
 	</div>

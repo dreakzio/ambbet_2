@@ -5,8 +5,8 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('dashboard') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-gift"></i>&nbsp;โปรโมชั่น</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-gift"></i>&nbsp;<?php echo $this->lang->line('promotion'); ?></span>
 	<hr style="margin-top: 15px">
 </section>
 	<div class="row mx-auto">
@@ -38,24 +38,24 @@
 									<div class="col-12">
 										<h4 class="text-dark text-center mt-2 mb-2"><?php echo $promotion['name']; ?>&nbsp;
 											<?php if ($promotion['max_value']>0 && $promotion['category'] == "1"): ?>
-												สูงสุด <?php echo number_format($promotion['max_value']) ?> บาท
+												<?php echo $this->lang->line('max'); ?> <?php echo number_format($promotion['max_value']) ?> <?php echo $this->lang->line('bath'); ?>
 											<?php elseif ($promotion['category'] == "2"): ?>
 											<?php endif; ?>
 										</h4>
-										<h6 class="text-danger font-weight-bold">** เพียงทำเทิร์นให้ครบบางอย่างเท่านั้น</h6>
+										<h6 class="text-danger font-weight-bold">** <?php echo $this->lang->line('just_do_some_turn'); ?></h6>
 										<hr class="mt-1 mb-1">
 										<div class="row">
 											<?php foreach (game_code_list() as $game_code): ?>
 												<?php if(isset($promotion['turn_'.strtolower($game_code)])): ?>
 													<div class="col-md-6">
-														<strong class=""><?php echo array_key_exists($game_code,game_code_text_list()) ? game_code_text_list()[$game_code] : $game_code; ?></strong> : <span class="float-right mr-2"><?php echo is_numeric($promotion['turn_'.strtolower($game_code)]) && (float)$promotion['turn_'.strtolower($game_code)] >0 ? $promotion['turn_'.strtolower($game_code)].' เท่า' : '-'; ?></span>
+														<strong class=""><?php echo array_key_exists($game_code,game_code_text_list()) ? game_code_text_list()[$game_code] : $game_code; ?></strong> : <span class="float-right mr-2"><?php echo is_numeric($promotion['turn_'.strtolower($game_code)]) && (float)$promotion['turn_'.strtolower($game_code)] >0 ? $promotion['turn_'.strtolower($game_code)].$this->lang->line('tao') : '-'; ?></span>
 													</div>
 												<?php endif; ?>
 											<?php endforeach; ?>
 										</div>
 									</div>
 									<div class="col-12 text-right">
-										<a href="#" data-dismiss="modal" data-target="#promotionModal<?php echo $promotion['id']; ?>" class="btn btn-success">ปิด</a>
+										<a href="#" data-dismiss="modal" data-target="#promotionModal<?php echo $promotion['id']; ?>" class="btn btn-success"><?php echo $this->lang->line('close'); ?></a>
 									</div>
 								</div>
 							</div>

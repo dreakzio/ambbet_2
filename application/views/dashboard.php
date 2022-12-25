@@ -1,5 +1,5 @@
 <section class="user-infor text-center">
-    <a style="font-size:23px !important; margin-bottom:13px;"><b>รหัสสมาชิกของคุณคือ :</b><a
+    <a style="font-size:23px !important; margin-bottom:13px;"><b><?php echo $this->lang->line('username_is'); ?> :</b><a
             style="background-image: linear-gradient(to right, gold , yellow);"><i style='font-size:24px'
                 class='fas'>&#xf2bb;</i>
             <?php echo $user['username']; ?></a></a> <br>
@@ -31,11 +31,11 @@
 <div>
     <section class="credit">
         <div class="credit-box" style="background-color:#000;">
-            <div class="amount-box float-left"><small>ยอดเงินคงเหลือ</small>
+            <div class="amount-box float-left"><small><?php echo $this->lang->line('balance_total'); ?></small>
                 <small class="float-right mr-3">
-                    <i v-if="!loading_wallet" @click.prevent="getCreditBalance" title="อัพเดทยอดเงิน"
+                    <i v-if="!loading_wallet" @click.prevent="getCreditBalance" title="<?php echo $this->lang->line('update_balance'); ?>"
                         class="fas fa-sync-alt refresh pointer animated"></i>
-                    <i title="อัพเดทยอดเงิน" v-else class="fas fa-sync-alt refresh fa-spin"></i>
+                    <i title="<?php echo $this->lang->line('update_balance'); ?>" v-else class="fas fa-sync-alt refresh fa-spin"></i>
                 </small>
                 <p class="amount">
                     <vue-numeric id="main_wallet" :read-only="true" empty-value="0.00" output-type="String"
@@ -43,10 +43,10 @@
                 </p>
             </div>
             <div class="button-box float-left"><a href="<?php echo base_url('deposit') ?>" class="btn-block btn-gold"><i
-                        class="fa fa-wallet"></i> ฝากเงิน</a>
+                        class="fa fa-wallet"></i> <?php echo $this->lang->line('deposit'); ?></a>
                 <a href="<?php echo base_url('withdraw') ?>" class="btn-block btn-silver"><i
                         class="fa fa-hand-holding-usd"></i>
-                    ถอนเงิน</a>
+                        <?php echo $this->lang->line('withdraw'); ?></a>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -58,28 +58,28 @@
             class="btn-block play-button text-center hvr-buzz-out d-none d-sm-block"
             style="text-decoration: none;padding: <?php echo $_SESSION['user']['role'] == roleAdmin() || $_SESSION['user']['role'] == roleSuperAdmin() ? '100px' : '53px' ?>;"><i
                 class="fa fa-play mb-2" style="font-size: 85px !important;"></i>
-            <p>เข้าเล่นเกม</p>
+            <p><?php echo $this->lang->line('playgame'); ?></p>
         </a>
         <a href="<?php echo base_url('game') ?>"
             class="btn-block play-button text-center hvr-buzz-out d-block d-sm-none"
             style="text-decoration: none;padding:53px"><i class="fa fa-play mb-2"
                 style="font-size: 85px !important;"></i>
-            <p>เข้าเล่นเกม</p>
+            <p><?php echo $this->lang->line('playgame'); ?></p>
         </a>
     </div>
     <div class="nav-other-button p-1">
         <div class="other-list other-list-1"><a
                 href="<?php echo $user['agent'] == "1" ? base_url('agent') : base_url('ref'); ?>"
                 class="btn-dark-tri hvr-buzz-out"><i class="fa fa-handshake mb-2"></i>
-                <p><?php echo $user['agent'] == "1" ? 'พันธมิตร' : 'แนะนำเพื่อน'; ?></p>
+                <p><?php echo $user['agent'] == "1" ? $this->lang->line('alliance') : $this->lang->line('refer_a_friend') ?></p>
             </a></div>
         <div class="other-list other-list-2"><a href="<?php echo base_url('promotions') ?>"
                 class="btn-dark-tri hvr-buzz-out"><i class="fa fa-gift mb-2"></i>
-                <p>โปรโมชั่น</p>
+                <p><?php echo $this->lang->line('promotion'); ?></p>
             </a></div>
         <div class="other-list other-list-1"><a href="<?php echo base_url('news') ?>"
                 class="btn-dark-tri hvr-buzz-out"><i class="far fa-newspaper mb-2"></i>
-                <p>ข่าวสาร</p>
+                <p><?php echo $this->lang->line('news'); ?></p>
             </a></div>
         <!-- <div class="other-list other-list-2"><a href="<?php echo base_url('profile') ?>"
 												class="btn-dark-tri hvr-buzz-out"><i class="fas fa-donate mb-2"></i>
@@ -91,16 +91,16 @@
 			</a></div> -->
         <div class="other-list other-list-2"><a href="<?php echo base_url('event') ?>"
                 class="btn-dark-tri hvr-buzz-out"><i class="fas fa-award mb-2"></i>
-                <p>กิจกรรม</p>
+                <p><?php echo $this->lang->line('event'); ?></p>
             </a></div>
         <div class="other-list other-list-1"><a class="btn-dark-tri hvr-buzz-out"
                 href="<?php echo base_url('history') ?>"><i class="fa fa-list-alt mb-2"></i>
-                <p>ประวัติการเงิน</p>
+                <p><?php echo $this->lang->line('finance_log'); ?></p>
             </a></div>
         <?php if($_SESSION['user']['role'] == roleAdmin() || $_SESSION['user']['role'] == roleSuperAdmin()): ?>
         <div class="other-list other-list-2"><a class="btn-dark-tri hvr-buzz-out"
                 href="<?php echo base_url('admin') ?>"><i class="fa fa-list-alt mb-2"></i>
-                <p>แอดมิน</p>
+                <p><?php echo $this->lang->line('admin'); ?></p>
             </a></div>
         <?php endif; ?>
         <div class="clearfix"></div>
@@ -235,7 +235,7 @@ if($chk_run_notify):
                         </div>
                     </div>
                     <div class="col-12 mt-3 text-right">
-                        <a href="#" data-dismiss="modal" data-target="#notifyModal" class="btn btn-success">ปิด</a>
+                        <a href="#" data-dismiss="modal" data-target="#notifyModal" class="btn btn-success"><?php echo $this->lang->line('close'); ?></a>
                     </div>
                 </div>
             </div>

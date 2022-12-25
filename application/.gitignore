@@ -30,3 +30,13 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/results/
 config/config.php
 config/database.php
+
+admin/application/config/config.php
+admin/application/config/database.php
+application/config/config.php
+application/config/database.php
+lib/Scb.php
+lib/Kplus.php
+prompayTransection.php
+config.php
+conn_cron.php
