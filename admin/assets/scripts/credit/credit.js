@@ -586,11 +586,7 @@ $('#upload_form').on('submit', function(e){
 			sweetAlert2('warning', 'เครดิตคงเหลือไม่เพียงพอ');
 			return;
 		}
-		if($('#image_file').val() == '')
-		{
-			sweetAlert2('warning', 'กรุณาแนบสลิปโอนเงิน');
-			return;
-		}
+
 		let transaction = $('#transaction').val();
 		let date = $('#date').val();
 		let time = $('#time').val();
@@ -599,6 +595,12 @@ $('#upload_form').on('submit', function(e){
 			let time =  moment().format('HH:mm');
 		}
 		if (transaction == 1) {
+			if($('#image_file').val() == '')
+			{
+				sweetAlert2('warning', 'กรุณาแนบสลิปโอนเงิน');
+				return;
+			}
+
 			if (date == "") {
 				sweetAlert2('warning', 'กรุณาเลือกวันที่');
 				return;

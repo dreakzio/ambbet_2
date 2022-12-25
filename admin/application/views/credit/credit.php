@@ -79,6 +79,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</select>
 							</div>
 						</div>
+
+					</div>
+					<div class="row" id="div_date" style=" display: none;">
 						<div class="col-md-4 col-sm-4" id="div_upload_slip">
 							<div class="form-group">
 								<label class="control-label">upload slip</label>
@@ -86,8 +89,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								<div id="imagePreview" class="imagePreview"></div>
 							</div>
 						</div>
-					</div>
-					<div class="row" id="div_date" style=" display: none;">
 						<div class="col-md-4 col-sm-4">
 							<div class="form-group">
 								<label class="control-label">วันที่</label>

@@ -15,7 +15,7 @@ class DepositWhitPromotion extends CI_Controller
 		$auto_deposit = $this->Setting_model->setting_find([
 			'name' => 'deposit_with_bonus_auto'
 		]);
-		if($auto_deposit==0){
+		if($auto_deposit['value']==0){
 			echo json_encode(['status'=>false,"message" => "Deposit with Bonus is Disabled"]);
 			die();
 		}
@@ -470,7 +470,6 @@ class DepositWhitPromotion extends CI_Controller
 					}
 
 				}
-
 
 				//$this->ref_bonus($user, $finance_id);
 				echo json_encode([

@@ -30,6 +30,7 @@ class Account extends CI_Controller
 		$this->check_login();
         header('Content-Type: application/json');
 		$user = $_SESSION['user'];
+		//print_r($user);
         try {
         	if(!empty($user['member_username'])){
 				$user['account_agent_username'] = $user['member_username'];

@@ -172,7 +172,6 @@ class Credit extends CI_Controller
 		//die();
 		$slip_image  = $this->slip_image('image_file');
 
-
 		$credit_before = $user['amount_deposit_auto'];
         $credit_after = $post['type']==1?($user['amount_deposit_auto']+$process):($user['amount_deposit_auto']-$process);
         $create = [
