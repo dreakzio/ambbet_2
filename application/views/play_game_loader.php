@@ -5,7 +5,7 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('game') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-play"></i> เล่นเกมส์</a>
+		<i class="fa fa-play"></i> <?php echo $this->lang->line('playgame'); ?></a>
 	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-gamepad"></i>&nbsp;<?php echo empty($game_title) ? "" : " ".$game_title; ?><?php echo empty($game_name) ? "" : " - ".$game_name; ?></span>
 	<hr style="margin-top: 15px">
 </section>

@@ -5,19 +5,19 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('dashboard') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-hand-holding-usd"></i>&nbsp;ถอนเงิน</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-hand-holding-usd"></i>&nbsp;<?php echo $this->lang->line('withdraw'); ?></span>
 	<hr style="margin-top: 15px">
 </section>
 <div>
 	<section class="credit">
 		<div class="credit-box" style="background-color: #000">
 			<div class="amount-box float-left">
-				<small>ยอดเงินคงเหลือ</small>
+				<small><?php echo $this->lang->line('balance_total'); ?></small>
 				<small class="float-right mr-3">
-					<i v-if="!loading_wallet" @click.prevent="getCreditBalance" title="อัพเดทยอดเงิน"
+					<i v-if="!loading_wallet" @click.prevent="getCreditBalance" title="<?php echo $this->lang->line('update_balance'); ?>"
 					   class="fas fa-sync-alt refresh pointer animated"></i>
-					<i title="อัพเดทยอดเงิน"
+					<i title="<?php echo $this->lang->line('update_balance'); ?>"
 					   v-else	   class="fas fa-sync-alt refresh fa-spin"></i>
 				</small>
 				<p class="amount">
@@ -26,9 +26,9 @@
 			</div>
 			<div class="button-box float-left">
 				<a href="<?php echo base_url('deposit') ?>" class="btn-block btn-gold"><i class="fa fa-wallet"></i>
-					ฝากเงิน</a>
+				<?php echo $this->lang->line('deposit'); ?></a>
 				<a href="<?php echo base_url('withdraw') ?>" class="btn-block btn-silver"><i
-							class="fa fa-hand-holding-usd"></i> ถอนเงิน</a>
+							class="fa fa-hand-holding-usd"></i> <?php echo $this->lang->line('withdraw'); ?></a>
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -36,7 +36,7 @@
 </div>
 
 <div class="card bank-info mt-4">
-	<h5 class="card-header">ถอนเงินเข้าบัญชีธนาคาร</h5>
+	<h5 class="card-header"><?php echo $this->lang->line('withdraw_money_tobank'); ?></h5>
 	<div class="card-body">
 		<div class="bank-user-logo">
 			<?php if(in_array($user['bank'],["01","1"])): ?>
@@ -62,11 +62,11 @@
 			<?php endif; ?>
 		</div>
 		<div class="bank-user-info">
-			<p id="bank-user-bankname" style="font-family: DB-Heavent-light !important;">ธนาคาร :
+			<p id="bank-user-bankname" style="font-family: DB-Heavent-light !important;"><?php echo $this->lang->line('bank_code'); ?> :
 				<?php echo array_key_exists($user['bank'],getBankList()) ? getBankList()[$user['bank']] : '-'; ?></p>
-			<p id="bank-user-name" style="font-family: DB-Heavent-light !important;">ชื่อบัญชี :
+			<p id="bank-user-name" style="font-family: DB-Heavent-light !important;"><?php echo $this->lang->line('bank_name'); ?> :
 				<?php echo $user['full_name']; ?></p>
-			<p id="bank-user-number" style="font-family: DB-Heavent-light !important;">เลขบัญชี :
+			<p id="bank-user-number" style="font-family: DB-Heavent-light !important;"><?php echo $this->lang->line('bank_number'); ?> :
 				<?php echo getBankNumberFormat($user['bank_number']); ?></p>
 		</div>
 	</div>
@@ -75,21 +75,21 @@
 <div class="card">
 	<div class="card-body">
 		<div class="form-group col-md-12" id="Rolling">
-			<label>ยอดเงินคงเหลือ</label>
+			<label><?php echo $this->lang->line('balance_total'); ?></label>
 			<input type="text" class="form-control text-muted" name="Amount" v-bind:value="amount" placeholder="" disabled="">
-			<label>ถอนขั้นต่ำ</label>
+			<label><?php echo $this->lang->line('minimum_withdrawal'); ?></label>
 			<input type="text" class="form-control text-muted" name="Bonus" v-model="withdraw_min_amount" placeholder="" disabled="">
-			<label id="Tag">ยอดถอน</label>
-			<vue-numeric :disabled="pre_loader" :placeholder="'กรอกจำนวนเงิน'" :class="'form-control'" id="withdraw_amount" :read-only="false"  v-bind:precision="0" v-model="amount_withdraw" separator=","></vue-numeric>
+			<label id="Tag"><?php echo $this->lang->line('withdraw_amount'); ?></label>
+			<vue-numeric :disabled="pre_loader" :placeholder="'<?php echo $this->lang->line('type_amount'); ?>'" :class="'form-control'" id="withdraw_amount" :read-only="false"  v-bind:precision="0" v-model="amount_withdraw" separator=","></vue-numeric>
 			<div class="text-left text-warning mb-2 mt-2">
 				<a href="<?php echo $web_setting['line_url']['value']; ?>" class="text-warning" target="_blank">
-				<span style="font-size:1em;">หากเกิดปัญหาถอนเงินหรืออื่นๆ กรุณาติดต่อเจ้าหน้าที่ Line ID : <span class="text-success"><?php echo isset($web_setting['line_id']) ? $web_setting['line_id']['value'] : ''; ?></span>
+				<span style="font-size:1em;"><?php echo $this->lang->line('issue_contact_admin'); ?><span class="text-success"><?php echo isset($web_setting['line_id']) ? $web_setting['line_id']['value'] : ''; ?></span>
 				</span>
 				</a>
 			</div>
 			<div class="form-group">
 				<button :disabled="pre_loader" type="button" @click.prevent="doWithdraw()" class="btn-red btn-lg btn-block" style="font-size: 20px" name="button">
-					<i class="fa fa-hand-holding-usd"></i> ทำรายการถอนเงิน
+					<i class="fa fa-hand-holding-usd"></i> <?php echo $this->lang->line('withdraw_money'); ?>
 				</button>
 			</div>
 		</div>
@@ -101,17 +101,17 @@
 <section class="py-4">
 	<div class="withdraw-history">
 		<div class="text-center text-dark title-withdraw-history">
-			<h3>ประวัติการถอน (20 รายการล่าสุด)</h3>
+			<h3><?php echo $this->lang->line('withdraw_history_20'); ?></h3>
 		</div>
 		<div class="table-deposit mx-auto">
 			<table class="table table-striped">
 				<thead class="bg-darkred-2">
 				<tr class="text-white bg-danger">
-					<th class="text-center">ลำดับ</th>
-					<th class="text-left" width="40%">วันเวลา</th>
-					<th class="text-center" width="10%">ประเภท</th>
-					<th class="text-right" width="15%">จำนวน</th>
-					<th class="text-center">สถานะ</th>
+					<th class="text-center"><?php echo $this->lang->line('index'); ?></th>
+					<th class="text-left" width="40%"><?php echo $this->lang->line('datetime'); ?></th>
+					<th class="text-center" width="10%"><?php echo $this->lang->line('type'); ?></th>
+					<th class="text-right" width="15%"><?php echo $this->lang->line('amount'); ?></th>
+					<th class="text-center"><?php echo $this->lang->line('status'); ?></th>
 				</tr>
 				</thead>
 				<tbody class="bg-white">
@@ -119,21 +119,21 @@
 					<th class="text-center">{{results.length - index}}</th>
 					<td class="text-left">{{result.created_at}}</td>
 					<td class="text-center">
-						<span v-if="result.type == '1'">ฝาก</span>
-						<span v-else>ถอน</span>
+						<span v-if="result.type == '1'"><?php echo $this->lang->line('deposit'); ?></span>
+						<span v-else><?php echo $this->lang->line('withdraw'); ?></span>
 					</td>
 					<td class="text-right">
 						<vue-numeric :read-only="true" empty-value="0.00" output-type="String" v-bind:precision="2" v-bind:value="result.amount || 0" separator=","></vue-numeric><span class="ml-1">฿</span>
 					</td>
 					<td class="text-center">
-						<span v-if="result.status == '0'">กำลังดำเนินการ</span>
-						<span v-else-if="result.status == '1' || result.status == '3'">สำเร็จ</span>
-						<span v-else-if="result.status == '2'">ไม่อนุมัติ</span>
-						<span v-else>กำลังดำเนินการ</span>
+						<span v-if="result.status == '0'"><?php echo $this->lang->line('inprogress'); ?></span>
+						<span v-else-if="result.status == '1' || result.status == '3'"><?php echo $this->lang->line('success'); ?></span>
+						<span v-else-if="result.status == '2'"><?php echo $this->lang->line('unsuccess'); ?></span>
+						<span v-else><?php echo $this->lang->line('inprogress'); ?></span>
 					</td>
 				</tr>
 				<tr v-if="results.length == 0">
-					<td colspan="5" class="text-center">ไม่มีข้อมูล</td>
+					<td colspan="5" class="text-center"><?php echo $this->lang->line('nodata'); ?></td>
 				</tr>
 				</tbody>
 			</table>

@@ -10,6 +10,8 @@ class Event extends CI_Controller
     {
         date_default_timezone_set('Asia/Bangkok');
         parent::__construct();
+		$language = $this->session->userdata('language');
+		$this->lang->load('text', $language);
         $this->check_login();
     }
 

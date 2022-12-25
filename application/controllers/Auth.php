@@ -9,6 +9,12 @@ class Auth extends CI_Controller
 	{
 		date_default_timezone_set('Asia/Bangkok');
 		parent::__construct();
+		// if (isset($_SESSION['language'])) {
+		// 	$this->session->set_userdata('language', 'thailand');
+		// 	// $this->lang->load('auth', $thailand);
+		// }
+		$language = $this->session->userdata('language');
+		$this->lang->load('text', $language);
 	}
 	public function index()
 	{
@@ -425,5 +431,53 @@ class Auth extends CI_Controller
 			redirect('auth');
 			exit();
 		}
+	}
+	public function ChangeLanguage()
+	{
+		// Point header 
+		header('Content-Type: application/json');
+
+		// Check params
+        // check_parameter([
+        // 'lao',
+		// 'english'
+        // ], 'POST');
+
+		// Declare post 
+        $post = $this->input->post();
+
+		// Handle Code 
+		if (in_array("thailand", $post, true)) {
+			$this->session->set_userdata('language', 'thailand');
+			// $thailand = $this->session->userdata('thailand');
+			// echo "thailand was founded".$language ;
+		}
+		if (in_array("lao", $post, true)) {
+			$this->session->set_userdata('language', 'lao');
+			// $lao = $this->session->userdata('lao');
+			// echo "lao was founded".$language ;
+		}
+		if (in_array("english", $post, true)) {
+			$this->session->set_userdata('language', 'english');
+			// $english = $this->session->userdata('language');
+			// echo "english was founded".$language ;
+		}
+
+		// Display language Session 
+		$language = $this->session->userdata('language');
+		
+		echo json_encode([
+			'myLanguage' => $language,
+            'message' => "Change Done !!!",
+            'result' => true,
+            ]);
+		
+	}
+	public function ClearSession()
+	{
+		session_destroy();
+		echo json_encode([
+			"response" => "ClearCache Done !!!!"
+		]);
 	}
 }

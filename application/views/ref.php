@@ -5,8 +5,8 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('dashboard') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-handshake"></i>&nbsp;แนะนำเพื่อน</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-handshake"></i>&nbsp;<?php echo $this->lang->line('refer_a_friend'); ?></span>
 	<hr style="margin-top: 15px">
 </section>
 <div class="text-center pb-3">
@@ -20,25 +20,25 @@
 				'name' => 'ref_bonus_type'
 		]); ?>
 		<?php if( (isset($web_setting['feature_bonus_aff_turnover_and_winlose_step2']) && $web_setting['feature_bonus_aff_turnover_and_winlose_step2']['value'] == "1") && $ref_step2_status!="" && $ref_step2_status['value'] == "1"): ?>
-			<h5 class="mt-3 text-dark">แนะนำเพื่อนรับ
+			<h5 class="mt-3 text-dark"><?php echo $this->lang->line('refer_a_friend_recieve'); ?>
 				<?php
 				echo $web_setting['ref_percent']['value'];
 				?>
-				%<?php echo isset($web_setting['ref_turn']) && $web_setting['ref_turn']['value'] != "" ? " ทำเทิร์น ".$web_setting['ref_turn']['value']." เท่า" : "" ?> (2 ขั้น) จากยอดเล่น<?php echo $ref_bonus_type!="" && $ref_bonus_type['value'] == "1" ? "เสีย" : "เทิร์นโอเวอร์" ?>ของเพื่อน & ยอดเล่น<?php echo $ref_bonus_type!="" && $ref_bonus_type['value'] == "1" ? "เสีย" : "เทิร์นโอเวอร์" ?>คนที่เพื่อนแนะนำ
+				%<?php echo isset($web_setting['ref_turn']) && $web_setting['ref_turn']['value'] != "" ? $this->lang->line('do_turn').$web_setting['ref_turn']['value'].$this->lang->line('tao') : "" ?> <?php echo $this->lang->line('2_steps_from_the_balance_played'); ?><?php echo $ref_bonus_type!="" && $ref_bonus_type['value'] == "1" ? $this->lang->line('loss') : $this->lang->line('turn_over') ?><?php echo $this->lang->line('of_friends_plays'); ?><?php echo $ref_bonus_type!="" && $ref_bonus_type['value'] == "1" ? $this->lang->line('loss') : $this->lang->line('turn_over') ?><?php echo $this->lang->line('recommended_by_friends'); ?>
 			</h5>
 		<?php else: ?>
-			<h5 class="mt-3 text-dark">แนะนำเพื่อนรับ
+			<h5 class="mt-3 text-dark"><?php echo $this->lang->line('refer_a_friend_recieve'); ?>
 				<?php
 				echo $web_setting['ref_percent']['value'];
 				?>
-				%<?php echo isset($web_setting['ref_turn']) && $web_setting['ref_turn']['value'] != "" ? " ทำเทิร์น ".$web_setting['ref_turn']['value']." เท่า" : "" ?>  จากยอดเล่น<?php echo $ref_bonus_type!="" && $ref_bonus_type['value'] == "1" ? "เสีย" : "เทิร์นโอเวอร์" ?>ของเพื่อน
+				%<?php echo isset($web_setting['ref_turn']) && $web_setting['ref_turn']['value'] != "" ? $this->lang->line('do_turn').$web_setting['ref_turn']['value'].$this->lang->line('tao') : "" ?>  <?php echo $this->lang->line('from_result_play'); ?><?php echo $ref_bonus_type!="" && $ref_bonus_type['value'] == "1" ? $this->lang->line('loss') : $this->lang->line('turn_over') ?><?php echo $this->lang->line('of_friend'); ?>
 			</h5>
 		<?php endif; ?>
 	<?php endif; ?>
 </div>
 <section class="affiliate mb-3">
 	<div class="affiliate-box">
-		<div class="affiliate-amount-box text-center"><small>คอมมิชชั่นคงเหลือ</small>
+		<div class="affiliate-amount-box text-center"><small><?php echo $this->lang->line('commission_balance'); ?></small>
 			<p class="amount">
 				<vue-numeric :class="'text-silver'" id="commission_wallet" :read-only="true" empty-value="0.00" output-type="String" v-bind:precision="2" v-bind:value="commission || 0" separator=","></vue-numeric>
 			</p>
@@ -46,7 +46,7 @@
 		<center>
 			<div class="form-group">
 				<button :disabled="pre_loader" @click.prevent="transferToMainWallet()" type="button" class="btn btn-light btn-lg btn-block" style="font-size: 20px">
-					<i class="fas fa-paper-plane"></i> โยกเข้ากระเป๋าเงิน
+					<i class="fas fa-paper-plane"></i> <?php echo $this->lang->line('tranferpoint'); ?>
 				</button>
 			</div>
 		</center>
@@ -58,18 +58,18 @@
 		<div class="col-12 col-md-6 mb-3 mb-md-0">
 			<div class="stat-content green">
 				<div class="stat-description text-faded"><a
-							style="font-size:20px !important;">คอมมิชชั่นที่โยกเเล้ว</a></div>
+							style="font-size:20px !important;"><?php echo $this->lang->line('rocking_commissions'); ?></a></div>
 				<div class="stat-number text-faded mt-2"><a
 							style="font-size:30px !important;"><?php echo number_format($count_commission,2); ?></a></div> <a
-						class="stat-footer">บาท</a>
+						class="stat-footer"><?php echo $this->lang->line('bath'); ?></a>
 			</div>
 		</div>
 		<div class="col-12 col-md-6">
 			<div class="stat-content red">
 				<div class="stat-description text-faded"><a
-							style="font-size:20px !important;">เเนะนำเเล้ว</a></div>
+							style="font-size:20px !important;"><?php echo $this->lang->line('recommended'); ?></a></div>
 				<div class="stat-number text-faded mt-2"><a style="font-size:30px !important;"><?php echo number_format($count_ref); ?></a>
-				</div> <a class="stat-footer">คน</a>
+				</div> <a class="stat-footer"><?php echo $this->lang->line('people'); ?></a>
 			</div>
 		</div>
 	</div>
@@ -86,10 +86,10 @@
 							<a class="nav-link text-center active" id="pills-qrcode-tab" data-toggle="pill" href="#pills-qrcode" role="tab" aria-controls="pills-qrcode" aria-selected="true">QR Code</a>
 						</li>
 						<li class="nav-item mx-1 mt-2" role="presentation">
-							<a class="nav-link text-center" id="pills-ref-tab" data-toggle="pill" href="#pills-ref" role="tab" aria-controls="pills-ref" aria-selected="false">ประวัติแนะนำ</a>
+							<a class="nav-link text-center" id="pills-ref-tab" data-toggle="pill" href="#pills-ref" role="tab" aria-controls="pills-ref" aria-selected="false"><?php echo $this->lang->line('refer_history'); ?></a>
 						</li>
 						<li class="nav-item mx-1 mt-2" role="presentation">
-							<a class="nav-link text-center" id="pills-ref-deposit-tab" data-toggle="pill" href="#pills-ref-deposit" role="tab" aria-controls="pills-ref-deposit" aria-selected="false">ประวัติโบนัส</a>
+							<a class="nav-link text-center" id="pills-ref-deposit-tab" data-toggle="pill" href="#pills-ref-deposit" role="tab" aria-controls="pills-ref-deposit" aria-selected="false"><?php echo $this->lang->line('bonus_history'); ?></a>
 						</li>
 					</ul>
 				</div>
@@ -102,7 +102,7 @@
 									<center class="">
 										<div id="qrcode"></div>
 										<button type="button"  @click.prevent="copyLinkRef('<?php echo base_url('register?ref=').$user['id'] ?>')"  class="btn btn-custom border-0 mt-3" name="button">
-											<span  class="text-silver"><i class="fa fa-clipboard"></i>&nbsp;คัดลอกลิงค์</span>
+											<span  class="text-silver"><i class="fa fa-clipboard"></i>&nbsp;<?php echo $this->lang->line('copylink'); ?></span>
 										</button>
 									</center>
 								</div>
@@ -117,8 +117,8 @@
 										<table class="table table-striped">
 											<thead class="bg-darkred-2">
 											<tr class="text-white bg-success">
-												<th class="text-center">ยูส</th>
-												<th class="text-center">วันเวลา</th>
+												<th class="text-center"><?php echo $this->lang->line('user'); ?></th>
+												<th class="text-center"><?php echo $this->lang->line('datetime'); ?></th>
 											</tr>
 											</thead>
 											<tbody class="bg-white">
@@ -127,12 +127,12 @@
 												<td class="text-center">{{result.created_at}}</td>
 											</tr>
 											<tr v-if="result_refs.length == 0">
-												<td colspan="2" class="text-center">ไม่มีข้อมูล</td>
+												<td colspan="2" class="text-center"><?php echo $this->lang->line('nodata'); ?></td>
 											</tr>
 											</tbody>
 											<tfoot>
 											<tr>
-												<td colspan="2" class="text-right text-muted">20 รายการล่าสุด</td>
+												<td colspan="2" class="text-right text-muted"><?php echo $this->lang->line('last20list'); ?></td>
 											</tr>
 											</tfoot>
 										</table>
@@ -149,9 +149,9 @@
 										<table class="table table-striped">
 											<thead class="bg-darkred-2">
 											<tr class="text-white bg-success">
-												<th class="text-center">จากยูส</th>
-												<th class="text-right">ยอดที่ได้รับ</th>
-												<th class="text-center">วันเวลา</th>
+												<th class="text-center"><?php echo $this->lang->line('from_user'); ?></th>
+												<th class="text-right"><?php echo $this->lang->line('received_amount'); ?></th>
+												<th class="text-center"><?php echo $this->lang->line('datetime'); ?></th>
 											</tr>
 											</thead>
 											<tbody class="bg-white">
@@ -165,12 +165,12 @@
 												<td class="text-center">{{result.created_at}}</td>
 											</tr>
 											<tr v-if="result_ref_deposits.length == 0">
-												<td colspan="3" class="text-center">ไม่มีข้อมูล</td>
+												<td colspan="3" class="text-center"><?php echo $this->lang->line('nodata'); ?></td>
 											</tr>
 											</tbody>
 											<tfoot>
 												<tr>
-													<td colspan="3" class="text-right text-muted">20 รายการล่าสุด</td>
+													<td colspan="3" class="text-right text-muted"><?php echo $this->lang->line('last20list'); ?></td>
 												</tr>
 											</tfoot>
 										</table>
