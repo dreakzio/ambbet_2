@@ -5,8 +5,8 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('dashboard') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-newspaper"></i>&nbsp;ข่าวสาร</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-newspaper"></i>&nbsp;<?php echo $this->lang->line('news'); ?></span>
 	<hr style="margin-top: 15px">
 </section>
 <div class="row mx-auto">
@@ -44,7 +44,7 @@
 									</p>
 								</div>
 								<div class="col-12 text-right">
-									<a href="#" data-dismiss="modal" data-target="#newModal<?php echo $new['id']; ?>" class="btn btn-success">ปิด</a>
+									<a href="#" data-dismiss="modal" data-target="#newModal<?php echo $new['id']; ?>" class="btn btn-success"><?php echo $this->lang->line('close'); ?></a>
 								</div>
 							</div>
 						</div>

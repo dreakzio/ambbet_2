@@ -40,8 +40,8 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('dashboard') ?>" class="float-right btn btn-outline-red btn-md">
-        <i class="fa fa-backward"></i> กลับ</a>
-    <span class="mb-4 mt-1" style="font-size: 25px"><i class="fas fa-award"></i>&nbsp;กิจกรรม</span>
+        <i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+    <span class="mb-4 mt-1" style="font-size: 25px"><i class="fas fa-award"></i>&nbsp;<?php echo $this->lang->line('event'); ?></span>
     <hr style="margin-top: 15px">
 </section>
 
@@ -66,15 +66,15 @@
     <div class="nav-other-button p-1 " id="Display-items">
         <div class="other-list other-list-new"><a href="<?php echo base_url('profile') ?>"
                 class="btn-dark-tri hvr-buzz-out"><i class="fas fa-donate mb-2"></i>
-                <p>คืนยอดเสีย</p>
+                <p><?php echo $this->lang->line('event_return_loss'); ?></p>
             </a></div>
         <div class="other-list other-list-new"><a href="<?php echo base_url('play_wheel') ?>"
                 class="btn-dark-tri hvr-buzz-out"><i class="fas fa-life-ring mb-2"></i>
-                <p id="test">วงล้อพารวย</p>
+                <p id="test"><?php echo $this->lang->line('event_wheel'); ?></p>
             </a></div>
         <div class="other-list other-list-new"><a href="<?php echo base_url('event/checkin') ?>"
                 class="btn-dark-tri hvr-buzz-out"><i class="far fa-calendar-check mb-2"></i>
-                <p>กิจกรรมเช็คอิน</p>
+                <p><?php echo $this->lang->line('event_checkin'); ?></p>
             </a></div>
         <div class="clearfix"></div>
     </div>

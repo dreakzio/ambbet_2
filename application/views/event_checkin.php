@@ -5,11 +5,11 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('event') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fas fa-check-circle mb-2"></i>&nbsp;กิจกรรมเช็คอิน</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fas fa-check-circle mb-2"></i>&nbsp;<?php echo $this->lang->line('event_checkin'); ?></span>
 	<hr style="margin-top: 15px">
 	<div class="text-center pb-0">
-		<h5 class="mt-3 text-dark">ท่านจะได้รับ <?php echo isset($web_setting["login_status"]) && $web_setting["login_status"]["value"] == "1" && is_numeric($web_setting['login_point']['value'] ) ? number_format($web_setting['login_point']['value'],2) : "0.00"; ?> แต้ม / วัน ฟรีเพียงแค่เข้าสู่ระบบหรือเข้าใช้งานเว็ปเท่านั้น
+		<h5 class="mt-3 text-dark"><?php echo $this->lang->line('u_will_recieve'); ?> <?php echo isset($web_setting["login_status"]) && $web_setting["login_status"]["value"] == "1" && is_numeric($web_setting['login_point']['value'] ) ? number_format($web_setting['login_point']['value'],2) : "0.00"; ?> <?php echo $this->lang->line('point_checkin'); ?>
 		</h5>
 	</div>
 	<div class="container" >
@@ -17,7 +17,7 @@
 			<div class="d-flex justify-content-center profile-box-top">
 				<div class="p-0 align-self-center text-center" >
 					<div class="user-name  text-silver text-center mb-1">
-						<p class="mb-0 text-success"><strong>วันที่เข้าใช้งานเว็ปล่าสุด : <?php echo !is_null($user['login_process_job_date']) && !empty($user['login_process_job_date']) ? date('Y-m-d',strtotime($user['login_process_job_date'])) : date('Y-m-d'); ?></strong></p>
+						<p class="mb-0 text-success"><strong><?php echo $this->lang->line('last_active'); ?> : <?php echo !is_null($user['login_process_job_date']) && !empty($user['login_process_job_date']) ? date('Y-m-d',strtotime($user['login_process_job_date'])) : date('Y-m-d'); ?></strong></p>
 					</div>
 				</div>
 			</div>
@@ -25,7 +25,7 @@
 	</div>
 	<section class="affiliate mb-3">
 		<div class="affiliate-box"  style="background: var(--base-color-main) !important">
-			<div class="affiliate-amount-box text-center"><small>แต้มสะสม</small>
+			<div class="affiliate-amount-box text-center"><small><?php echo $this->lang->line('totalpoint'); ?></small>
 				<p class="amount">
 					<vue-numeric :class="'text-silver'" id="commission_wallet" :read-only="true" empty-value="0.00" output-type="String" v-bind:precision="2" v-bind:value="commission || 0" separator=","></vue-numeric>
 				</p>
@@ -33,7 +33,7 @@
 			<center>
 				<div class="form-group">
 					<button :disabled="pre_loader" @click.prevent="transferToMainWallet()" type="button" class="btn btn-light btn-lg btn-block" style="font-size: 20px">
-						<i class="fas fa-paper-plane"></i> โยกเข้ากระเป๋าเงิน
+						<i class="fas fa-paper-plane"></i> <?php echo $this->lang->line('tranferpoint'); ?>
 					</button>
 				</div>
 			</center>

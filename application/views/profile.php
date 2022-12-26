@@ -5,8 +5,8 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('dashboard') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-user"></i>&nbsp;บัญชีผู้ใช้</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-user"></i>&nbsp;<?php echo $this->lang->line('profile'); ?></span>
 	<hr style="margin-top: 15px">
 </section>
 <section class="">
@@ -21,20 +21,20 @@
 						<h4 class="d-block text-center mb-3 d-sm-none">
 							<img src="<?php echo base_url() ?>assets/images/profile-user.png" style="width: 80px" />
 						</h4>
-						<h4>ชื่อ-นามสกุล : <?php echo $user['full_name']; ?></h4>
-						<h4>รหัสสมาชิก : <?php echo $user['username']; ?></h4>
+						<h4><?php echo $this->lang->line('firstname_lastname'); ?> : <?php echo $user['full_name']; ?></h4>
+						<h4><?php echo $this->lang->line('usercode'); ?> : <?php echo $user['username']; ?></h4>
 						<?php if(isset($web_setting['feature_bonus_return_balance_winlose']) && $web_setting['feature_bonus_return_balance_winlose']['value'] == "1"): ?>
-							<h4 class="mb-0">โบนัสคืนยอดเสีย :
+							<h4 class="mb-0"><?php echo $this->lang->line('bonus_return_loss'); ?> :
 								<div class="form-check form-check-inline">
 									<input class="form-check-input" type="radio" name="radioReturnBalance" v-on:change="changeReturnBalance" id="radioReturnBalance1" value="0" v-model="is_active_return_balance">
 									<label class="form-check-label text-dark" for="radioReturnBalance1">
-										ปิด
+										<?php echo $this->lang->line('close'); ?>
 									</label>
 								</div>
 								<div class="form-check mb-2 form-check-inline">
 									<input class="form-check-input" type="radio" name="radioReturnBalance" v-on:change="changeReturnBalance" id="radioReturnBalance2" value="1" v-model="is_active_return_balance">
 									<label class="form-check-label text-dark" for="radioReturnBalance2">
-										เปิด
+										<?php echo $this->lang->line('open'); ?>
 									</label>
 								</div>
 							</h4>
@@ -74,10 +74,10 @@
 								<?php endif; ?>
 							<?php endif; ?>
 							<?php if(isset($web_setting['ref_return_balance_status']) && $web_setting['ref_return_balance_status']['value'] == "1"): ?>
-								<p class="text-warning mb-2 mt-0">หากเปิดรับโบนัสจะได้รับเครดิตฟรี <?php echo $ref_return_balance_percent_cal; ?> %
-									(ทำเทิร์น <?php echo $ref_return_balance_turn_cal; ?> เท่า) จากยอดเล่นเสียแต่ละวันของท่าน</p>
+								<p class="text-warning mb-2 mt-0"><?php echo $this->lang->line('if_open_freebonus'); ?> <?php echo $ref_return_balance_percent_cal; ?> %
+									(<?php echo $this->lang->line('do_turn'); ?> <?php echo $ref_return_balance_turn_cal; ?> <?php echo $this->lang->line('tao'); ?>) <?php echo $this->lang->line('fromloss_each_user'); ?></p>
 							<?php else: ?>
-								<p class="text-warning mb-2 mt-0">หากเปิดรับโบนัสจะได้รับเครดิตฟรี <?php echo $ref_return_balance_percent_cal; ?> % จากยอดเล่นเสียแต่ละวันของท่าน</p>
+								<p class="text-warning mb-2 mt-0"><?php echo $this->lang->line('if_open_freebonus'); ?> <?php echo $ref_return_balance_percent_cal; ?> % <?php echo $this->lang->line('fromloss_each_user'); ?></p>
 							<?php endif; ?>
 						<?php endif; ?>
 					</div>
@@ -86,7 +86,7 @@
 			<div class="col-sm-12 col-md-12">
 				<section class="affiliate mb-3">
 					<div class="affiliate-box" style="background: var(--base-color-main) !important">
-						<div class="affiliate-amount-box text-center"><small>โบนัสคืนยอดเสียคงเหลือ</small>
+						<div class="affiliate-amount-box text-center"><small><?php echo $this->lang->line('bonus_return_losspoint'); ?></small>
 							<p class="amount">
 								<vue-numeric :class="'text-silver'" id="return_balance_wallet" :read-only="true" empty-value="0.00" output-type="String" v-bind:precision="2" v-bind:value="return_balance || 0.00" separator=","></vue-numeric>
 							</p>
@@ -94,7 +94,7 @@
 						<center>
 							<div class="form-group">
 								<button :disabled="pre_loader" @click.prevent="transferToMainWallet()" type="button" class="btn btn-light btn-lg btn-block" style="font-size: 20px">
-									<i class="fas fa-paper-plane"></i> โยกเข้ากระเป๋าเงิน
+									<i class="fas fa-paper-plane"></i> <?php echo $this->lang->line('tranferpoint'); ?>
 								</button>
 							</div>
 						</center>
@@ -106,7 +106,7 @@
 				<a style="color: #000" href="<?php echo base_url('account/user_bank') ?>" class="menu-list">
 					<div class="d-flex d-flex justify-content-between">
 						<div class="p-2 flex-grow-1 bd-highlight">
-							<i class="fa fa-university"></i> ข้อมูลธนาคาร
+							<i class="fa fa-university"></i> <?php echo $this->lang->line('bank_detail'); ?>
 						</div>
 						<div class="p-2 align-self-center">
 							<i class="fas fa-angle-right"></i>
@@ -116,7 +116,7 @@
 				<a style="color: #000" href="<?php echo base_url('account/user_account') ?>" class="menu-list">
 					<div class="d-flex d-flex justify-content-between">
 						<div class="p-2 flex-grow-1 bd-highlight">
-							<i class="fa fa-users"></i> ข้อมูลเข้าสู่ระบบ
+							<i class="fa fa-users"></i> <?php echo $this->lang->line('login_detail'); ?>
 						</div>
 						<div class="p-2 align-self-center">
 							<i class="fas fa-angle-right"></i>
@@ -126,7 +126,7 @@
 				<a style="color: #000" href="<?php echo base_url('change-password') ?>" class="menu-list">
 					<div class="d-flex d-flex justify-content-between">
 						<div class="p-2 flex-grow-1 bd-highlight">
-							<i class="fa fa-key"></i> เปลี่ยนรหัสผ่าน
+							<i class="fa fa-key"></i> <?php echo $this->lang->line('changepassword'); ?>
 						</div>
 						<div class="p-2 align-self-center">
 							<i class="fas fa-angle-right"></i>

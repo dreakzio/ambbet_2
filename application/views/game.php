@@ -309,238 +309,238 @@
 						<a href="<?php echo base_url('lobby/pg_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/pgbt.jpg"
 																			   style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="live22">
 						<a href="<?php echo base_url('lobby/live22_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/live22bt.jpg"
 																				   style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="spg">
 						<a href="<?php echo base_url('lobby/spg_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/spbt.jpg"
 																				style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="ganapati">
 						<a href="<?php echo base_url('lobby/ganapati_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/gmtbt.jpg"
 																					 style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="ameba">
 						<a href="<?php echo base_url('lobby/ameba_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/ambabt.jpg"
 																				  style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="askmebetslot">
 						<a href="<?php echo base_url('lobby/askmebetslot_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/dgsbt.jpg"
 																						 style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="slotxo">
 						<a href="<?php echo base_url('lobby/slotxo_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/xobt.jpg"
 																				   style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="ambgame">
 						<a href="<?php echo base_url('lobby/ambgame_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/ambbt.jpg"
 																					style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="evoplay">
 						<a href="<?php echo base_url('lobby/evoplay_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/evoplaybt.jpg"
 																					style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="pragmaticslot">
 						<a href="<?php echo base_url('lobby/pragmaticslot_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/pragmaticslotbt.jpg"
 																						  style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure  id="ambslot">
 						<a href="<?php echo base_url('lobby/ambslot_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/ambslotbt.jpg"
 																					style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="allwayspin">
 						<a href="<?php echo base_url('lobby/allwayspin_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/allwayspinbt.jpg"
 																					   style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="booongo">
 						<a href="<?php echo base_url('lobby/booongo_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/booongobt.jpg"
 																					style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="funkygame">
 						<a href="<?php echo base_url('lobby/funkygame_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/funkygamebt.jpg"
 																					  style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="funtagaming">
 						<a href="<?php echo base_url('lobby/funtagaming_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/funtabt.jpg"
 																						style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="iconicgaming">
 						<a href="<?php echo base_url('lobby/iconicgaming_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/iconicbt.jpg"
 																						 style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="kagaming">
 						<a href="<?php echo base_url('lobby/kagaming_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/kabt.jpg"
 																					 style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="mannaplay">
 						<a href="<?php echo base_url('lobby/mannaplay_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/mannaplaybt.jpg"
 																					  style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="wazdandirect">
 						<a href="<?php echo base_url('lobby/wazdandirect_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/wazdandirectbt.jpg"
 																						 style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="hotgraph">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/hotgraph_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/hotgraphbt.jpg"
 																												   style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="jili">
 						<a href="<?php echo base_url('lobby/jili_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/jilibt.jpg"
 																				 style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="simpleplay">
 						<a href="<?php echo base_url('lobby/simpleplay_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/simpleplay.png"
 																					   style="width: 100%; border-radius: 10px" alt="SimplePlay Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="microgame">
 						<a href="<?php echo base_url('lobby/microgame_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/microgame.png"
 																					  style="width: 100%; border-radius: 10px" alt="Micro Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="yggdrasil">
 						<a href="<?php echo base_url('lobby/yggdrasil_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/yggdrasil.png"
 																					  style="width: 100%; border-radius: 10px" alt="Yggdrasil Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="upgslot">
 						<a href="<?php echo base_url('lobby/upgslot_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/upgslot.png"
 																					style="width: 100%; border-radius: 10px" alt="UPGslot Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="p8">
 						<a href="<?php echo base_url('lobby/p8_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/p8.png"
 																			   style="width: 100%; border-radius: 10px" alt="P8 Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="mpoker">
 						<a href="<?php echo base_url('lobby/mpoker_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/mpoker.png"
 																				   style="width: 100%; border-radius: 10px" alt="M-Poker Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="avgaming">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/avgaming_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/avgaming.png"
 																												   style="width: 100%; border-radius: 10px" alt="Cherry Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="dragongaming">
 						<a href="<?php echo base_url('lobby/dragongaming_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/dragongaming.png"
 																						 style="width: 100%; border-radius: 10px" alt="Dragon Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="i8">
 						<a href="<?php echo base_url('lobby/i8_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/i8.png"
 																			   style="width: 100%; border-radius: 10px" alt="I8 Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="kingmaker">
 						<a href="<?php echo base_url('lobby/kingmaker_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/kingmaker.png"
 																					  style="width: 100%; border-radius: 10px" alt="King Maker Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="kingpoker">
 						<a href="<?php echo base_url('lobby/kingpoker_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/kingpoker.png"
 																					  style="width: 100%; border-radius: 10px" alt="King Poker Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="mega7">
 						<a href="<?php echo base_url('lobby/mega7_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/mega7.png"
 																				  style="width: 100%; border-radius: 10px" alt="Mega7 Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure  id="relaxgame">
 						<a href="<?php echo base_url('lobby/relaxgame_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/relaxgame.png"
 																					  style="width: 100%; border-radius: 10px" alt="Relax Gaming"/></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 				</div>
@@ -549,84 +549,84 @@
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/sa_game')?>"><img class="mb-3"
 																											src="<?php echo base_url(); ?>assets/images/game/sabt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="sexy">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/sexy_game')?>"><img class="mb-3"
 																											  src="<?php echo base_url(); ?>assets/images/game/sebt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="pretty">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/pretty_game')?>"><img class="mb-3"
 																												src="<?php echo base_url(); ?>assets/images/game/ptbt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="ag">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/ag_game')?>"><img class="mb-3"
 																											src="<?php echo base_url(); ?>assets/images/game/agbt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure  id="dream">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/dream_game')?>"><img class="mb-3"
 																											   src="<?php /*echo base_url(); */?>assets/images/game/dgbt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure  id="allbet">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/allbet_game')?>"><img class="mb-3"
 																												src="<?php /*echo base_url(); */?>assets/images/game/allbetbt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="ebet">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/ebet_game')?>"><img class="mb-3"
 																											  src="<?php /*echo base_url(); */?>assets/images/game/ebetbt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure  id="bg">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/bg_game')?>"><img class="mb-3"
 																											src="<?php /*echo base_url(); */?>assets/images/game/bgcasinobt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="pragmatic">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/pragmatic_game')?>"><img class="mb-3"
 																												   src="<?php /*echo base_url(); */?>assets/images/game/pragmaticbt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="greendragon">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/greendragon_game')?>"><img class="mb-3"
 																													 src="<?php /*echo base_url(); */?>assets/images/game/greendgbt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="betgame">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/betgame_game')?>"><img class="mb-3"
 																												 src="<?php /*echo base_url(); */?>assets/images/game/betgamebt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 					<figure id="keno">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/keno_game')?>"><img class="mb-3"
 																											  src="<?php /*echo base_url(); */?>assets/images/game/kenobt.jpg" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 
@@ -637,7 +637,7 @@
 						   target="_blank"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/ambbetbt.jpg"
 												style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 				</div>
@@ -647,7 +647,7 @@
 						   target="_blank"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/amblottobt.jpg"
 												style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
-							<div id="text">ปิด</div>
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
 				</div>

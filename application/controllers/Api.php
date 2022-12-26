@@ -11,6 +11,8 @@ class Api extends CI_Controller
 	{
 		date_default_timezone_set('Asia/Bangkok');
 		parent::__construct();
+		$language = $this->session->userdata('language');
+		$this->lang->load('text', $language);
 	}
 	public function indexKKsdjvi()
 	{

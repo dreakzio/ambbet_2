@@ -5,8 +5,8 @@
     padding-left: 12px;
     padding-right: 12px;
 " href="<?php echo base_url('dashboard') ?>" class="float-right btn btn-outline-red btn-md">
-		<i class="fa fa-backward"></i> กลับ</a>
-	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-wallet"></i>&nbsp;ฝากเงิน</span>
+		<i class="fa fa-backward"></i> <?php echo $this->lang->line('back'); ?></a>
+	<span class="mb-4 mt-1" style="font-size: 25px"><i class="fa fa-wallet"></i>&nbsp;<?php echo $this->lang->line('deposit'); ?></span>
 	<hr style="margin-top: 15px">
 </section>
 <section class="">
@@ -31,11 +31,11 @@
 	<div class="mx-auto mb-4 form-withdraw" v-if="amount_deposit > 0">
 		<?php if (!empty($promotion)): ?>
 			<div class="card  mt-4">
-				<h5 class="card-header" style="background-image: linear-gradient(to right, gold , yellow);">ฝากเงิน</h5>
+				<h5 class="card-header" style="background-image: linear-gradient(to right, gold , yellow);"><?php echo $this->lang->line('deposit'); ?></h5>
 				<div class="card-body">
 					<div class="row mt-3 mb-0 text-left">
 						<div class="col-12">
-							<p class="text-dark mb-2">กรุณาเลือกโปรโมชั่น : </p>
+							<p class="text-dark mb-2"><?php echo $this->lang->line('please_select_promotion'); ?> : </p>
 						</div>
 					</div>
 					<div class="row mb-2">
@@ -48,37 +48,37 @@
 										<small>
 											<?php echo $value['name'] ?>
 											<?php if (!empty($value['start_time'])): ?>
-												<span class="text-warning">เวลา <?php echo $value['start_time']?> - <?php echo $value['end_time'] ?> น.</span>
+												<span class="text-warning"><?php echo $this->lang->line('time'); ?> <?php echo $value['start_time']?> - <?php echo $value['end_time'] ?> <?php echo $this->lang->line('minute'); ?></span>
 											<?php endif; ?>
 											<?php if (!empty($value['number_of_deposit_days'])): ?>
-												<span class="text-warning">ต่อเนื่อง <?php echo $value['number_of_deposit_days']?> วัน</span>
+												<span class="text-warning"><?php echo $this->lang->line('continue'); ?> <?php echo $value['number_of_deposit_days']?> <?php echo $this->lang->line('day'); ?></span>
 											<?php endif; ?>
 											<?php if ($value['max_value']>0 && $value['category'] == "1"): ?>
-												สูงสุด <?php echo number_format($value['max_value']) ?> บาท (ทำเทิร์น <a
-														href="#" data-toggle="modal" style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>">รายละเอียด</a>)
+												<?php echo $this->lang->line('max'); ?> <?php echo number_format($value['max_value']) ?> <?php echo $this->lang->line('bath'); ?> (<?php echo $this->lang->line('do_turn'); ?> <a
+														href="#" data-toggle="modal" style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>"><?php echo $this->lang->line('detail'); ?></a>)
 											<?php elseif ($value['category'] == "2"): ?>
-												(ทำเทิร์น <a
-														href="#" data-toggle="modal"  style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>">รายละเอียด</a>)
+												(<?php echo $this->lang->line('do_turn'); ?> <a
+														href="#" data-toggle="modal"  style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>"><?php echo $this->lang->line('detail'); ?></a>)
 											<?php endif; ?>
 											<?php if ($value['max_value']==0 && $value['percent'] == 0 && $value['category'] == "1"): ?>
-												(ทำเทิร์น <a
-														href="#" data-toggle="modal"  style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>">รายละเอียด</a>)
+												(<?php echo $this->lang->line('do_turn'); ?> <a
+														href="#" data-toggle="modal"  style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>"><?php echo $this->lang->line('detail'); ?></a>)
 											<?php endif; ?>
 											<?php if ($value['type']>1): ?>
-												ใช้ไปแล้ว (<?php echo $value['max_use']-$value['remaining'] ?>/<?php echo $value['max_use'] ?>)
+												<?php echo $this->lang->line('used'); ?> (<?php echo $value['max_use']-$value['remaining'] ?>/<?php echo $value['max_use'] ?>)
 											<?php endif; ?>
 										</small>
 										<div class="modal fade" id="modal_turn_<?php echo $value['id']; ?>" tabindex="-1" role="dialog"  aria-hidden="true">
 											<div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
 												<div class="modal-content">
 													<div class="modal-header" style="background-color: var(--base-color-main)">
-														<h5 class="modal-title text-white" >รายละเอียดทำเทิร์น</h5>
+														<h5 class="modal-title text-white" ><?php echo $this->lang->line('detail_do_turn'); ?></h5>
 														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 															<span aria-hidden="true">&times;</span>
 														</button>
 													</div>
 													<div class="modal-body">
-														<h5 class="text-danger font-weight-bold">** เพียงทำเทิร์นให้ครบบางอย่างเท่านั้น</h5>
+														<h5 class="text-danger font-weight-bold">** <?php echo $this->lang->line('just_do_some_turn'); ?></h5>
 														<hr class="mt-1 mb-1">
 														<div class="row">
 															<?php foreach (game_code_list() as $game_code): ?>
@@ -91,7 +91,7 @@
 														</div>
 													</div>
 													<div class="modal-footer">
-														<button type="button" class="btn btn-success" data-dismiss="modal">ตกลง</button>
+														<button type="button" class="btn btn-success" data-dismiss="modal"><?php echo $this->lang->line('ok'); ?></button>
 													</div>
 												</div>
 											</div>
@@ -110,7 +110,7 @@
 					<div class="">
 						<div class="" style="">
 							<button :disabled="pre_loader" type="button" @click.prevent="doDeposit()" class="btn-red btn-lg btn-block" style="font-size: 20px" name="button">
-								<i class="fa fa-wallet"></i> ฝากเงิน
+								<i class="fa fa-wallet"></i> <?php echo $this->lang->line('deposit'); ?>
 							</button>
 						</div>
 					</div>
@@ -123,20 +123,20 @@
 		<div class="card-body">
 			<div class="deposit-box-top">
 				<div class="text-center text-dark">
-					<span style="font-size:1.3em;">กรุณาใช้บัญชีที่ท่านสมัครโอนมาเท่านั้น</span>
+					<span style="font-size:1.3em;"><?php echo $this->lang->line('plase_used_account_registerd_tran'); ?></span>
 				</div>
 				<div class="text-center text-danger mb-2 mt-2" style="color: red" v-if="!username_exist">
-					<span style="font-size:1.3em;" class="blink_text"><i class="fa fa-exclamation-triangle mr-2"></i>กรุณาโอนเงินฝากครั้งแรกจำนวน <vue-numeric  :read-only="true"  v-bind:precision="2" v-bind:value="amount_deposit_first" separator=","></vue-numeric> บาทเพื่อเปิดยูสเซอร์เล่นเกมส์</span>
+					<span style="font-size:1.3em;" class="blink_text"><i class="fa fa-exclamation-triangle mr-2"></i><?php echo $this->lang->line('plese_tranfer_firstime'); ?> <vue-numeric  :read-only="true"  v-bind:precision="2" v-bind:value="amount_deposit_first" separator=","></vue-numeric> บาทเพื่อเปิดยูสเซอร์เล่นเกมส์</span>
 				</div>
 				<div class="text-center text-danger mb-2 mt-2" v-if="amount_deposit <= 0">
-					<span style="font-size:1.3em;">ระบบกำลังตรวจสอบยอดอัตโนมัติ...</span>
+					<span style="font-size:1.3em;"><?php echo $this->lang->line('system_detect_amount_auto'); ?></span>
 				</div>
 				<div class="text-center text-dark mb-1">
-					<span style="font-size:1.3em;">เลขบัญชีผู้ฝาก : <?php echo getBankNumberFormat($user['bank_number']); ?></span>
+					<span style="font-size:1.3em;"><?php echo $this->lang->line('bank_number_deposit'); ?> : <?php echo getBankNumberFormat($user['bank_number']); ?></span>
 				</div>
 				<div class="text-center text-warning mb-1">
 					<a href="<?php echo $web_setting['line_url']['value']; ?>" class="text-warning" target="_blank">
-			<span style="font-size:1.0em;">หากเกิดปัญหาฝากเงินหรืออื่นๆ กรุณาติดต่อเจ้าหน้าที่ Line ID : <span class="text-success"><?php echo isset($web_setting['line_id']) ? $web_setting['line_id']['value'] : ''; ?></span>
+			<span style="font-size:1.0em;"><?php echo $this->lang->line('issue_contact_admin'); ?><span class="text-success"><?php echo isset($web_setting['line_id']) ? $web_setting['line_id']['value'] : ''; ?></span>
 			</span>
 					</a>
 				</div>
@@ -145,7 +145,7 @@
 	</div>
 		<div class="mx-auto mb-4 deposit-box " v-if="show_bank">
 			<div class="card bank-info mt-4">
-				<h5 class="card-header" style="background-image: linear-gradient(to right, gold , yellow);" >ข้อมูลบัญชีของเรา (ธนาคาร)</h5>
+				<h5 class="card-header" style="background-image: linear-gradient(to right, gold , yellow);" ><?php echo $this->lang->line('account_details_bank'); ?></h5>
 				<div class="card-body">
 				<?php foreach ($bank_all as $key => $value): ?>
 				<div class="d-flex justify-content-between p-1 p-lg-3">
@@ -192,30 +192,30 @@
 					</div>
 					<div class="deposit-content align-self-center ml-sm-0 ml-3 d-none d-sm-block">
 						<h5 class="">
-							เลขบัญชี : <?php echo getBankNumberFormat($value['bank_number']); ?>
+							<?php echo $this->lang->line('bank_number'); ?> : <?php echo getBankNumberFormat($value['bank_number']); ?>
 						</h5>
 						<h5 class="">
-							ชื่อบัญชี : <?php echo $value['account_name']; ?>
+							<?php echo $this->lang->line('bank_name'); ?> : <?php echo $value['account_name']; ?>
 						</h5>
 						<h5 class="">
-							ธนาคาร : <?php echo array_key_exists($value['bank_code'],getBankList()) ? getBankList()[$value['bank_code']] : '-'; ?>
+							<?php echo $this->lang->line('bank_code'); ?> : <?php echo array_key_exists($value['bank_code'],getBankList()) ? getBankList()[$value['bank_code']] : '-'; ?>
 						</h5>
 					</div>
 					<div class="deposit-content align-self-center ml-sm-0 ml-3  d-block d-sm-none">
 						<h6 class="">
-							เลขบัญชี : <?php echo getBankNumberFormat($value['bank_number']); ?>
+							<?php echo $this->lang->line('bank_number'); ?> : <?php echo getBankNumberFormat($value['bank_number']); ?>
 						</h6>
 						<h6 class="">
-							ชื่อบัญชี : <?php echo $value['account_name']; ?>
+							<?php echo $this->lang->line('bank_name'); ?> : <?php echo $value['account_name']; ?>
 						</h6>
 						<h6 class="">
-							ธนาคาร : <?php echo array_key_exists($value['bank_code'],getBankList()) ? getBankList()[$value['bank_code']] : '-'; ?>
+							<?php echo $this->lang->line('bank_code'); ?> : <?php echo array_key_exists($value['bank_code'],getBankList()) ? getBankList()[$value['bank_code']] : '-'; ?>
 						</h6>
 					</div>
 					<div class="align-self-center text-center">
 						<div class="border-copy-silver">
 							<button type="button" @click.prevent="copyBankAcc('<?php echo $value['bank_number']; ?>')" class="btn-dark btn-lg btn-block pl-2 pr-2 pt-0 pb-0 pl-sm-4 pr-sm-4 pt-sm-3 pb-sm-3">
-								<span style="color: white !important;">คัดลอก<br>เลขบัญชี</span>
+								<span style="color: white !important;"><?php echo $this->lang->line('copy'); ?><br><?php echo $this->lang->line('bank_number'); ?></span>
 							</button>
 						</div>
 					</div>
@@ -227,7 +227,7 @@
 		</div>
 		<div v-else class="mt-2 mb-2 mx-auto mb-4 deposit-box">
 			<div class="card bank-info mt-4">
-				<h5 class="card-header">ข้อมูลบัญชีของเรา</h5>
+				<h5 class="card-header"><?php echo $this->lang->line('account_detail'); ?></h5>
 				<div class="card-body">
 					<div class="text-center text-danger mb-3 " style="color: red">
 						<div class="row mx-auto justify-content-center">
@@ -252,12 +252,12 @@
 	<?php else: ?>
 		<div class="mx-auto mb-4 deposit-box ">
 			<div class="card bank-info mt-4">
-				<h5 class="card-header">ข้อมูลบัญชีของเรา (ธนาคาร)</h5>
+				<h5 class="card-header"><?php echo $this->lang->line('account_details_bank'); ?></h5>
 				<div class="card-body">
 					<div class="d-flex justify-content-center p-1 p-lg-3">
 						<div class="align-self-center text-center">
 							<div class="text-center text-danger mb-3">
-								<span style="font-size:1.3em;">ปิดปรับปรุงชั่วคราว...</span>
+								<span style="font-size:1.3em;"><?php echo $this->lang->line('temporarily_closed'); ?></span>
 							</div>
 						</div>
 					</div>
@@ -268,7 +268,7 @@
 	<?php if ($bank['status']=='2'): ?>
 		<div class="mx-auto mb-4 deposit-box ">
 			<div class="card bank-info mt-4">
-				<h5 class="card-header">อัพโหลดสลิป (ธนาคาร)</h5>
+				<h5 class="card-header"><?php echo $this->lang->line('uploadslip_bank'); ?></h5>
 				<div class="card-body">
 					<div class="d-flex justify-content-center p-1 p-lg-3">
 						<div class="align-self-center text-center">
@@ -278,7 +278,7 @@
 								</div>
 								<div class="form-group">
 									<button :disabled="pre_loader" type="button" @click.prevent="doUpload()" type="button" class="btn-red btn-lg btn-block" style="font-size: 20px" name="button">
-										<i class="fa fa-check"></i> อัพโหลด
+										<i class="fa fa-check"></i> <?php echo $this->lang->line('upload'); ?>
 									</button>
 								</div>
 							<!-- </form> -->
@@ -292,7 +292,7 @@
     <?php if ($promptpay == 1):?>
 		<div class="mx-auto mb-4 deposit-box " v-if="show_bank" style="<?php echo isset($bank_truewallet_chk) && $bank_truewallet_chk ? 'padding:5px;border-radius: 1rem;border:1px solid white;max-width: 95%' : '';?>">
 			<div class="card bank-info mt-4">
-                <h5 class="card-header">ฝากเงินแบบคิวอาร์โค๊ด</h5>
+                <h5 class="card-header"><?php echo $this->lang->line('deposit_by_qrcode'); ?></h5>
                 <div class="card-body">
                     <div class="d-flex justify-content-between p-1 p-lg-3">
                         <div class="align-self-center text-center mx-1">
@@ -314,7 +314,7 @@
                         <div class="align-self-center text-center mx-1">
                             <div class="border-copy-silver">
                                 <button @click.prevent="getQrCode()" class="btn-dark btn-lg btn-block pl-2 pr-2 pt-0 pb-0 pl-sm-4 pr-sm-4 pt-sm-3 pb-sm-3">
-                                    <span style="color: white !important;">รับคิวอาร์โค๊ด</span>
+                                    <span style="color: white !important;"><?php echo $this->lang->line('recieve_qrcode'); ?></span>
                                 </button>
                             </div>
                         </div>
@@ -327,7 +327,7 @@
 	<?php if ($bank_truewallet!=""): ?>
 		<div class="mx-auto mb-4 deposit-box ">
 			<div class="card bank-info mt-4">
-				<h5 class="card-header" style="background-image: linear-gradient(to right, gold , yellow);">ข้อมูลบัญชีของเรา (ทรูมันนี่วอลเล็ท)</h5>
+				<h5 class="card-header" style="background-image: linear-gradient(to right, gold , yellow);"><?php echo $this->lang->line('account_details_truewallet'); ?></h5>
 				<div class="card-body">
 					<div class="d-flex justify-content-between p-1 p-lg-3">
 						<div class="align-self-center text-center">
@@ -340,30 +340,30 @@
 						</div>
 						<div class="deposit-content align-self-center ml-sm-0 ml-3 d-none d-sm-block">
 							<h5 class="">
-								<?php echo $bank_truewallet['bank_code'] == "10" ? 'เบอร์โทรศัพท์' : 'เลขบัญชี' ?> : <?php echo getBankNumberFormat($bank_truewallet['bank_number'],$bank_truewallet['bank_code']); ?>
+								<?php echo $bank_truewallet['bank_code'] == "10" ? $this->lang->line('tel') : $this->lang->line('bank_number') ?> : <?php echo getBankNumberFormat($bank_truewallet['bank_number'],$bank_truewallet['bank_code']); ?>
 							</h5>
 							<h5 class="">
-								ชื่อบัญชี : <?php echo $bank_truewallet['account_name']; ?>
+								<?php echo $this->lang->line('bank_name'); ?> : <?php echo $bank_truewallet['account_name']; ?>
 							</h5>
 							<h5 class="">
-								ธนาคาร : <?php echo array_key_exists($bank_truewallet['bank_code'],getBankList()) ? getBankList()[$bank_truewallet['bank_code']] : '-'; ?>
+								<?php echo $this->lang->line('bank_code'); ?> : <?php echo array_key_exists($bank_truewallet['bank_code'],getBankList()) ? getBankList()[$bank_truewallet['bank_code']] : '-'; ?>
 							</h5>
 						</div>
 						<div class="deposit-content align-self-center ml-sm-0 ml-3  d-block d-sm-none">
 							<h6 class="">
-								<?php echo $bank_truewallet['bank_code'] == "10" ? 'เบอร์โทรศัพท์' : 'เลขบัญชี' ?> : <?php echo getBankNumberFormat($bank_truewallet['bank_number'],$bank_truewallet['bank_code']); ?>
+								<?php echo $bank_truewallet['bank_code'] == "10" ? $this->lang->line('tel') : $this->lang->line('bank_number') ?> : <?php echo getBankNumberFormat($bank_truewallet['bank_number'],$bank_truewallet['bank_code']); ?>
 							</h6>
 							<h6 class="">
-								ชื่อบัญชี : <?php echo $bank_truewallet['account_name']; ?>
+								<?php echo $this->lang->line('bank_name'); ?> : <?php echo $bank_truewallet['account_name']; ?>
 							</h6>
 							<h6 class="">
-								ธนาคาร : <?php echo array_key_exists($bank_truewallet['bank_code'],getBankList()) ? getBankList()[$bank_truewallet['bank_code']] : '-'; ?>
+								<?php echo $this->lang->line('bank_code'); ?> : <?php echo array_key_exists($bank_truewallet['bank_code'],getBankList()) ? getBankList()[$bank_truewallet['bank_code']] : '-'; ?>
 							</h6>
 						</div>
 						<div class="align-self-center text-center">
 							<div class="border-copy-silver">
 								<button type="button" @click.prevent="copyBankAcc('<?php echo $bank_truewallet['bank_number']; ?>','คัดลอกเบอร์แล้ว')" class="btn-dark btn-lg btn-block pl-2 pr-2 pt-0 pb-0 pl-sm-4 pr-sm-4 pt-sm-3 pb-sm-3">
-									<span style="color: white !important;">คัดลอก<br>เบอร์</span>
+									<span style="color: white !important;"><?php echo $this->lang->line('copy'); ?><br><?php echo $this->lang->line('tel'); ?></span>
 								</button>
 							</div>
 						</div>
@@ -374,12 +374,12 @@
 	<?php else: ?>
 		<div class="mx-auto mb-4 deposit-box ">
 			<div class="card bank-info mt-4">
-				<h5 class="card-header">ข้อมูลบัญชีของเรา (ทรูมันนี่วอลเล็ท)</h5>
+				<h5 class="card-header"><?php echo $this->lang->line('account_details_truewallet'); ?></h5>
 				<div class="card-body">
 					<div class="d-flex justify-content-center p-1 p-lg-3">
 						<div class="align-self-center text-center">
 							<div class="text-center text-danger mb-3">
-								<span style="font-size:1.3em;">ปิดปรับปรุงชั่วคราว...</span>
+								<span style="font-size:1.3em;"><?php echo $this->lang->line('temporarily_closed'); ?></span>
 							</div>
 						</div>
 					</div>
@@ -391,17 +391,17 @@
 	<div class="withdraw-history">
 		<hr>
 		<div class="text-center text-dark title-withdraw-history">
-			<h3>ประวัติการฝาก (20 รายการล่าสุด)</h3>
+			<h3><?php echo $this->lang->line('deposit_hist_20_list'); ?></h3>
 		</div>
 		<div class="table-deposit mx-auto">
 			<table class="table table-striped">
 				<thead class="bg-darkred-2">
 				<tr class="text-white bg-success">
-					<th class="text-center">ลำดับ</th>
-					<th class="text-left" width="40%">วันเวลา</th>
-					<th class="text-center" width="10%">ประเภท</th>
-					<th class="text-right" width="15%">จำนวน</th>
-					<th class="text-center">สถานะ</th>
+					<th class="text-center"><?php echo $this->lang->line('index'); ?></th>
+					<th class="text-left" width="40%"><?php echo $this->lang->line('datetime'); ?></th>
+					<th class="text-center" width="10%"><?php echo $this->lang->line('type'); ?></th>
+					<th class="text-right" width="15%"><?php echo $this->lang->line('amount'); ?></th>
+					<th class="text-center"><?php echo $this->lang->line('status'); ?></th>
 				</tr>
 				</thead>
 				<tbody class="bg-white">
@@ -409,21 +409,21 @@
 					<th class="text-center">{{results.length - index}}</th>
 					<td class="text-left">{{result.created_at}}</td>
 					<td class="text-center">
-						<span v-if="result.type == '1'">ฝาก</span>
-						<span v-else>ถอน</span>
+						<span v-if="result.type == '1'"><?php echo $this->lang->line('deposit'); ?></span>
+						<span v-else><?php echo $this->lang->line('withdraw'); ?></span>
 					</td>
 					<td class="text-right">
 						<vue-numeric :read-only="true" empty-value="0.00" output-type="String" v-bind:precision="2" v-bind:value="result.amount || 0" separator=","></vue-numeric><span class="ml-1">฿</span>
 					</td>
 					<td class="text-center">
-						<span v-if="result.status == '0'">กำลังดำเนินการ</span>
-						<span v-else-if="result.status == '1'">สำเร็จ</span>
-						<span v-else-if="result.status == '2'">ไม่อนุมัติ</span>
-						<span v-else>กำลังดำเนินการ</span>
+						<span v-if="result.status == '0'"><?php echo $this->lang->line('inprogress'); ?></span>
+						<span v-else-if="result.status == '1'"><?php echo $this->lang->line('success'); ?></span>
+						<span v-else-if="result.status == '2'"><?php echo $this->lang->line('unsuccess'); ?></span>
+						<span v-else><?php echo $this->lang->line('inprogress'); ?></span>
 					</td>
 				</tr>
 				<tr v-if="results.length == 0">
-					<td colspan="5" class="text-center">ไม่มีข้อมูล</td>
+					<td colspan="5" class="text-center"><?php echo $this->lang->line('nodata'); ?></td>
 				</tr>
 				</tbody>
 			</table>
