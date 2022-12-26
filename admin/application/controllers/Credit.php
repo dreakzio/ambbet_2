@@ -14,7 +14,6 @@ class Credit extends CI_Controller
     }
     public function index()
     {
-
 		$currentURL = current_url();
 		$log_page_id = $this->Log_page_model->log_page_create([
 			'ip' => isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $this->input->ip_address(),
@@ -170,7 +169,11 @@ class Credit extends CI_Controller
         }
 
 		//die();
-		$slip_image  = $this->slip_image('image_file');
+
+		$slip_image ='';
+		if($_FILES){
+			$slip_image  = $this->slip_image('image_file');
+		}
 
 		$credit_before = $user['amount_deposit_auto'];
         $credit_after = $post['type']==1?($user['amount_deposit_auto']+$process):($user['amount_deposit_auto']-$process);

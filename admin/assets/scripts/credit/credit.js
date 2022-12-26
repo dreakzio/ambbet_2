@@ -413,7 +413,7 @@ function dataTable() {
 					let {
 						slip_image
 					} = full;
-					if (slip_image !== null) {
+					if (slip_image !== null && slip_image != ''  && slip_image != 'NULL') {
 						image = BaseURL + 'assets/images/slip/'+slip_image;
 						html = '<ul class="list-unstyled users-list m-0 align-items-center">\n' +
 							'<img class="media-object rounded" src="'+image+'" alt="Avatar" height="40" width="40" onClick="showImage(\''+image+'\')" style="cursor: pointer;"></li></ul>';
