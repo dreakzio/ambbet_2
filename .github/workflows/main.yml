@@ -17,8 +17,9 @@ jobs:
         source: "*"
         target: "/var/www/dev.aba444.com"
         
-    - uses: appleboy/scp-action@master    
+    - uses: actions/checkout@master    
     - name: "dev.aba444.com"
+      uses: appleboy/scp-action@master
       with:
         host: dev.aba444.com
         username: root
