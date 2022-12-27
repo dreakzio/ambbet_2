@@ -220,7 +220,7 @@ error_reporting(0);
 	}
 	?>
 	<script src="<?php echo base_url('assets/plugins/numeral/min/numeral.min.js') ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url('assets/scripts/custom.js?'.date('Y-m-d')) ?>"></script>
+	<script type="text/javascript" src="<?php echo base_url('assets/scripts/custom.js?'.date('Y-m-d-h')) ?>"></script>
 	<?php if(isset($_SESSION['line_login_error_msg']) && !empty($_SESSION['line_login_error_msg'])): ?>
 		<?php
 			$line_login_error_msg = $_SESSION['line_login_error_msg'];
