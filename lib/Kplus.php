@@ -158,8 +158,6 @@ Class Kplus{
 		curl_close ($ch);
 		return json_decode($result, true);
 	}
-
-
 }
 
 
