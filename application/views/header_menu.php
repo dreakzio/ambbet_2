@@ -62,5 +62,5 @@
         </div>
     </div>
 
-    <script src="<?php echo base_url('assets/scripts/header_menu.js?').date('Y-m-d') ?>"></script>
+    <script src="<?php echo base_url('assets/scripts/header_menu.js?').date('Y-m-d-h-i') ?>"></script>
 </header>
