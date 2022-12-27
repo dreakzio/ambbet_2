@@ -1,8 +1,8 @@
-name: scp files to production
+name: scp files to develop
 on: 
   push:
     branches:
-      - main
+      - develop
 jobs:
 
   build:
