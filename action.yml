@@ -5,5 +5,5 @@
     username: root
     password: "@Aa123456Aa"
     port: 22
-    source: "*"
-    target: "test"
+    source: "readme.md"
+    target: "assets"
