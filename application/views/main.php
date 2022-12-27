@@ -205,7 +205,6 @@ error_reporting(0);
 							<script>
 								let page_id = '<?php echo str_replace("/","_",$page); ?>';
 							</script>
-							ทดสอบ
 							<?php
 							$this->load->view($page,['web_setting'=>$web_setting,'page_id'=>str_replace("/","_",$page)]);
 							?>
