@@ -1,16 +1,18 @@
 name: scp files
 on: [push]
 jobs:
+
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: copy files via ssh password
+    - uses: actions/checkout@master
+    - name: copy file via ssh password
       uses: appleboy/scp-action@master
       with:
         host: 165.232.164.156
         username: root
         password: "@Aa123456Aa"
         port: 22
-        source: "readme.md"
-        target: "assets"
+        source: "*"
+        target: "/var/www/dev.aba444.com"
