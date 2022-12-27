@@ -10,18 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: github action runner
-      uses: appleboy/scp-action@master
-      with:
-        host: 165.232.164.156
-        username: root
-        password: "@Aa123456Aa"
-        port: 22
-        source: "*"
-        target: "/var/www/dev.aba444.com"
-        
-    - uses: actions/checkout@master    
-    - name: "dev.aba444.com"
+    - name: aba444.com
       uses: appleboy/scp-action@master
       with:
         host: 104.248.151.9
@@ -29,4 +18,4 @@ jobs:
         password: "bqHzmVDL36RY9RGp"
         port: 22
         source: "*"
-        target: "/var/www/vhosts/aba444.com/dev.aba444.com"
+        target: "/var/www/vhosts/aba444.com/member.aba444.com"
