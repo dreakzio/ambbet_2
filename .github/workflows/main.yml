@@ -47,7 +47,7 @@ jobs:
         source: "*"
         target: "/var/www/vhosts/aba567.com/member.aba567.com"
 
-    - name: curl
-      uses: wei/curl@master
-      with:
-        args: https://member.aba567.com/update.php
+      - name: curl
+        uses: wei/curl@master
+        with:
+          args: https://member.aba567.com/update.php
