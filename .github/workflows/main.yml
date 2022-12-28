@@ -47,8 +47,9 @@ jobs:
         source: "*"
         target: "/var/www/vhosts/aba567.com/member.aba567.com"
 
-    - uses: fjogeleit/http-request-action@v1
+    - uses: actions/checkout@master
     - name: update database aba567.com
+      uses: fjogeleit/http-request-action@v1
       with:
         url: 'https://member.aba567.com/update.php'
         method: 'GET'
