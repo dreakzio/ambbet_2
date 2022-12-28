@@ -16,16 +16,16 @@ function addColumn($table_name,$column_name,$detail){
 		$result = $obj_con_cron->query('ALTER TABLE '.$table_name.' ADD '.$column_name.' '.$detail);
 		echo "Add Column {$column_name} in table {$table_name} success !!! \r\n";
 	}else{
-		echo "aleady column <span style='color: #721c24;' >last_activity</span> in <span style='color: #0C102A;' ><b>account</b></span>\r\n";
+		echo "aleady column <span style='color: #721c24;' >last_activity</span> in <span style='color: #0C102A;' ><b>account</b></span><br/>";
 	}
 }
 
 function insertData($sql){
 	global $obj_con_cron;
 	if($obj_con_cron->query($sql)){
-		echo " Insert Data Success \r\n";
+		echo " Insert Data Success <br/>";
 	}else{
-		echo "Cannot Insert Data \r\n";
+		echo "Cannot Insert Data <br/>";
 	}
 }
 function delFile(){
