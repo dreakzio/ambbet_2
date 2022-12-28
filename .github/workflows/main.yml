@@ -20,6 +20,22 @@ jobs:
     #     source: "*"
     #     target: "/var/www/vhosts/aba444.com/member.aba444.com"
 
+    # - uses: actions/checkout@master
+    # - name: aba567.com
+    #   uses: appleboy/scp-action@master
+    #   with:
+    #     host: 68.183.232.127
+    #     username: root
+    #     password: "rnzH3DERuJvuBIRn"
+    #     port: 22
+    #     source: "*"
+    #     target: "/var/www/vhosts/aba567.com/member.aba567.com"
+
+    # - name: curl
+    #   uses: wei/curl@master
+    #   with:
+    #     args: https://member.aba567.com/update.php
+
     - uses: actions/checkout@master
     - name: aba567.com
       uses: appleboy/scp-action@master
