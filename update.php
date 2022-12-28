@@ -4,8 +4,11 @@ require('conn_cron.php');
 
 addColumn('account','last_activity','DATETIME NULL');
 addColumn('account','auto_accept_bonus'," INT(1) NOT NULL DEFAULT '0'");
+addColumn('credit_history','slip_image'," VARCHAR(100) NULL AFTER status");
 insertData("INSERT INTO web_setting (id, name, value) VALUES (NULL, 'deposit_with_bonus_auto', '0');");
 delFile();
+
+echo json_encode(['status'=>true,"message" => "Success"]);
 function addColumn($table_name,$column_name,$detail){
 	global $obj_con_cron;
 	$SqlCheckAcc = "SHOW COLUMNS from `{$table_name}` LIKE '{$column_name}'";
