@@ -46,3 +46,14 @@ jobs:
         port: 22
         source: "*"
         target: "/var/www/vhosts/aba567.com/member.aba567.com"
+
+    - uses: actions/checkout@master
+    - name: deploy winwin289.com
+      uses: appleboy/scp-action@master
+      with:
+        host: 68.183.232.127
+        username: root
+        password: "5Vg)82S3WgdE$KkB"
+        port: 22
+        source: "*"
+        target: "/var/www/vhosts/winwin289.com/member.winwin289.com"
