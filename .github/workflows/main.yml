@@ -37,19 +37,18 @@ jobs:
     #     args: https://member.aba567.com/update.php
 
     - uses: actions/checkout@master
-    - name: aba567.com
-      uses: appleboy/scp-action@master
-      with:
-        host: 68.183.232.127
-        username: root
-        password: "rnzH3DERuJvuBIRn"
-        port: 22
-        source: "*"
-        target: "/var/www/vhosts/aba567.com/member.aba567.com"
+      - name: deploy aba567.com
+        uses: appleboy/scp-action@master
+        with:
+          host: 68.183.232.127
+          username: root
+          password: "rnzH3DERuJvuBIRn"
+          port: 22
+          source: "*"
+          target: "/var/www/vhosts/aba567.com/member.aba567.com"
 
-    - uses: actions/checkout@master
-    - name: update database aba567.com
-      uses: fjogeleit/http-request-action@v1
-      with:
-        url: 'https://member.aba567.com/update.php'
-        method: 'GET'
+      - name: update database aba567.com
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://member.aba567.com/update.php'
+          method: 'GET'
