@@ -43,7 +43,7 @@ if(isset($_SESSION['line_login_chk']) && $_SESSION['line_login_chk']){
 				<div class="register-text mt-4 text-center">
 					<a href="<?php echo base_url('/auth/line_link') ?>" class="btn btn-line btn-submit">
 						<i class="fa fa-line mr-1"></i>
-						<span class="text-silver"> <?php echo $this->lang->line('login_by_line'); ?> </span>
+						<span class="text-silver"> <?php echo $this->lang->line('login_by_line'); ?> :</span>
 					</a>
 				</div>
 				<div class="row mt-4 mb-4">
