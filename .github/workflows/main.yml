@@ -47,8 +47,8 @@ jobs:
         source: "*"
         target: "/var/www/vhosts/aba567.com/member.aba567.com"
 
-    - name: Deploy Stage
-      uses: fjogeleit/http-request-action@v1
+    - uses: fjogeleit/http-request-action@v1
+    - name: update database aba567.com
       with:
         url: 'https://member.aba567.com/update.php'
         method: 'GET'
