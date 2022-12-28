@@ -51,7 +51,7 @@ jobs:
     - name: deploy winwin289.com
       uses: appleboy/scp-action@master
       with:
-        host: 68.183.232.127
+        host: 167.71.198.220
         username: root
         password: "5Vg)82S3WgdE$KkB"
         port: 22
