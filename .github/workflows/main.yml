@@ -47,7 +47,8 @@ jobs:
         source: "*"
         target: "/var/www/vhosts/aba567.com/member.aba567.com"
 
-      - name: curl
-        uses: wei/curl@master
-        with:
-          args: https://member.aba567.com/update.php
+    - name: Deploy Stage
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://member.aba567.com/update.php'
+        method: 'GET'
