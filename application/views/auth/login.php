@@ -37,7 +37,7 @@ if(isset($_SESSION['line_login_chk']) && $_SESSION['line_login_chk']){
 	<?php endif; ?>
 	<hr style="margin-top: 15px" />
 
-	<div id="login">ทดสอบ
+	<div id="login">
 		<?php if($line_login_status == "1" && (!$line_login_chk || is_null($line_login_chk))): ?>
 			<div class="form-group">
 				<div class="register-text mt-4 text-center">
