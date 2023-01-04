@@ -40,5 +40,29 @@ function delFile(){
 		echo "File can't be deleted";
 	}
 }
+
+function line_push_message($uid, $message, $access_token,$group_id=''){
+	// $chOne = curl_init();
+	if($group_id==''){
+		$group_id ='-499549481'; //กลุ่มที่ต้องการ
+	}else{
+		$group_id =$group_id; //กลุ่มที่ต้องการ
+	}
+	$website="https://api.telegram.org/bot".$access_token;
+	//$chatId=1234567;  //Receiver Chat Id
+	$params=[
+		'chat_id'=>$group_id,
+		'text'=>$message,
+	];
+	$ch = curl_init($website . '/sendMessage');
+	curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$result = curl_exec($ch);
+	curl_close($ch);
+}
+
 /**/
 ?>
