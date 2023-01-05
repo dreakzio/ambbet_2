@@ -210,7 +210,7 @@
 			let gameName = ten_games[i].gameName;
 			let gameId = ten_games[i].gameId;
 			let gameImg = ten_games[i].imgUrl;
-			let gameUrl = `https://member.aba444.com/home/play_game/pg_game/${gameId}?title=${encodeURIComponent(gameName)}`;
+			let gameUrl = `<?php echo base_url() ?>home/play_game/pg_game/${gameId}?title=${encodeURIComponent(gameName)}`;
 			if(!jackpots[i])
 				jackpots[i] = randomBetween(100,200);
 			dom += `<div class="sliderBXcell">
