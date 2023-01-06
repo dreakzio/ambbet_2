@@ -334,6 +334,7 @@ class Credit extends CI_Controller
         'result' => true
         ]);
     }
+	/// save image to folder
 	public function slip_image($name){
 		$type_file = pathinfo($_FILES[$name]["name"], PATHINFO_EXTENSION);
 		$random_string = random_string('alnum', 5);
