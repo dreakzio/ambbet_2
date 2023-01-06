@@ -43,7 +43,7 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 	//Check bank active
 	//$sql_bank_check = "SELECT * FROM `bank` where status = '1' and deleted = '0' and bank_number = '".$scb['accnum']."'";
 	//$sql_bank_check = "SELECT * FROM `bank` where status = '1' and (bank_code = '03' or bank_code = '3') and deleted = '0'";
-	$sql_bank_check = "SELECT * FROM `bank` where (bank_code = '03' or bank_code = '3') and deleted = '0'";
+	$sql_bank_check = "SELECT * FROM `bank` where status = '1' and (bank_code = '03' or bank_code = '3') and deleted = '0'";
 	$con_bank_check = $obj_con_cron->query($sql_bank_check);
 	$chk_can_run_cron = false;
 	$chk_is_withdraw = false;
