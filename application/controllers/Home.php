@@ -56,6 +56,17 @@ class Home extends CI_Controller
 		'kingpoker_game' => 'kingpoker',
 		'mega7_game' => 'mega7',
 		'relaxgame_game' => 'relaxgame',
+		'slotracha' => 'Slotracha',
+		'spinix_game' => 'Spinix',
+		'advantplay_game' => 'Advantplay',
+		'ninjaslot_game' => 'Ninjaslot',
+		'ace333_game' => 'Ace333',
+		'cq9_game' => 'Cq9',
+		'wmslot_game' => 'Wmslot',
+		'sboslot_game' => 'Sboslot',
+		'wecasino_game' => 'Wecasino',
+		'iampoker_game' => 'Rekop',
+		'wmcasino_game' => 'Wmcasino',
 	);
 	public function __construct()
 	{
@@ -254,6 +265,17 @@ class Home extends CI_Controller
 			'kingpoker_game' => 'King Poker Gaming',
 			'mega7_game' => 'Mega7 Gaming',
 			'relaxgame_game' => 'Relax Gaming',
+			'slotracha' => 'Slotracha',
+			'spinix_game' => 'Spinix',
+			'advantplay_game' => 'Advantplay',
+			'ninjaslot_game' => 'Ninjaslot',
+			'ace333_game' => 'Ace333',
+			'cq9_game' => 'Cq9',
+			'wmslot_game' => 'Wmslot',
+			'sboslot_game' => 'Sboslot',
+			'wecasino_game' => 'Wecasino',
+			'iampoker_game' => 'Rekop',
+			'wmcasino_game' => 'Wmcasino',
 		);
 		if(array_key_exists($game,$game_list)){
 			$data['user'] = $_SESSION['user'];
@@ -337,6 +359,17 @@ class Home extends CI_Controller
 			'kingpoker_game' => 'King Poker Gaming',
 			'mega7_game' => 'Mega7 Gaming',
 			'relaxgame_game' => 'Relax Gaming',
+			'slotracha' => 'Slotracha',
+			'spinix_game' => 'Spinix',
+			'advantplay_game' => 'Advantplay',
+			'ninjaslot_game' => 'Ninjaslot',
+			'ace333_game' => 'Ace333',
+			'cq9_game' => 'Cq9',
+			'wmslot_game' => 'Wmslot',
+			'sboslot_game' => 'Sboslot',
+			'wecasino_game' => 'Wecasino',
+			'iampoker_game' => 'Rekop',
+			'wmcasino_game' => 'Wmcasino',
 		);
 		if(array_key_exists($game,$game_list)){
 			$data['user'] = $_SESSION['user'];
@@ -422,6 +455,17 @@ class Home extends CI_Controller
 			'kingpoker_game' => 'King Poker Gaming',
 			'mega7_game' => 'Mega7 Gaming',
 			'relaxgame_game' => 'Relax Gaming',
+			'slotracha' => 'Slotracha',
+			'spinix_game' => 'Spinix',
+			'advantplay_game' => 'Advantplay',
+			'ninjaslot_game' => 'Ninjaslot',
+			'ace333_game' => 'Ace333',
+			'cq9_game' => 'Cq9',
+			'wmslot_game' => 'Wmslot',
+			'sboslot_game' => 'Sboslot',
+			'wecasino_game' => 'Wecasino',
+			'iampoker_game' => 'Rekop',
+			'wmcasino_game' => 'Wmcasino',
 		);
 		if(array_key_exists($game,$game_list)){
 			$response = $this->game_api_librarie->getGameList($this->code_login[strtolower($game)]);
@@ -493,6 +537,17 @@ class Home extends CI_Controller
 			'kingpoker_game' => 'King Poker Gaming',
 			'mega7_game' => 'Mega7 Gaming',
 			'relaxgame_game' => 'Relax Gaming',
+			'slotracha' => 'Slotracha',
+			'spinix_game' => 'Spinix',
+			'advantplay_game' => 'Advantplay',
+			'ninjaslot_game' => 'Ninjaslot',
+			'ace333_game' => 'Ace333',
+			'cq9_game' => 'Cq9',
+			'wmslot_game' => 'Wmslot',
+			'sboslot_game' => 'Sboslot',
+			'wecasino_game' => 'Wecasino',
+			'iampoker_game' => 'Rekop',
+			'wmcasino_game' => 'Wmcasino',
 		);
 		$data['type'] = "lobby";
 		$data['game_title'] = array_key_exists($game_code,$game_list) ? $game_list[$game_code] : "";
@@ -642,6 +697,17 @@ class Home extends CI_Controller
 			'kingpoker_game' => 'King Poker Gaming',
 			'mega7_game' => 'Mega7 Gaming',
 			'relaxgame_game' => 'Relax Gaming',
+			'slotracha' => 'Slotracha',
+			'spinix_game' => 'Spinix',
+			'advantplay_game' => 'Advantplay',
+			'ninjaslot_game' => 'Ninjaslot',
+			'ace333_game' => 'Ace333',
+			'cq9_game' => 'Cq9',
+			'wmslot_game' => 'Wmslot',
+			'sboslot_game' => 'Sboslot',
+			'wecasino_game' => 'Wecasino',
+			'iampoker_game' => 'Rekop',
+			'wmcasino_game' => 'Wmcasino',
 		);
 		$data['type'] = "";
 		if(strtolower($game_code) == "ambbet"){

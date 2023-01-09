@@ -543,6 +543,62 @@
 							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>
 					</figure>
+					<figure  id="slotracha">
+						<a href="<?php echo base_url('lobby/slotracha') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/slotracha.png"
+																					  style="width: 100%; border-radius: 10px" alt="Slotracha Gaming"/></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure  id="spinix">
+						<a href="<?php echo base_url('lobby/spinix_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/Spinix.png"
+																				 style="width: 100%; border-radius: 10px" alt="Spinix Gaming"/></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure  id="advantplay">
+						<a href="<?php echo base_url('lobby/advantplay_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/advantplay.png"
+																				   style="width: 100%; border-radius: 10px" alt="Advantplay Gaming"/></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure  id="ninjaslot">
+						<a href="<?php echo base_url('lobby/ninjaslot_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/ninjaslot.png"
+																					   style="width: 100%; border-radius: 10px" alt="Ninjaslot Gaming"/></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure  id="ace333">
+						<a href="<?php echo base_url('lobby/ace333_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/ACE333.png"
+																					  style="width: 100%; border-radius: 10px" alt="Ace333 Gaming"/></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure  id="cq9">
+						<a href="<?php echo base_url('lobby/cq9_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/cq9.png"
+																				   style="width: 100%; border-radius: 10px" alt="Cq9 Gaming"/></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure  id="wmslot">
+						<a href="<?php echo base_url('lobby/wmslot_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/wmslot.png"
+																				style="width: 100%; border-radius: 10px" alt="Wmslot Gaming"/></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure  id="sboslot">
+						<a href="<?php echo base_url('lobby/sboslot_game') ?>"><img class="mb-3" src="<?php echo base_url(); ?>assets/images/game/SBOslot.png"
+																				   style="width: 100%; border-radius: 10px" alt="Sboslot Gaming"/></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
 				</div>
 				<div id="Casino" style="display: none">
 					<figure id="sa">
@@ -625,6 +681,27 @@
 					<figure id="keno">
 						<a target="_blank" href="<?php echo base_url('home/play_game_once/keno_game')?>"><img class="mb-3"
 																											  src="<?php /*echo base_url(); */?>assets/images/game/kenobt.jpg" style="width: 100%; border-radius: 10px" /></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure id="wecasino" style="display: none;">
+						<a target="_blank" href="<?php echo base_url('home/play_game_once/wecasino_game')?>"><img class="mb-3"
+																											  src="<?php /*echo base_url(); */?>assets/images/game/wmcasino.png" style="width: 100%; border-radius: 10px" /></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure id="iampoker">
+						<a target="_blank" href="<?php echo base_url('home/play_game_once/iampoker_game')?>"><img class="mb-3"
+																												  src="<?php /*echo base_url(); */?>assets/images/game/Iampoker.png" style="width: 100%; border-radius: 10px" /></a>
+						<div id="overlay" >
+							<div id="text"><?php echo $this->lang->line('close'); ?></div>
+						</div>
+					</figure>
+					<figure id="wmcasino">
+						<a target="_blank" href="<?php echo base_url('home/play_game_once/wmcasino_game')?>"><img class="mb-3"
+																												  src="<?php /*echo base_url(); */?>assets/images/game/wmcasino.png" style="width: 100%; border-radius: 10px" /></a>
 						<div id="overlay" >
 							<div id="text"><?php echo $this->lang->line('close'); ?></div>
 						</div>

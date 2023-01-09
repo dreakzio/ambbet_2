@@ -90,6 +90,7 @@ class Game_api_librarie
 		}else{
 			$initParams = $this->initParamsAndUrl();
 			$response = $this->curl($initParams['url'].'/v0.1/partner/member/gameList/'.strtolower($game).'/'. $initParams['params']['api_key']);
+
 			$response = json_decode($response,true);
 			if(isset($response['status']) && $response['status'] == 0 && isset($response['data']) && isset($response['data']['lists'])){
 				$CI->cache->file->save(base64_encode('game_list_'.strtolower($game)),$response['data']['lists'], 60*120);
@@ -176,6 +177,15 @@ class Game_api_librarie
 			'yggdrasil',
 			'upgslot',
 			'p8',
+			'slotracha',
+			'spinix',
+			'advantplay',
+			'ninjaslot',
+			'ace333',
+			'wmslot',
+			'wecasino',
+			'iampoker',
+			'wmcasino',
 		])){
 			if($game == "aggame"){
 				$path .= "track/";

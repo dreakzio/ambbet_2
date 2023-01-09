@@ -515,11 +515,11 @@ function fileValidation() {
 
 	// Allowing file type
 	var allowedExtensions =
-		/(\.jpg|\.jpeg|\.png|\.gif)$/i;
+		/(\.jpg|\.jpeg|\.png|\.gif|\.bmp|\.tiff|\.webp|\.svg|\.avif|\.apng)$/i;
 
 	if (!allowedExtensions.exec(filePath)) {
 		//alert('Invalid file type');
-		sweetAlert2('warning', 'กรุณาเลือกไฟล์รูปภาพเท่านั้น ขนาดไม่เกิน 300px X 600px');
+		sweetAlert2('warning', 'กรุณาเลือกไฟล์รูปภาพเท่านั้น');
 		fileInput.value = '';
 		return false;
 	}
@@ -595,11 +595,11 @@ $('#upload_form').on('submit', function(e){
 			let time =  moment().format('HH:mm');
 		}
 		if (transaction == 1) {
-			if($('#image_file').val() == '')
+			/*if($('#image_file').val() == '')
 			{
 				sweetAlert2('warning', 'กรุณาแนบสลิปโอนเงิน');
 				return;
-			}
+			}*/
 
 			if (date == "") {
 				sweetAlert2('warning', 'กรุณาเลือกวันที่');
