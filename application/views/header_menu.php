@@ -59,7 +59,6 @@
 					<img src="<?php echo base_url(); ?>assets/images/flag_lao.png" width="20"
 						height="20">
 				</a>
-                <span>Test Push/Pull</span>
         </div>
     </div>
     <script src="<?php echo base_url('assets/scripts/header_menu.js?').date('Y-m-d-h-i') ?>"></script>
