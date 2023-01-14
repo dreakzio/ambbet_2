@@ -9,10 +9,9 @@ class Auth extends CI_Controller
 	{
 		date_default_timezone_set('Asia/Bangkok');
 		parent::__construct();
-		// if (isset($_SESSION['language'])) {
-		// 	$this->session->set_userdata('language', 'thailand');
-		// 	// $this->lang->load('auth', $thailand);
-		// }
+		if (isset($_SESSION['language'])) {
+			$this->session->set_userdata('language', 'thailand');
+		}
 		$language = $this->session->userdata('language');
 		$this->lang->load('text', $language);
 	}
