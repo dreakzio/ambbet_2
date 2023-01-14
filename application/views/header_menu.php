@@ -46,7 +46,17 @@
             <?php endif; ?>
 
         </div>
-        <div class="nav-mobile" style="position:absolute; right:25px">
+        <div class="language_lay">
+            <button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span> <?php $this->session->userdata('language'); ?></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#" @click.prevent="PickLanguageThai" style="min-width:inherit;"> <img src="<?php echo base_url(); ?>assets/images/flag_thai.png" width="20"height="20"> TH </a>
+                <a class="dropdown-item" href="#" @click.prevent="PickLanguageLao" style="min-width:inherit;"> <img src="<?php echo base_url(); ?>assets/images/flag_english.png" width="20"height="20"> LAO </a>
+                <a class="dropdown-item" href="#" @click.prevent="PickLanguageEnglish" style="min-width:inherit;"> <img src="<?php echo base_url(); ?>assets/images/flag_lao.png" width="20"height="20"> EN </a>
+            </div>
+        </div>
+        <!-- <div class="nav-mobile" style="position:absolute; right:25px">
 				<a href="#" @click.prevent="PickLanguageThai">
 					<img src="<?php echo base_url(); ?>assets/images/flag_thai.png" width="20"
 						height="20">
@@ -59,7 +69,7 @@
 					<img src="<?php echo base_url(); ?>assets/images/flag_lao.png" width="20"
 						height="20">
 				</a>
-        </div>
+        </div> -->
     </div>
     <script src="<?php echo base_url('assets/scripts/header_menu.js?').date('Y-m-d-h-i') ?>"></script>
 </header>
