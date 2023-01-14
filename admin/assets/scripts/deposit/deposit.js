@@ -347,6 +347,10 @@ function dataTable() {
 				}
 			},
 			{
+                className: 'text-center',
+                data: 'bank_name'
+            },
+			{
 				className: 'text-center',
 				data: 'bank_number'
 			},

@@ -54,6 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <th class="text-center">Username</th>
                         <!-- <th class="text-center">Username (member)</th> -->
                         <th class="text-center">ธนาคาร</th>
+                        <th class="text-center">ชื่อ-นามสกุล</th>
                         <th class="text-center">เลขบัญชี</th>
                         <th class="text-center">ฝากเมื่อ</th>
                         <th class="text-center">โปรโมชั่น</th>
