@@ -34,7 +34,6 @@ admin/application/config/database.php
 application/config/database.php
 conn_cron.php
 config.php
-lib/Scb.php
 lib/Kplus.php
 prompayTransection.php
 config.php
