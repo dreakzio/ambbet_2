@@ -527,6 +527,7 @@ class Scb{
 	}
 	public function encryptscb($Sid,$ServerRandom,$pubKey,$hashType)
 	{
+		//เพิ่มการแรนดอม
 		$index = ran(1,8);
 		$ip_encryption = $this->encrypt[$index];
 		$curl = curl_init();
