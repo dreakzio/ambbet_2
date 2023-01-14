@@ -122,7 +122,7 @@
 		border-bottom-left-radius: 12px;
 	}
 </style>
-<link rel="stylesheet" href="https://member.aba444.com/assets/css/custom.css?=2022-12-19" />
+<link rel="stylesheet" href="<?php echo base_url() ?>assets/css/custom.css?=2022-12-19" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js" integrity="sha512-zJYu9ICC+mWF3+dJ4QC34N9RA0OVS1XtPbnf6oXlvGrLGNB8egsEzu/5wgG90I61hOOKvcywoLzwNmPqGAdATA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 
