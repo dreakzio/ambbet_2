@@ -198,9 +198,9 @@
 		let j = 30;
 		let ten_games = [];
 		all_games.forEach(function(game) {
-			// code
+			//code
 			//console.log(game.recommended)
-			// if(game.recommended)
+			//if(game.recommended)
 			ten_games.push(game);
 		});
 
