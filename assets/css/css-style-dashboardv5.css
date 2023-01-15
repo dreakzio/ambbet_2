@@ -1918,14 +1918,14 @@ div.dropdown-menu a:hover{
         padding-left: 5px;
         margin-top: 0px;
     }
-    
+
     .btn-lang {
         background-image: linear-gradient(90deg, rgb(213, 148, 56) 0%, rgb(254, 233, 128) 100%);
         padding: 10px 20px !important;
         font-size: 14px !important; 
         /* border-radius: 15px !important; */
     }
-
+    
     .language_lay {
         position:absolute;
         top: 0px; 
@@ -2102,4 +2102,5 @@ button#cancel i {
 .list-contact-right p {
     margin-top: 10px;
     margin-bottom: 0px;
+}
 }
