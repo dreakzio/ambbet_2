@@ -1955,6 +1955,7 @@ div.dropdown-menu a:hover{
         font-weight: bold;
         color: white;
     }
+}
 
 
 /* Small devices (landscape phones, 576px and up) */
@@ -2102,5 +2103,4 @@ button#cancel i {
 .list-contact-right p {
     margin-top: 10px;
     margin-bottom: 0px;
-}
 }
