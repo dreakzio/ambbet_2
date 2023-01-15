@@ -47,7 +47,7 @@
 
         </div>
         <div class="language_lay">
-            <button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-lang btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span> <?php echo ($this->session->userdata('language') == NULL ? "thailand" : $this->session->userdata('language')); ?> </span>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
