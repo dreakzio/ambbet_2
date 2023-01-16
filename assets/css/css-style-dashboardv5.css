@@ -1444,7 +1444,6 @@ h2.ql-align-center {
 .reset-password a {
     font-size: 20px;
 }
-
 .btn-lang_register {
     background-image: linear-gradient(90deg, rgb(63, 252, 60) 0%, rgb(254, 233, 128) 100%);
 }
@@ -1481,7 +1480,6 @@ div.dropdown-menu a:hover{
     background-image: linear-gradient(90deg, rgb(213, 148, 56) 0%, rgb(254, 233, 128) 100%);
     font-weight: bold;
 }
-
 
 /* Media Queries*/
 
@@ -1520,11 +1518,6 @@ div.dropdown-menu a:hover{
     .navbar {
         padding: 0px;
     }
-      
-    .nav-mobile{
-        position: absolute;
-        top: 80px;
-     }
     .container.content {
         margin-top: -40px;
         min-height: 300px;
@@ -1829,6 +1822,53 @@ div.dropdown-menu a:hover{
         padding: 0px;
         height: 70px;
     }
+    .btn-lang_register {
+        background-image: linear-gradient(90deg, rgb(63, 252, 60) 0%, rgb(254, 233, 128) 100%);
+        padding: 10px 20px !important;
+        font-size: 14px !important; 
+        /* border-radius: 15px !important; */
+    }
+    .dropdown-toggle::after{
+        right: auto !important;
+    }
+    .btn-lang_logout {
+        background-image: linear-gradient(90deg, rgb(251, 15, 15) 0%, rgb(254, 233, 128) 100%);
+        padding: 10px 20px !important;
+        font-size: 14px !important; 
+        /* border-radius: 15px !important; */
+    }
+    .btn-lang {
+        background-image: linear-gradient(90deg, rgb(213, 148, 56) 0%, rgb(254, 233, 128) 100%);
+        padding: 10px 20px !important;
+        font-size: 14px !important; 
+        /* border-radius: 15px !important; */
+    }
+    .language_lay {
+        position:absolute;
+        top: 0px; 
+        right:0px;
+    }
+    div.dropdown-menu.show {
+        /* background:#B8860B; */
+        /* border: 2px solid red; */
+        text-align: left;
+        width: 6.5rem!important;
+        backdrop-filter: blur(1px);
+        /* background-color: #fff; */
+        overflow: visible; 
+        /* background-color: rgba(255, 255, 255, 0.4); */
+        
+    }
+    div.dropdown-menu {
+       min-width: auto !important; 
+       max-width: 4.5rem !important;
+       overflow: hidden;
+    }
+    div.dropdown-menu a:hover{
+        background-image: linear-gradient(to right, gold , yellow);
+        font-weight: bold;
+        color: white;
+    }
     .scroll-text {
         background-color: #101010;
         padding: 4px 0px 0px 0px;
@@ -1927,58 +1967,7 @@ div.dropdown-menu a:hover{
         padding-left: 5px;
         margin-top: 0px;
     }
-
-    .btn-lang_register {
-        background-image: linear-gradient(90deg, rgb(63, 252, 60) 0%, rgb(254, 233, 128) 100%);
-        padding: 10px 20px !important;
-        font-size: 14px !important; 
-        /* border-radius: 15px !important; */
-    }
-    .dropdown-toggle::after{
-        right: auto !important;
-    }
-    .btn-lang_logout {
-        background-image: linear-gradient(90deg, rgb(251, 15, 15) 0%, rgb(254, 233, 128) 100%);
-        padding: 10px 20px !important;
-        font-size: 14px !important; 
-        /* border-radius: 15px !important; */
-    }
-    .btn-lang {
-        background-image: linear-gradient(90deg, rgb(213, 148, 56) 0%, rgb(254, 233, 128) 100%);
-        padding: 10px 20px !important;
-        font-size: 14px !important; 
-        /* border-radius: 15px !important; */
-    }
-
-    .language_lay {
-        position:absolute;
-        top: 0px; 
-        right:0px;
-    }
-
-    div.dropdown-menu.show {
-        /* background:#B8860B; */
-        /* border: 2px solid red; */
-        text-align: left;
-        width: 6.5rem!important;
-        backdrop-filter: blur(1px);
-        /* background-color: #fff; */
-        overflow: visible; 
-        /* background-color: rgba(255, 255, 255, 0.4); */
-        
-    }
-
-    div.dropdown-menu {
-       min-width: auto !important; 
-       max-width: 4.5rem !important;
-       overflow: hidden;
-    }
-
-    div.dropdown-menu a:hover{
-        background-image: linear-gradient(to right, gold , yellow);
-        font-weight: bold;
-        color: white;
-    }
+    
 }
 
 
