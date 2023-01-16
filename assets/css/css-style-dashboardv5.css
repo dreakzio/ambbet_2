@@ -1445,6 +1445,13 @@ h2.ql-align-center {
     font-size: 20px;
 }
 
+.btn-lang_register {
+    background-image: linear-gradient(90deg, rgb(63, 252, 60) 0%, rgb(254, 233, 128) 100%);
+}
+.btn-lang_logout {
+    background-image: linear-gradient(90deg, rgb(251, 15, 15) 0%, rgb(254, 233, 128) 100%);
+}
+
 .btn-lang {
     background-image: linear-gradient(90deg, rgb(213, 148, 56) 0%, rgb(254, 233, 128) 100%);
 }
@@ -1457,14 +1464,16 @@ h2.ql-align-center {
 
 div.dropdown-menu.show {
     text-align: left;
-    width: 7.5rem!important;
+    min-width: auto !important; 
+    max-width: auto !important;
     backdrop-filter: blur(1px);
-    overflow: visible; 
+    overflow: visible;
+    position:absolute!important;
 }
 
 div.dropdown-menu {
    min-width: auto !important; 
-   max-width: 8rem !important;
+   max-width: auto !important;
    overflow: hidden;
 }
 
@@ -1919,6 +1928,21 @@ div.dropdown-menu a:hover{
         margin-top: 0px;
     }
 
+    .btn-lang_register {
+        background-image: linear-gradient(90deg, rgb(63, 252, 60) 0%, rgb(254, 233, 128) 100%);
+        padding: 10px 20px !important;
+        font-size: 14px !important; 
+        /* border-radius: 15px !important; */
+    }
+    .dropdown-toggle::after{
+        right: auto !important;
+    }
+    .btn-lang_logout {
+        background-image: linear-gradient(90deg, rgb(251, 15, 15) 0%, rgb(254, 233, 128) 100%);
+        padding: 10px 20px !important;
+        font-size: 14px !important; 
+        /* border-radius: 15px !important; */
+    }
     .btn-lang {
         background-image: linear-gradient(90deg, rgb(213, 148, 56) 0%, rgb(254, 233, 128) 100%);
         padding: 10px 20px !important;
