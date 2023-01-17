@@ -10,14 +10,15 @@ class Scb{
 	private $cnt_re_login = 0;
 	private $api_auth = "";
 
-	private $encrypt =  array('68.183.191.209'
-							,'188.166.220.72'
-							,'128.199.170.222'
-							,'139.59.227.226'
-							,'188.166.220.72'
-							,'128.199.75.47'
-							,'159.223.59.138'
-							,'167.99.66.200');
+	private $encrypt =  array('http://68.183.191.209:80'
+							,'http://188.166.220.72:80'
+							,'http://128.199.170.222:80'
+							,'http://139.59.227.226:80'
+							,'http://188.166.220.72:80'
+							,'http://128.199.75.47:80'
+							,'http://159.223.59.138:80'
+							,'http://167.99.66.200:80'
+							,'https://pin.ufo234.co');
 
 	public function Curl($method, $url, $header, $data, $cookie)
 	{
@@ -157,8 +158,11 @@ class Scb{
 
 		$curl = curl_init();
 
+		$index = rand(1,8);
+		$ip_encryption = $this->encrypt[$index];
+
 		curl_setopt_array($curl, array(
-			CURLOPT_URL => "http://159.223.81.75:80/pin/encrypt",
+			CURLOPT_URL => "{$ip_encryption}/pin/encrypt",
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => "",
 			CURLOPT_MAXREDIRS => 10,
@@ -532,7 +536,7 @@ class Scb{
 		$ip_encryption = $this->encrypt[$index];
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
-			CURLOPT_URL => 'http://'.$ip_encryption.'/pin/encrypt', // ใส่ url ของคุณ
+			CURLOPT_URL => $ip_encryption.'/pin/encrypt', // ใส่ url ของคุณ
 			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => '',
