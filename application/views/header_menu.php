@@ -8,13 +8,13 @@
                             alt="" /></a>
                 </div>
                 <?php if(isset($_SESSION['user'])): ?>
-                <div class="col-2 d-flex justify-content-center text-center ">
+                <div class="col-2 col-md-3 d-flex justify-content-center text-center justify-content-md-end">
                     <button class="btn btn-lang_logout btn-sm" type="button" href="javascript: {}"
                         @click.prevent="logout">
                         <span>Logout</span>
                     </button>
                 </div>
-                <div class="col-3 ">
+                <div class="col-3 col-md-2">
                     <button class="btn btn-lang btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span>

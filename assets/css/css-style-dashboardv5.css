@@ -1463,11 +1463,11 @@ h2.ql-align-center {
 
 div.dropdown-menu.show {
     text-align: left;
-    min-width: auto !important; 
-    max-width: auto !important;
+    width: inherit!important;
     backdrop-filter: blur(1px);
     overflow: visible;
     position:absolute!important;
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 div.dropdown-menu {
@@ -1860,8 +1860,7 @@ div.dropdown-menu a:hover{
         
     }
     div.dropdown-menu {
-       min-width: auto !important; 
-       max-width: 4.5rem !important;
+       width: inherit;
        overflow: hidden;
     }
     div.dropdown-menu a:hover{
