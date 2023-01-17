@@ -35,6 +35,7 @@ application/config/database.php
 conn_cron.php
 config.php
 lib/Kplus.php
+lib/Scb.php
 prompayTransection.php
 config.php
 conn_cron.php
