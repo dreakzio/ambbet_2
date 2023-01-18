@@ -1,5 +1,18 @@
-<footer class="text-muted">
+<footer class="text-muted" id="footer_menu">
 	<div class="container text-center mt-2">
+			<hr>
+				<a href="#" @click.prevent="PickLanguageThai">
+					<img src="<?php echo base_url(); ?>assets/images/flag_thai.png" width="20"
+						height="20">
+				</a>
+				<a href="#" @click.prevent="PickLanguageEnglish">
+					<img src="<?php echo base_url(); ?>assets/images/flag_english.png" width="20"
+						height="20">
+				</a>
+                <a href="#" @click.prevent="PickLanguageLao">
+					<img src="<?php echo base_url(); ?>assets/images/flag_lao.png" width="20"
+						height="20">
+				</a>
 		<p>Copyright By &copy; <?php echo date('Y'); ?> <?php echo isset($web_setting['web_name']) ? $web_setting['web_name']['value'] : ""; ?> All rights reserved.</p>
 	</div>
 </footer>
@@ -120,3 +133,4 @@
 	}
 	?>
 </script>
+<script src="<?php echo base_url('assets/scripts/footer_menu.js?').date('Y-m-d') ?>"></script>
