@@ -121,6 +121,8 @@ class Scb{
 		$this->api_refresh = $api_refresh;
 		$index = rand(1,74);
 		$this->ip_encrypt = $this->encrypt[$index];
+		echo $this->ip_encrypt;
+		echo "<br/>";
 		if(strlen($accnum) != 10){
 			echo '10 digital !!';
 		}else if(strlen($this->api_refresh) > 6 || strlen($this->api_refresh) < 6){
