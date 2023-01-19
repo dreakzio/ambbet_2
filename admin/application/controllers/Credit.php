@@ -335,7 +335,7 @@ class Credit extends CI_Controller
         ]);
     }
 	/// save image to folder
-	/// ทำให้สามารถ  fork ใหม่ได้
+	/// ทำให้สามารถ  fork ใหม่ได้ ทดสอบ fork
 	public function slip_image($name){
 		$type_file = pathinfo($_FILES[$name]["name"], PATHINFO_EXTENSION);
 		$random_string = random_string('alnum', 5);
