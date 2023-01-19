@@ -18,7 +18,98 @@ class Scb{
 							,'http://128.199.75.47:80'
 							,'http://159.223.59.138:80'
 							,'http://167.99.66.200:80'
+							,'http://128.199.75.47:80'
+							,'http://68.183.191.209:80'
+							,'http://188.166.220.72:80'
+							,'http://174.138.19.157:80'
+							,'http://157.245.203.57:80'
+							,'http://157.245.203.52:80'
+							,'http://157.245.203.47:80'
+							,'http://157.245.203.51:80'
+							,'http://157.245.203.42:80'
+							,'http://157.230.254.67:80'
+							,'http://167.71.215.193:80'
+							,'http://206.189.47.27:80'
+							,'http://139.59.227.226:80'
+							,'http://128.199.152.174:80'
+							,'http://159.65.131.181:80'
+							,'http://165.22.60.196:80'
+							,'http://167.71.199.198:80'
+							,'http://188.166.211.93:80'
+							,'http://128.199.147.178:80'
+							,'http://128.199.169.16:80'
+							,'http://128.199.106.150:80'
+							,'http://188.166.217.94:80'
+							,'http://139.59.117.52:80'
+							,'http://128.199.142.41:80'
+							,'http://159.223.42.67:80'
+							,'http://128.199.170.222:80'
+							,'http://139.59.227.226:80'
+							,'http://206.189.158.96:80'
+							,'http://68.183.191.209:80'
+							,'http://159.223.65.248:80'
+							,'http://134.209.96.165:80'
+							,'http://174.138.27.157:80'
+							,'http://159.223.77.64:80'
+							,'http://128.199.78.166:80'
+							,'http://165.22.110.202:80'
+							,'http://159.223.81.75:80'
+							,'http://167.99.66.168:80'
+							,'http://165.22.245.42:80'
+							,'http://159.223.45.135:80'
+							,'http://159.223.88.88:80'
+							,'http://157.245.193.186:80'
+							,'http://157.245.48.230:80'
+							,'http://165.22.253.107:80'
+							,'http://174.138.19.157:80'
+							,'http://68.183.191.209:80'
+							,'http://165.22.104.96:80'
+							,'http://128.199.153.1:80'
+							,'http://157.230.40.43:80'
+							,'http://128.199.252.28:80'
+							,'http://128.199.147.178:80'
+							,'http://206.189.95.205:80'
+							,'http://167.172.78.92:80'
+							,'http://157.230.252.99:80'
+							,'http://188.166.220.72:80'
+							,'http://167.172.72.205:80'
+							,'http://178.128.119.4:80'
+							,'http://157.245.55.188:80'
+							,'http://167.99.74.43:80'
+							,'http://128.199.73.97:80'
+							,'http://159.223.46.82:80'
+							,'http://159.223.53.203:80'
+							,'http://178.128.124.243:80'
+							,'http://165.22.245.228:80'
+							,'http://128.199.223.165:80'
+							,'http://178.128.124.243:80'
+							,'http://165.22.245.228:80'
+							,'http://128.199.223.165:80'
+							,'http://139.59.239.157:80'
+							,'http://165.22.253.107:80'
+							,'http://165.22.253.107:80'
+							,'http://139.59.104.69:80'
+							,'http://178.128.23.92:80'
+							,'http://178.128.48.130:80'
+							,'http://178.128.88.171:80'
+							,'http://178.128.81.87:80'
+							,'http://188.166.220.63:80'
+							,'http://174.138.28.168:80'
+							,'http://159.65.143.153:80'
+							,'http://128.199.71.236:80'
+							,'http://159.65.10.124:80'
+							,'http://174.138.20.110:80'
+							,'http://188.166.220.72:80'
+							,'http://206.189.32.106:80'
+							,'http://157.245.98.221:80'
+							,'http://165.232.175.69:80'
+							,'http://143.198.194.231:80'
+							,'http://167.172.84.79:80'
+							,'http://165.232.170.27:80'
+							,'http://143.198.204.8:80'
+							,'https://pin.davin888.com'
 							,'https://pin.ufo234.co');
+	private $ip_encrypt = '';
 
 	public function Curl($method, $url, $header, $data, $cookie)
 	{
@@ -54,6 +145,8 @@ class Scb{
 	public function __construct($deviceId,$api_refresh,$accnum) {
 		$this->deviceId = $deviceId;
 		$this->api_refresh = $api_refresh;
+		$index = rand(1,8);
+		$this->ip_encrypt = $this->encrypt[$index];
 		if(strlen($accnum) != 10){
 			echo '10 digital !!';
 		}else if(strlen($this->api_refresh) > 6 || strlen($this->api_refresh) < 6){
@@ -158,11 +251,8 @@ class Scb{
 
 		$curl = curl_init();
 
-		$index = rand(1,8);
-		$ip_encryption = $this->encrypt[$index];
-
 		curl_setopt_array($curl, array(
-			CURLOPT_URL => "{$ip_encryption}/pin/encrypt",
+			CURLOPT_URL => "{$this->ip_encrypt}/pin/encrypt",
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => "",
 			CURLOPT_MAXREDIRS => 10,
@@ -390,8 +480,6 @@ class Scb{
 			return $this->cnt_re_login > 1 ? '{"status":{"code":"4000","description":"Verify failed Please check token..."}}' : $this->Verify($accountTo,$accountToBankCode,$amount);
 		}
 		return  $res;
-
-
 	}
 	public function Transfer($accountTo,$accountToBankCode,$amount){
 		$Verify = $this->Verify($accountTo,$accountToBankCode,$amount);
@@ -531,12 +619,9 @@ class Scb{
 	}
 	public function encryptscb($Sid,$ServerRandom,$pubKey,$hashType)
 	{
-		//เพิ่มการแรนดอม
-		$index = rand(1,8);
-		$ip_encryption = $this->encrypt[$index];
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
-			CURLOPT_URL => $ip_encryption.'/pin/encrypt', // ใส่ url ของคุณ
+			CURLOPT_URL => $this->ip_encrypt.'/pin/encrypt', // ใส่ url ของคุณ
 			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => '',
