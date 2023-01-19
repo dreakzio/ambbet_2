@@ -145,7 +145,7 @@ class Scb{
 	public function __construct($deviceId,$api_refresh,$accnum) {
 		$this->deviceId = $deviceId;
 		$this->api_refresh = $api_refresh;
-		$index = rand(1,8);
+		$index = rand(1,90);
 		$this->ip_encrypt = $this->encrypt[$index];
 		if(strlen($accnum) != 10){
 			echo '10 digital !!';
