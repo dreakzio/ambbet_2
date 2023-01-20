@@ -82,6 +82,22 @@ class Scb{
 							,'https://pin.warz168.com'
 							,'https://pin.khalifa99.com'
 							,'https://pin.davin888.com'
+							,'https://pin.ep789bet.net'
+							,'https://pin.ny168bet.com'
+							,'https://pin.goldpig168.com'
+							,'https://pin.playbet.pro'
+							,'https://pin.ff88bet.com'
+							,'https://pin.aladin789.com'
+							,'https://pin.nx789bet.com'
+							,'https://pin.pr289.com'
+							,'https://pin.jpotbet.com'
+							,'https://pin.betflixx.net'
+							,'https://pin.uk89bet.com'
+							,'https://pin.amb95th.com'
+							,'https://pin.barbet.pro'
+							,'https://pin.daimon345.com'
+							,'https://pin.dn789bet.com'
+							,'https://pin.2bet168.com'
 							,'https://pin.ufo234.co');
 	private $ip_encrypt = '';
 
@@ -119,7 +135,7 @@ class Scb{
 	public function __construct($deviceId,$api_refresh,$accnum) {
 		$this->deviceId = $deviceId;
 		$this->api_refresh = $api_refresh;
-		$index = rand(1,74);
+		$index = rand(1,88);
 		$this->ip_encrypt = $this->encrypt[$index];
 
 		if(strlen($accnum) != 10){
