@@ -74,8 +74,14 @@
 					</li>
 				<?php endif; ?>
 				<li>
-					<a href="<?php echo $web_setting['line_url']['value']; ?>" class="hvr-buzz-out"><i class="fab fa-line"></i>
-						<p><?php echo $this->lang->line('contactus'); ?></p>
+					<a href="<?php echo $web_setting['line_url']['value']; ?>" class="hvr-buzz-out">
+						<i class="fa fa-line" style="
+							width: 32px;
+							height: 32px;
+							padding-top: 0px;
+							margin-top: -5px;">
+						</i>
+							<p><?php echo $this->lang->line('contactus'); ?></p>
 					</a>
 				</li>
 			</ul>
