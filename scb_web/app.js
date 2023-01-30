@@ -6,7 +6,6 @@ const bodyParser = require('body-parser')
 //const PORT = process.env.APP_PORT
 const PORT = 8000
 
-
 const scb = require('./routes/scb')
 
 app.use(bodyParser.json())
