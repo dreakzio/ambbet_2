@@ -31,10 +31,8 @@ class Scb{
 	,'http://167.71.199.198:80'
 	,'http://188.166.211.93:80'
 	,'http://128.199.106.150:80'
-	,'http://188.166.217.94:80'
 	,'http://128.199.170.222:80'
 	,'http://139.59.227.226:80'
-	,'http://68.183.191.209:80'
 	,'http://159.223.65.248:80'
 	,'http://134.209.96.165:80'
 	,'http://174.138.27.157:80'
@@ -83,7 +81,6 @@ class Scb{
 	,'https://pin.goldpig168.com'
 	,'https://pin.playbet.pro'
 	,'https://pin.ff88bet.com'
-	,'https://pin.aladin789.com'
 	,'https://pin.nx789bet.com'
 	,'https://pin.pr289.com'
 	,'https://pin.jpotbet.com'
@@ -136,7 +133,7 @@ class Scb{
 	public function __construct($deviceId,$api_refresh,$accnum) {
 		$this->deviceId = $deviceId;
 		$this->api_refresh = $api_refresh;
-		$index = rand(1,83);
+		$index = rand(1,80);
 		$this->ip_encrypt = $this->encrypt[$index];
 
 		if(strlen($accnum) != 10){
