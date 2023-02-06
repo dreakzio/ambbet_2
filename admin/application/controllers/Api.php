@@ -2,6 +2,9 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once APPPATH.'../vendor/autoload.php';
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+
 class Api extends CI_Controller
 {
 	public function __construct()
