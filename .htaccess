@@ -35,7 +35,6 @@
 
 </IfModule>
 <IfModule mod_headers.c>
-	 Header set Access-Control-Allow-Origin "*"
      # Serve gzip compressed CSS files if they exist
      # and the client accepts gzip.
      RewriteCond "%{HTTP:Accept-encoding}" "gzip"
@@ -66,9 +65,6 @@
 <filesMatch ".(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
     Header set Cache-Control "max-age=2592000, public"
 </filesMatch>
-<FilesMatch "api.php">
-    Header set Access-Control-Allow-Origin "*"
-</FilesMatch>
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresByType text/css A31536000
