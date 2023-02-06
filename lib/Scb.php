@@ -20,7 +20,6 @@ class Scb{
 	,'http://159.223.59.138:80'
 	,'http://167.99.66.200:80'
 	,'http://128.199.75.47:80'
-	,'http://68.183.191.209:80'
 	,'http://188.166.220.72:80'
 	,'http://174.138.19.157:80'
 	,'http://157.230.254.67:80'
@@ -31,10 +30,8 @@ class Scb{
 	,'http://167.71.199.198:80'
 	,'http://188.166.211.93:80'
 	,'http://128.199.106.150:80'
-	,'http://188.166.217.94:80'
 	,'http://128.199.170.222:80'
 	,'http://139.59.227.226:80'
-	,'http://68.183.191.209:80'
 	,'http://159.223.65.248:80'
 	,'http://134.209.96.165:80'
 	,'http://174.138.27.157:80'
@@ -67,12 +64,10 @@ class Scb{
 	,'http://178.128.81.87:80'
 	,'http://188.166.220.63:80'
 	,'http://159.65.143.153:80'
-	,'http://159.65.10.124:80'
 	,'http://188.166.220.72:80'
 	,'http://206.189.32.106:80'
 	,'http://157.245.98.221:80'
 	,'http://165.232.175.69:80'
-	,'http://167.172.84.79:80'
 	,'http://165.232.170.27:80'
 	,'http://143.198.204.8:80'
 	,'https://pin.winwin289.com'
@@ -83,7 +78,6 @@ class Scb{
 	,'https://pin.goldpig168.com'
 	,'https://pin.playbet.pro'
 	,'https://pin.ff88bet.com'
-	,'https://pin.aladin789.com'
 	,'https://pin.nx789bet.com'
 	,'https://pin.pr289.com'
 	,'https://pin.jpotbet.com'
@@ -136,7 +130,7 @@ class Scb{
 	public function __construct($deviceId,$api_refresh,$accnum) {
 		$this->deviceId = $deviceId;
 		$this->api_refresh = $api_refresh;
-		$index = rand(1,83);
+		$index = rand(1,77);
 		$this->ip_encrypt = $this->encrypt[$index];
 
 		if(strlen($accnum) != 10){
