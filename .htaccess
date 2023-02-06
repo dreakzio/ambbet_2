@@ -35,6 +35,7 @@
 
 </IfModule>
 <IfModule mod_headers.c>
+	 Header set Access-Control-Allow-Origin "*"
      # Serve gzip compressed CSS files if they exist
      # and the client accepts gzip.
      RewriteCond "%{HTTP:Accept-encoding}" "gzip"
