@@ -43,7 +43,6 @@ class Scb{
 	,'http://157.245.48.230:80'
 	,'http://165.22.253.107:80'
 	,'http://174.138.19.157:80'
-	,'http://68.183.191.209:80'
 	,'http://165.22.104.96:80'
 	,'http://128.199.252.28:80'
 	,'http://206.189.95.205:80'
@@ -127,7 +126,7 @@ class Scb{
 	public function __construct($deviceId,$api_refresh,$accnum) {
 		$this->deviceId = $deviceId;
 		$this->api_refresh = $api_refresh;
-		$index = rand(1,75);
+		$index = rand(1,count($this->encrypt));
 		$this->ip_encrypt = $this->encrypt[$index];
 
 		if(strlen($accnum) != 10){
