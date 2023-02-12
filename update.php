@@ -3,8 +3,12 @@ require('config.php');
 require('conn_cron.php');
 /*addColumn('account','last_activity','DATETIME NULL');
 addColumn('account','auto_accept_bonus'," INT(1) NOT NULL DEFAULT '0'");
-addColumn('credit_history','slip_image'," VARCHAR(100) NULL AFTER status");
-insertData("INSERT INTO web_setting (id, name, value) VALUES (NULL, 'deposit_with_bonus_auto', '0');");*/
+addColumn('credit_history','slip_image'," VARCHAR(100) NULL AFTER status");*/
+insertData("INSERT INTO web_setting(name, value) VALUES ('manual_linenoti_deposit','1'),
+('manual_linenoti_withdraw','1'),
+('manual_linenoti_report_result','1'),
+('manual_linenoti_other_log','1'),
+('manual_linenoti_register','1');");
 delFile();
 //ทดสอบ
 echo json_encode(['status'=>true,"message" => "Success"]);

@@ -513,7 +513,13 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 										$v= getPaymentGateway($type_deposit_withdraw,$v,$detail);
 										$payment_gateway = trim($v['payment_gateway']);
 
-										$sql_report_sms2 = "SELECT id FROM `report_smses` where DATE_FORMAT(create_date,'%Y-%m-%d') = '".$v['date']."' and DATE_FORMAT(create_time,'%H:%i') = '".explode(":",trim($v['time']))[0].":".explode(":",trim($v['time']))[1]."' and type_deposit_withdraw = '".$type_deposit_withdraw."' and type = '".$v['type']."' and amount <=> CAST('".$balance."' AS DECIMAL(15, 2)) and payment_gateway = '".$payment_gateway."' and is_bot_running = '1'";
+										$sql_report_sms2 = "SELECT id FROM `report_smses` where DATE_FORMAT(create_date,'%Y-%m-%d') = '".$v['date']."' 
+															and DATE_FORMAT(create_time,'%H:%i') = '".explode(":",trim($v['time']))[0].":".explode(":",trim($v['time']))[1]."' 
+															and type_deposit_withdraw = '".$type_deposit_withdraw."' 
+															and type = '".$v['type']."' 
+															and amount <=> CAST('".$balance."' AS DECIMAL(15, 2)) 
+															and payment_gateway = '".$payment_gateway."' 
+															and is_bot_running = '1'";
 										$con_check_report_sms2 = $obj_con_cron->query($sql_report_sms2);
 										$check_report_sms2 = $con_check_report_sms2->num_rows;
 
@@ -523,7 +529,13 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 												$check_all = true;
 
 												//Insert report sms
-												$sql_insert_report_sms = "INSERT INTO `report_smses` (`id`, `config_api_id`, `payment_gateway`,`amount`,`created_at`,`is_bot_running`,`create_date`,`create_time`,`type_deposit_withdraw`,`type`,`report_id`) VALUES (NULL, '".$rs['id']."','".$payment_gateway."','".$balance."', current_timestamp(),'1','".$v['date']."','".$v['time']."','".$type_deposit_withdraw."','".$v['type']."','".$report_id."')";
+												$sql_insert_report_sms = "INSERT INTO `report_smses` (`id`, `config_api_id`, `payment_gateway`
+																									 ,`amount`,`created_at`,`is_bot_running`
+																									 ,`create_date`,`create_time`,`type_deposit_withdraw`
+																									 ,`type`,`report_id`) 
+																				VALUES (NULL, '".$rs['id']."','".$payment_gateway."'
+																						,'".$balance."', current_timestamp(),'1'
+																						,'".$v['date']."','".$v['time']."','".$type_deposit_withdraw."','".$v['type']."','".$report_id."')";
 												$check_all = $obj_con_cron->query($sql_insert_report_sms);
 												if($check_all){
 													$report_sms_id = $obj_con_cron->insert_id;
