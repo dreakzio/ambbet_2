@@ -339,9 +339,11 @@ class Kbank{
 							$set3 = substr($toAccountNo,4,5);
 							$set4 = substr($toAccountNo,9,5);
 							$toAccountNo = $set1.'-'.$set2.'-'.$set3.'-'.$set4;
-							$payment_gateway_ext = $toAccountNo;
+							//$payment_gateway_ext = $toAccountNo;
+							$payment_gateway_ext = $toAccountNo." ".$transaction['detail']['data']['toAccountNameTh']." ".$transaction['detail']['data']['bankNameEn'];
 						}else{
-							$payment_gateway_ext = $transaction['toAccountNumber'];
+							//$payment_gateway_ext = $transaction['toAccountNumber'];
+							$payment_gateway_ext = $transaction['toAccountNumber']." ".(!empty($transaction['benefitAccountNameTh']) ? $transaction['benefitAccountNameTh'] : $transaction['benefitAccountNameEn']);
 						}
 						// print_r($transaction['detail']['data']);
 						if($transaction['fromAccountNameEn'] == '')
@@ -358,7 +360,7 @@ class Kbank{
 							'type' => trim($transaction['channelTh']),
 							'type_deposit_withdraw' => !is_null($transaction['depositAmount']) ? 'D' : 'W',
 							'amount' => !is_null($transaction['depositAmount']) ? $transaction['depositAmount'] : $transaction['withdrawAmount'],
-							'payment_gateway' => trim($payment_gateway_ext),
+							'payment_gateway' => trim($transaction['channelTh'].' | '.trim($payment_gateway_ext)),
 							'toAccountNameTh' => trim($transNameTh),
 							'toAccountNameEn' => trim($transNameEn),
 							'bankNameTh' => trim($transaction['detail']['data']['bankNameTh']),
