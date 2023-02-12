@@ -161,6 +161,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									</div>
 								</div>
 							</div>
+							
 							<div class="row">
 								<div class="col-md-4">
 									<div class="form-group">
@@ -447,6 +448,93 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 										<select class="form-control" name="web_setting[lotto_status]" id="lotto_status">
 											<option value="0">ปิด</option>
 											<option value="1" <?php if ($lotto_status['value']==1): ?>
+												selected
+											<?php endif; ?>>เปิด</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<div class="content-body">
+			<section class="card">
+				<div class="card-content">
+					<div class="card-body">
+						<h3 class="card-title">ตั้งค่า "เปิด/ปิด" การแจ้งเตือน Line Notify</h3>
+						<hr>
+						<div class="form-body mt-3">
+							<div class="row ">
+								<div class="col-md-3">
+									<div class="form-group">
+										<label class="control-label">การแจ้งเตือนการฝากเงิน</label>
+										<?php $manual_linenoti_deposit = $this->Setting_model->setting_find([
+												'name' => 'manual_linenoti_deposit'
+										]); ?>
+										<select class="form-control" name="web_setting[manual_linenoti_deposit]" id="manual_linenoti_deposit">
+											<option value="0">ปิด</option>
+											<option value="1" <?php if ($manual_linenoti_deposit['value']==1): ?>
+												selected
+											<?php endif; ?>>เปิด</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label class="control-label">การแจ้งเตือนการถอนเงิน</label>
+										<?php $manual_linenoti_withdraw = $this->Setting_model->setting_find([
+												'name' => 'manual_linenoti_withdraw'
+										]); ?>
+										<select class="form-control" name="web_setting[manual_linenoti_withdraw]" id="manual_linenoti_withdraw">
+											<option value="0">ปิด</option>
+											<option value="1" <?php if ($manual_linenoti_withdraw['value']==1): ?>
+												selected
+											<?php endif; ?>>เปิด</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label class="control-label">การแจ้งเตือนยอดรายวัน</label>
+										<?php $manual_linenoti_report_result = $this->Setting_model->setting_find([
+												'name' => 'manual_linenoti_report_result'
+										]); ?>
+										<select class="form-control" name="web_setting[manual_linenoti_report_result]" id="manual_linenoti_report_result">
+											<option value="0">ปิด</option>
+											<option value="1" <?php if ($manual_linenoti_report_result['value']==1): ?>
+												selected
+											<?php endif; ?>>เปิด</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label class="control-label">การแจ้งเตือน Log ต่างๆในระบบ</label>
+										<?php $manual_linenoti_other_log = $this->Setting_model->setting_find([
+												'name' => 'manual_linenoti_other_log'
+										]); ?>
+										<select class="form-control" name="web_setting[manual_linenoti_other_log]" id="manual_linenoti_other_log">
+											<option value="0">ปิด</option>
+											<option value="1" <?php if ($manual_linenoti_other_log['value']==1): ?>
+												selected
+											<?php endif; ?>>เปิด</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label class="control-label">การแจ้งเตือนการสมัครสมาชิก</label>
+										<?php $manual_linenoti_register = $this->Setting_model->setting_find([
+												'name' => 'manual_linenoti_register'
+										]); ?>
+										<select class="form-control" name="web_setting[manual_linenoti_register]" id="manual_linenoti_register">
+											<option value="0">ปิด</option>
+											<option value="1" <?php if ($manual_linenoti_register['value']==1): ?>
 												selected
 											<?php endif; ?>>เปิด</option>
 										</select>

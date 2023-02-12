@@ -130,6 +130,79 @@ function month_th_list($type="l")
 	}
 }
 
+function sender_Line($message_new, $line_notify_token)
+{
+	$LINE_API = "https://notify-api.line.me/api/notify";
+	$headers    = [
+		'Content-Type: application/x-www-form-urlencoded',
+		'Authorization: Bearer '.trim($line_notify_token)
+	];
+	$fields    = 'message='.$message_new;  //ข้อความที่ต้องการส่ง สูงสุด 1000 ตัวอักษร
+	try{
+		$ch = curl_init();
+		curl_setopt( $ch, CURLOPT_URL, $LINE_API);
+		curl_setopt( $ch, CURLOPT_POST, 1);
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields);
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 30);
+		curl_setopt( $ch, CURLOPT_TIMEOUT, 60);
+		curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+		$result = curl_exec( $ch );
+		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		curl_close( $ch );
+		$header = substr($result, 0, $header_size);
+		$body = substr($result, $header_size);
+		$response = json_decode($body,TRUE);
+		if(!is_null($line_notify_id)){
+			$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_update([
+				'id' => $line_notify_id,
+				'message' => $message_new,
+				'response' => json_encode([
+					'headers' => $header,
+					'response' => $response,
+				],JSON_UNESCAPED_UNICODE),
+				'type' => $type,
+				'status' => 1,
+			]);
+		}else{
+			$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_create([
+				'message' => $message_new,
+				'response' => json_encode([
+					'headers' => $header,
+					'response' => $response,
+				],JSON_UNESCAPED_UNICODE),
+				'type' => $type,
+				'status' => 1,
+			]);
+		}
+		return [
+			'headers' => $header,
+			'response' => $response,
+		];
+	}catch (Exception $ex){
+		if(!is_null($line_notify_id)){
+			$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_update([
+				'id' => $line_notify_id,
+				'message' => $message_new,
+				'status' => 1,
+				'response' =>json_encode( ["status"=>false,"Error : ".$ex->getMessage()],JSON_UNESCAPED_UNICODE),
+				'type' => $type
+			]);
+		}else{
+			$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_create([
+				'message' => $message_new,
+				'status' => 1,
+				'response' =>json_encode( ["status"=>false,"Error : ".$ex->getMessage()],JSON_UNESCAPED_UNICODE),
+				'type' => $type
+			]);
+		}
+		return [
+			'response' => ["status"=>false,"Error : ".$ex->getMessage()],
+		];
+	}
+}
+
 function line_notify_message($type="4",$message,$line_notify_id = null)
 {
 	/*
@@ -138,14 +211,32 @@ function line_notify_message($type="4",$message,$line_notify_id = null)
 	$CI = & get_instance();
 	if($type == "4"){
 		$line_notify_status = $CI->Setting_model->setting_find([
-			'name' => 'line_notify_log_api_status'
+			'name' => 'line_notify_log_api_status' // Old setting for AK !!!
 		]);
 	}else{
 		$line_notify_status = $CI->Setting_model->setting_find([
-			'name' => 'line_notify_status'
+			'name' => 'line_notify_status' // Current settings 
 		]);
 	}
-	$message_new = $message;
+
+	$message_new = $message; 
+	
+	$manual_linenoti_deposit = $CI->Setting_model->setting_find([
+		'name' => 'manual_linenoti_deposit' 
+	]);  // รับสถานะแจ้งฝาก
+	$manual_linenoti_withdraw = $CI->Setting_model->setting_find([
+		'name' => 'manual_linenoti_withdraw' 
+	]);  // รับสถานะแจ้งถอน
+	$manual_linenoti_report_result = $CI->Setting_model->setting_find([
+		'name' => 'manual_linenoti_report_result' 
+	]);  // รับสถานะแจ้งรายงานผล
+	$manual_linenoti_other_log = $CI->Setting_model->setting_find([
+		'name' => 'manual_linenoti_other_log' 
+	]);  // รับสถานะแจ้งรายงานผล log อื่นๆ
+	$manual_linenoti_register = $CI->Setting_model->setting_find([
+		'name' => 'manual_linenoti_register' 
+	]);  // รับสถานะแจ้งสมัคร
+
 	if($line_notify_status!="" && $line_notify_status['value'] == "1"){
 		if($type == "4"){
 			$line_notify_token = $CI->Setting_model->setting_find([
@@ -157,98 +248,124 @@ function line_notify_message($type="4",$message,$line_notify_id = null)
 			]);
 		}
 		if($line_notify_token!="" && !empty($line_notify_token['value'])){
+
 			//1 = ฝาก
 			//2 = ถอน
 			//3 = รายงานสรุปยอดทุก 00.00
 			//4 = อื่นๆ & Log API
 			//5 = สมัครสมาชิก
-			switch ($type){
-				case "1" :
-					$message_new = "".$message;
-					 break;
-				case "2" :
-					$message_new = "".$message;
-					break;
-				case "4" :
-					$domain = str_replace("www.","",$CI->config->item('domain_name'));
-					$domain = str_replace(".com","",$domain);
-					$message_new = $CI->config->item('api_prefix_username')." (".$domain.") => ".$message;
-					break;
-				case "5" :
-					$message_new = "".$message;
-					break;
-				default :
-					break;
+
+			// ------- Start Old code -------
+			// switch ($type){
+			// 	case "1" :
+			// 		$message_new = "".$message;
+			// 		 break;
+			// 	case "2" :
+			// 		$message_new = "".$message;
+			// 		break;
+			// 	case "4" :
+			// 		$domain = str_replace("www.","",$CI->config->item('domain_name'));
+			// 		$domain = str_replace(".com","",$domain);
+			// 		$message_new = $CI->config->item('api_prefix_username')." (".$domain.") => ".$message;
+			// 		break;
+			// 	case "5" :
+			// 		$message_new = "".$message;
+			// 		break;
+			// 	default :
+			// 		break;
+			// }
+			// ------- End Old code -------
+
+			if ($type == "1" && $manual_linenoti_deposit['value'] == "1"){
+				$message_new = "".$message;
+				return sender_Line($message_new,$line_notify_token['value']);
+			}else if($type == "2" && $manual_linenoti_withdraw['value'] == "1"){
+				$message_new = "".$message;
+				return sender_Line($message_new,$line_notify_token['value']);
+			}else if($type == "3" && $manual_linenoti_report_result['value'] =="1"){
+				$message_new = "".$message;
+				return sender_Line($message_new,$line_notify_token['value']);
+			}else if($type == "4" && $manual_linenoti_other_log['value'] == "1"){
+				$domain = str_replace("www.","",$CI->config->item('domain_name'));
+				$domain = str_replace(".com","",$domain);
+				$message_new = $CI->config->item('api_prefix_username')." (".$domain.") => ".$message;
+				return sender_Line($message_new,$line_notify_token['value']);
+			}else if($type == "5" && $manual_linenoti_register['value'] == "1"){
+				$message_new = "".$message;
+				return sender_Line($message_new,$line_notify_token['value']);
 			}
-			$LINE_API = "https://notify-api.line.me/api/notify";
-			$headers    = [
-				'Content-Type: application/x-www-form-urlencoded',
-				'Authorization: Bearer '.trim($line_notify_token['value'])
-			];
-			$fields    = 'message='.$message_new;  //ข้อความที่ต้องการส่ง สูงสุด 1000 ตัวอักษร
-			try{
-				$ch = curl_init();
-				curl_setopt( $ch, CURLOPT_URL, $LINE_API);
-				curl_setopt( $ch, CURLOPT_POST, 1);
-				curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields);
-				curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers);
-				curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 30);
-				curl_setopt( $ch, CURLOPT_TIMEOUT, 60);
-				curl_setopt($ch, CURLOPT_HEADER, true);
-				curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-				$result = curl_exec( $ch );
-				$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-				curl_close( $ch );
-				$header = substr($result, 0, $header_size);
-				$body = substr($result, $header_size);
-				$response = json_decode($body,TRUE);
-				if(!is_null($line_notify_id)){
-					$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_update([
-						'id' => $line_notify_id,
-						'message' => $message_new,
-						'response' => json_encode([
-							'headers' => $header,
-							'response' => $response,
-						],JSON_UNESCAPED_UNICODE),
-						'type' => $type,
-						'status' => 1,
-					]);
-				}else{
-					$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_create([
-						'message' => $message_new,
-						'response' => json_encode([
-							'headers' => $header,
-							'response' => $response,
-						],JSON_UNESCAPED_UNICODE),
-						'type' => $type,
-						'status' => 1,
-					]);
-				}
-				return [
-					'headers' => $header,
-					'response' => $response,
-				];
-			}catch (Exception $ex){
-				if(!is_null($line_notify_id)){
-					$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_update([
-						'id' => $line_notify_id,
-						'message' => $message_new,
-						'status' => 1,
-						'response' =>json_encode( ["status"=>false,"Error : ".$ex->getMessage()],JSON_UNESCAPED_UNICODE),
-						'type' => $type
-					]);
-				}else{
-					$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_create([
-						'message' => $message_new,
-						'status' => 1,
-						'response' =>json_encode( ["status"=>false,"Error : ".$ex->getMessage()],JSON_UNESCAPED_UNICODE),
-						'type' => $type
-					]);
-				}
-				return [
-					'response' => ["status"=>false,"Error : ".$ex->getMessage()],
-				];
-			}
+
+			// Start old req code 
+			// $LINE_API = "https://notify-api.line.me/api/notify";
+			// $headers    = [
+			// 	'Content-Type: application/x-www-form-urlencoded',
+			// 	'Authorization: Bearer '.trim($line_notify_token['value'])
+			// ];
+			// $fields    = 'message='.$message_new;  //ข้อความที่ต้องการส่ง สูงสุด 1000 ตัวอักษร
+			// try{
+			// 	$ch = curl_init();
+			// 	curl_setopt( $ch, CURLOPT_URL, $LINE_API);
+			// 	curl_setopt( $ch, CURLOPT_POST, 1);
+			// 	curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields);
+			// 	curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers);
+			// 	curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 30);
+			// 	curl_setopt( $ch, CURLOPT_TIMEOUT, 60);
+			// 	curl_setopt($ch, CURLOPT_HEADER, true);
+			// 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+			// 	$result = curl_exec( $ch );
+			// 	$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+			// 	curl_close( $ch );
+			// 	$header = substr($result, 0, $header_size);
+			// 	$body = substr($result, $header_size);
+			// 	$response = json_decode($body,TRUE);
+			// 	if(!is_null($line_notify_id)){
+			// 		$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_update([
+			// 			'id' => $line_notify_id,
+			// 			'message' => $message_new,
+			// 			'response' => json_encode([
+			// 				'headers' => $header,
+			// 				'response' => $response,
+			// 			],JSON_UNESCAPED_UNICODE),
+			// 			'type' => $type,
+			// 			'status' => 1,
+			// 		]);
+			// 	}else{
+			// 		$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_create([
+			// 			'message' => $message_new,
+			// 			'response' => json_encode([
+			// 				'headers' => $header,
+			// 				'response' => $response,
+			// 			],JSON_UNESCAPED_UNICODE),
+			// 			'type' => $type,
+			// 			'status' => 1,
+			// 		]);
+			// 	}
+			// 	return [
+			// 		'headers' => $header,
+			// 		'response' => $response,
+			// 	];
+			// }catch (Exception $ex){
+			// 	if(!is_null($line_notify_id)){
+			// 		$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_update([
+			// 			'id' => $line_notify_id,
+			// 			'message' => $message_new,
+			// 			'status' => 1,
+			// 			'response' =>json_encode( ["status"=>false,"Error : ".$ex->getMessage()],JSON_UNESCAPED_UNICODE),
+			// 			'type' => $type
+			// 		]);
+			// 	}else{
+			// 		$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_create([
+			// 			'message' => $message_new,
+			// 			'status' => 1,
+			// 			'response' =>json_encode( ["status"=>false,"Error : ".$ex->getMessage()],JSON_UNESCAPED_UNICODE),
+			// 			'type' => $type
+			// 		]);
+			// 	}
+			// 	return [
+			// 		'response' => ["status"=>false,"Error : ".$ex->getMessage()],
+			// 	];
+			// }
+			// End old req code 
 		}else{
 			if(!is_null($line_notify_id)){
 				$log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_update([
