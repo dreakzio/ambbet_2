@@ -11,7 +11,7 @@ class Scb{
 	private $api_auth = "";
 
 	private $encrypt =  array(
-	'http://188.166.220.72:80'
+		'http://188.166.220.72:80'
 	,'http://128.199.170.222:80'
 	,'http://139.59.227.226:80'
 	,'http://188.166.220.72:80'
@@ -89,6 +89,7 @@ class Scb{
 
 	private $proxy_url  = 'proxyprivates.com';
 	private $proxy_port = '3128';
+	private $count_login = 0;
 	private $proxy_userpasswd='proxydata:f6Hj2DBefuNd7xNs';
 	public function Curl($method, $url, $header, $data, $cookie)
 	{
@@ -314,10 +315,19 @@ class Scb{
 			"accountNo": "'.$this->accnum.'"
 			}';
 		$res = $this->Curl("POST",$url,$headers,$data,false);
+
 		$d = json_decode($res,true);
 		if($d['status']['code'] === "1002"){
-			$this->new_Login();
-			return $this->cnt_re_login > 1 ? null : $this->GetBalance();
+
+			if($this->count_login <=2){
+				$this->new_Login();
+				return $this->cnt_re_login > 1 ? [] : $this->GetBalance();
+			}else{
+				$json = array();
+				return $json['status'] == '0';
+			}
+
+			$this->count_login ++;
 		}
 		return $res;
 
@@ -335,9 +345,18 @@ class Scb{
 		$data_scb = '{ "accountNo": "'.$this->accnum.'", "endDate": "'.$endDate.'", "pageNumber": "1", "pageSize": 35, "productType": "2", "startDate": "'.$startDate.'" }';
 		$res = $this->Curl("POST",$url,$headers,$data_scb,false);
 		$d = json_decode($res,true);
+		//print_r($res);
 		if($d['status']['code'] === "1002"){
-			$this->new_Login();
-			return $this->cnt_re_login > 1 ? [] : $this->getTransaction();
+
+			if($this->count_login <=2){
+				$this->new_Login();
+				return $this->cnt_re_login > 1 ? [] : $this->getTransaction();
+			}else{
+				$json = array();
+				return $json['status'] == '0';
+			}
+
+			$this->count_login ++;
 		}
 
 		$json = json_decode($res, true);
@@ -508,8 +527,6 @@ class Scb{
 			return $this->cnt_re_login > 1 ? '{"status":{"code":"4002","description":"Transfer failed Please check token..."}}' : $this->Transfer($accountTo,$accountToBankCode,$amount);
 		}
 		return $res;
-
-
 	}
 
 	//ตรวจสอบสลิปด้วย QRcode (ต้องหาทาง Decypt Qr ให้ได้ก่อน)
@@ -561,6 +578,7 @@ class Scb{
 			),
 		));
 		$response = curl_exec($curl);
+
 		$headers = array();
 		$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
 
@@ -654,8 +672,10 @@ class Scb{
 		));
 		$response = curl_exec($curl);
 		curl_close($curl);
+		//print_r($response);
 		$headers = array();
 		$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
+		//print_r($header_text);
 		foreach (explode("\r\n", $header_text) as $i => $line){
 			if ($i === 0) {
 				$headers['http_code'] = $line;
@@ -665,13 +685,14 @@ class Scb{
 			}
 		}
 
-		curl_close($curl);
+
 		return $headers;
 	}
 	public function new_Login()
 	{
 		//echo "error Login ";
 		$preload = $this->preloadandresumecheck();
+
 		$e2ee = $this->PseudoFE($preload['Api-Auth']);
 		$e2eejson = json_decode($e2ee,true);
 		$hashType = $e2eejson['e2ee']['pseudoOaepHashAlgo'];
@@ -679,17 +700,19 @@ class Scb{
 		$ServerRandom = $e2eejson['e2ee']['pseudoRandom'];
 		$pubKey = $e2eejson['e2ee']['pseudoPubKey'];
 		$encryptscb = $this->encryptscb($Sid,$ServerRandom,$pubKey,$hashType);
-		$Auth1 = $this->fasteasy_login_pin($preload['Api-Auth'],$encryptscb,$Sid);
 
+		$Auth1 = $this->fasteasy_login_pin($preload['Api-Auth'],$encryptscb,$Sid);
+		//print_r($Auth1);
 		if ($Auth1=="") {
 			echo 'error Login 2';
-			//exit();
+			exit();
 		}
 		$access_token = trim($Auth1["Api-Auth"]);
 		if(empty($access_token)){
 			echo 'error auth token';
-			//exit();
+			exit();
 		}
+		//print_r($access_token);
 		/*$strFileName = "token_".$this->accnum.".txt";
 		$objFopen = fopen($strFileName, 'w');
 		fwrite($objFopen, $access_token);*/

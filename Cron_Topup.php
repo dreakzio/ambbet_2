@@ -1,9 +1,13 @@
 <?php
 require('config.php');
+
 if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
+
 	/*$sec_rand = rand(5,8);
 	sleep($sec_rand);*/
-	error_reporting(0);
+
+	ini_set('display_errors', 1);
+	error_reporting(E_ALL);
 	date_default_timezone_set("Asia/Bangkok"); //set เขตเวลา
 	$current_date = date("d/m/Y");
 	$current_date_chk = date("Y-m-d");
@@ -30,6 +34,7 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 		}
 	}
 
+
 	//Check min amount for disabled auto
 	$deposit_min_amount_for_disable_auto = null;
 	$sql_deposit_min_amount_for_disable_auto_check = "SELECT * FROM `web_setting` where name = 'deposit_min_amount_for_disable_auto'";
@@ -52,6 +57,7 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 		$data_chk = [];
 		$chk_can_run_cron = true;
 		$chk_is_withdraw = false;
+
 		if(isset($rs['status_withdraw']) && $rs['status_withdraw'] == "1"){
 			$chk_is_withdraw = true;
 		}
@@ -65,6 +71,7 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 			&& !$chk_is_withdraw
 		){
 			try{
+
 				$start_time_can_not_deposit = new DateTime($rs['start_time_can_not_deposit']);
 				$end_time_can_not_deposit = new DateTime($rs['end_time_can_not_deposit']);
 				$time_current = new DateTime(date('H:i'));
@@ -116,13 +123,28 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 		if($chk_can_run_cron){
 
 			try{
+
 				$scb = $rs;
+				//print_r($scb);
 				$scb['api_token_1'] = decrypt(base64_decode($scb['api_token_1']),SECRET_KEY_SALT);
 				$scb['api_token_2'] = decrypt(base64_decode($scb['api_token_2']),SECRET_KEY_SALT);
+				//print_r($scb);
 				$obj_con_cron->autocommit(true);
 				if(!array_key_exists($scb['bank_number'],$data_stmt_acc_list_api)){
 					$api = new scb($scb['api_token_1'],$scb['api_token_2'],$scb['bank_number']); //$deviceId,$api_refresh,$accnum
+
+					//die();
 					$balance = $api->GetBalance();
+
+					if(isset($balance['status']) &&  $balance['status']==0){
+						if($status_create_line_notify && !empty($token_line_notify)){
+							$message = "SCB Device ID expired Bank NO :".$scb['bank_number'];
+							$sql_line_notify_device_id_error ="INSERT INTO `log_line_notify` (`id`, `type`, `message`) VALUES (NULL, '1', '".$message."')";
+							$obj_con_cron->query($sql_line_notify_device_id_error);
+						}
+						continue;
+					}
+
 					$balance = json_decode($balance,true);
 					$transactions = $api->getTransaction();
 					$data_stmt_acc_list_api[$scb['bank_number']] = [
@@ -256,15 +278,11 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 							$time_explode = explode(":",trim($v['time']));
 
 							//Check report sms
-
 							$sql_report_sms = "SELECT id FROM `report_smses` where DATE_FORMAT(create_date,'%Y-%m-%d') = '".$v['date']."' and DATE_FORMAT(create_time,'%H:%i') = '".$time_explode[0].":".$time_explode[1]."' and type_deposit_withdraw = 'D' and amount <=> CAST('".$balance."' AS DECIMAL(15, 2)) and payment_gateway = '".$payment_gateway."' and is_bot_running = '1'";
 							$con_check_report_sms = $obj_con_cron->query($sql_report_sms);
 							$check_report_sms = $con_check_report_sms->num_rows;
 
-
 							if($check_report_sms == 0){
-
-
 								try
 								{
 									$check_all = true;
@@ -394,13 +412,13 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 																							strpos(strtolower($payment_gateway),"นางสาว ") !== false
 																						)
 																					) {
-																					   $payment_bank_name_ex = explode(" ",$payment_gateway);
-																					   if(count($payment_bank_name_ex) >= 6){
+																						$payment_bank_name_ex = explode(" ",$payment_gateway);
+																						if(count($payment_bank_name_ex) >= 6){
 																							$bank_name_from_payment_like = $payment_bank_name_ex[count($payment_bank_name_ex)-2]." ".$payment_bank_name_ex[count($payment_bank_name_ex)-1];
 																							if(strpos(strtolower($rs_acc['bank_name']),trim($bank_name_from_payment_like)) !== false){
 																								$check_add_once = true;
 																							}
-																					   }
+																						}
 																					}
 																				}else{
 																					$check_add_once = true;
