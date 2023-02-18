@@ -35,7 +35,7 @@ class Ktb{
 	}
 	public function getBalanceAndTransactions(){
 		//check proxy
-		if($socket =@fsockopen($this->host, $this->proxy_port, $errno, $errstr, 2)) {fclose($socket);} else {echo 'offline.';exit;}
+		//if($socket =@fsockopen($this->host, $this->proxy_port, $errno, $errstr, 2)) {fclose($socket);} else {echo 'offline.';exit;}
 		$data_entry = '{"action":"UPDATE","accountTokenNumber":"'.$this->accountTokenNo.'","activeIndex":"0","lastSeq":"0","userIdentity":"'.$this->userIdentity.'","hasViewMore":false,"transaction":[]}';
 		return $this->CallCurl($data_entry);
 	}
@@ -55,10 +55,10 @@ class Ktb{
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 
-		curl_setopt($ch, CURLOPT_PROXYPORT, $this->proxy_port);
+		/*curl_setopt($ch, CURLOPT_PROXYPORT, $this->proxy_port);
 		curl_setopt($ch, CURLOPT_PROXYTYPE, 'HTTP');
 		curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
-		curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->loginpassw);
+		curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->loginpassw);*/
 
 		$response = curl_exec($ch);
 		curl_close($ch);
