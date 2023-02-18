@@ -25,6 +25,8 @@ class Auto_withdraw_librarie
 					$json = json_decode($res, true);
 					if ($json['status']['code'] == 1000) {
 						return ['status' => true, 'msg' => $json];
+					}elseif ($json['status'] == 0){
+						return ['status' => false, 'msg' => 'Device ID หมดอายุ'];
 					} else {
 						return ['status' => false, 'msg' => $json['status']['description']];
 					}
