@@ -306,6 +306,11 @@ class Scb{
 	public function GetBalance(){
 		$url = "https://fasteasy.scbeasy.com:8443/v2/deposits/casa/details";
 
+		if($this->Access_token()==''){
+			$json = array();
+			return $json['status'] == '0';
+		}
+
 		$headers =  array(
 			"Api-Auth: ".$this->Access_token(),
 			"content-type: application/json",
@@ -320,6 +325,7 @@ class Scb{
 		if($d['status']['code'] === "1002"){
 
 			if($this->count_login <=2){
+				echo $this->count_login;
 				$this->new_Login();
 				return $this->cnt_re_login > 1 ? [] : $this->GetBalance();
 			}else{
@@ -717,7 +723,6 @@ class Scb{
 		$objFopen = fopen($strFileName, 'w');
 		fwrite($objFopen, $access_token);*/
 		$this->api_auth = $access_token;
-
 	}
 	//======================================================
 }

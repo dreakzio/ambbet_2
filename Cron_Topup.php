@@ -135,7 +135,7 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 
 					//die();
 					$balance = $api->GetBalance();
-
+					//print_r($balance);
 					if(isset($balance['status']) &&  $balance['status']==0){
 						if($status_create_line_notify && !empty($token_line_notify)){
 							$message = "SCB Device ID expired Bank NO :".$scb['bank_number'];
@@ -144,6 +144,7 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 						}
 						continue;
 					}
+				//	die();
 
 					$balance = json_decode($balance,true);
 					$transactions = $api->getTransaction();
