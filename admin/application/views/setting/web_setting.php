@@ -134,20 +134,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</div>
 								<div class="col-md-4">
 									<div class="form-group">
-										<label class="control-label">สถานะยืนยัน OTP (หน้าสมัครสมาชิก)</label>
-										<?php $register_verify_otp_status = $this->Setting_model->setting_find([
-												'name' => 'register_verify_otp_status'
-										]); ?>
-										<select class="form-control" name="web_setting[register_verify_otp_status]" id="register_verify_otp_status">
-											<option value="0">ปิดใช้งาน</option>
-											<option value="1" <?php if ($register_verify_otp_status['value']==1): ?>
-												selected
-											<?php endif; ?>>เปิดใช้งาน</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
 										<label class="control-label">เปิด/ปิด ระบบรับโบนัส auto</label>
 										<?php $deposit_with_bonus_auto = $this->Setting_model->setting_find([
 												'name' => 'deposit_with_bonus_auto'
@@ -308,26 +294,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									</div>
 								</div>
 							</div>
-							<div class="row" style="display:none;">
-								<div class="col-md-4">
-									<div class="form-group">
-										<label class="control-label">SMS API Username</label>
-										<?php $sms_api_username = $this->Setting_model->setting_find([
-												'name' => 'sms_api_username'
-										]); ?>
-										<input type="text" id="sms_api_username" name="web_setting[sms_api_username]" class="form-control" value="<?php echo $sms_api_username['value'] ?>" placeholder="ข้อมูล SMS API Username">
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label class="control-label">SMS API Password</label>
-										<?php $sms_api_password = $this->Setting_model->setting_find([
-												'name' => 'sms_api_password'
-										]); ?>
-										<input type="text" id="sms_api_password" name="web_setting[sms_api_password]" class="form-control" value="<?php echo $sms_api_password['value'] ?>" placeholder="ข้อมูล SMS API Password">
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -388,6 +354,53 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 		<!-- end of finance -->
+
+		<div class="content-body">
+			<section class="card">
+				<div class="card-content">
+					<div class="card-body">
+						<h3 class="card-title">ตั้งค่า SMS</h3>
+						<hr>
+						<div class="form-body mt-3">
+						<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										<label class="control-label">SMS API Username</label>
+										<?php $sms_api_username = $this->Setting_model->setting_find([
+												'name' => 'sms_api_username'
+										]); ?>
+										<input type="text" id="sms_api_username" name="web_setting[sms_api_username]" class="form-control" value="<?php echo $sms_api_username['value'] ?>" placeholder="ข้อมูล SMS API Username">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label class="control-label">SMS API Password</label>
+										<?php $sms_api_password = $this->Setting_model->setting_find([
+												'name' => 'sms_api_password'
+										]); ?>
+										<input type="text" id="sms_api_password" name="web_setting[sms_api_password]" class="form-control" value="<?php echo $sms_api_password['value'] ?>" placeholder="ข้อมูล SMS API Password">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label class="control-label">สถานะยืนยัน OTP (หน้าสมัครสมาชิก)</label>
+										<?php $register_verify_otp_status = $this->Setting_model->setting_find([
+												'name' => 'register_verify_otp_status'
+										]); ?>
+										<select class="form-control" name="web_setting[register_verify_otp_status]" id="register_verify_otp_status">
+											<option value="0">ปิดใช้งาน</option>
+											<option value="1" <?php if ($register_verify_otp_status['value']==1): ?>
+												selected
+											<?php endif; ?>>เปิดใช้งาน</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
 
 		<div class="content-body">
 			<section class="card">
