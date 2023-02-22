@@ -3,7 +3,7 @@ error_reporting(0);
 header('Content-Type: application/json');
 class Scb{
 	private $tilesVersion='60';
-	private $useragent = 'Android/10;FastEasy/3.62.0/6573';
+	private $useragent = 'Android/10;FastEasy/3.64.1/6739';
 	private $deviceId = '';
 	private $api_refresh = '';
 	private $accnum = '';
@@ -132,6 +132,7 @@ class Scb{
 
 		if(strlen($accnum) != 10){
 			echo '10 digital !!';
+
 		}else if(strlen($this->api_refresh) > 6 || strlen($this->api_refresh) < 6){
 			echo 'pin should have 6 digits!! : '.$this->accnum;
 		}else{
@@ -142,7 +143,11 @@ class Scb{
 	public function Login(){
 		$this->cnt_re_login += 1;
 		if($this->cnt_re_login > 1){
-			echo 'Error re Login Acc : '.$this->accnum.' > 1 round please check token.';
+			$json = array();
+			$json['status'] = '0';
+			echo $json['msg'] = 'Error re Login Acc : '.$this->accnum.' > 1 round please check token.';
+			return $json;
+			//echo 'Error re Login Acc : '.$this->accnum.' > 1 round please check token.';
 			////exit();
 		}
 		/*$url = "https://fasteasy.scbeasy.com:8443/v1/login/refresh";
@@ -190,8 +195,10 @@ class Scb{
 		$Auth=$Auth[0][0];
 
 		if ($Auth=="") {
-			echo 'error Login 1';
-			//exit();
+			$json = array();
+			$json['status'] = '0';
+			$json['msg'] = 'SCB error Login please get DeviceID';
+			return $json;
 		}
 
 
@@ -284,13 +291,17 @@ class Scb{
 		preg_match_all('/(?<=Api-Auth:).+/', $response_auth, $Auth_result);
 		$Auth1=$Auth_result[0][0];
 		if ($Auth1=="") {
-			echo 'error Login 2';
-			//exit();
+			$json = array();
+			$json['status'] = '0';
+			$json['msg'] = 'SCB error Login please get DeviceID';
+			return $json;
 		}
 		$access_token = trim($Auth1);
 		if(empty($access_token)){
-			echo 'error auth token';
-			//exit();
+			$json = array();
+			$json['status'] = '0';
+			$json['msg'] = 'SCB error Login please get DeviceID';
+			return $json;
 		}
 		/*$strFileName = "token_".$this->accnum.".txt";
 		$objFopen = fopen($strFileName, 'w');
@@ -308,7 +319,9 @@ class Scb{
 
 		if($this->Access_token()==''){
 			$json = array();
-			return $json['status'] == '0';
+			$json['status'] = '0';
+			$json['msg'] = 'SCB error Login please get DeviceID';
+			return $json;
 		}
 
 		$headers =  array(
@@ -325,16 +338,20 @@ class Scb{
 		if($d['status']['code'] === "1002"){
 
 			if($this->count_login <=2){
-				echo $this->count_login;
+			//	echo $this->count_login;
 				$this->new_Login();
 				return $this->cnt_re_login > 1 ? [] : $this->GetBalance();
 			}else{
 				$json = array();
-				return $json['status'] == '0';
+				$json['status'] = '0';
+				$json['msg'] = 'SCB error Login please get DeviceID';
+				return $json;
 			}
+			//$this->count_login;
 
 			$this->count_login ++;
 		}
+
 		return $res;
 
 	}
@@ -353,13 +370,15 @@ class Scb{
 		$d = json_decode($res,true);
 		//print_r($res);
 		if($d['status']['code'] === "1002"){
-
 			if($this->count_login <=2){
 				$this->new_Login();
 				return $this->cnt_re_login > 1 ? [] : $this->getTransaction();
 			}else{
 				$json = array();
-				return $json['status'] == '0';
+				$json['status'] = '0';
+				$json['msg'] = 'SCB error Login please get DeviceID';
+				return $json;
+
 			}
 
 			$this->count_login ++;
@@ -482,18 +501,22 @@ class Scb{
 		$res = $this->Curl("POST",$url,$headers,$data,false);
 
 		$d = json_decode($res,true);
-
+		//print_r($d);
+		//die();
 		if($d['status']['code'] === "1002"){
 			$this->new_Login();
 			return $this->cnt_re_login > 1 ? '{"status":{"code":"4000","description":"Verify failed Please check token..."}}' : $this->Verify($accountTo,$accountToBankCode,$amount);
 		}
 
+		$this->cnt_re_login += 1;
 		return  $res;
 
 	}
 	public function Transfer($accountTo,$accountToBankCode,$amount){
 		$Verify = $this->Verify($accountTo,$accountToBankCode,$amount);
 		$Verifys = json_decode($Verify,true);
+		//print_r($Verifys);
+		//die();
 		if(!isset($Verifys['data'])){
 
 			return $Verify;
@@ -532,6 +555,7 @@ class Scb{
 			$this->new_Login();
 			return $this->cnt_re_login > 1 ? '{"status":{"code":"4002","description":"Transfer failed Please check token..."}}' : $this->Transfer($accountTo,$accountToBankCode,$amount);
 		}
+		$this->cnt_re_login += 1;
 		return $res;
 	}
 
@@ -550,7 +574,7 @@ class Scb{
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 		$result = curl_exec($curl);
 		if (curl_errno($curl)) {
-			return ['status' => false, 'msg' => 'ผิดพลาด curl'];
+			return ['status' => 0, 'msg' => 'ผิดพลาด curl'];
 		}
 		return json_decode($result, true);
 	}
@@ -584,7 +608,8 @@ class Scb{
 			),
 		));
 		$response = curl_exec($curl);
-
+		//print_r($response);
+		//die();
 		$headers = array();
 		$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
 
@@ -696,6 +721,7 @@ class Scb{
 	}
 	public function new_Login()
 	{
+
 		//echo "error Login ";
 		$preload = $this->preloadandresumecheck();
 
@@ -710,18 +736,24 @@ class Scb{
 		$Auth1 = $this->fasteasy_login_pin($preload['Api-Auth'],$encryptscb,$Sid);
 		//print_r($Auth1);
 		if ($Auth1=="") {
-			echo 'error Login 2';
-			exit();
+			//echo 'error Login 2';
+			$json = array();
+			$json['status'] = '0';
+			$json['msg'] = 'SCB error Login please get DeviceID';
+			return $json;
 		}
 		$access_token = trim($Auth1["Api-Auth"]);
 		if(empty($access_token)){
-			echo 'error auth token';
-			exit();
+			$json = array();
+			$json['status'] = '0';
+			$json['msg'] = 'SCB error Login please get DeviceID';
+			return $json;
 		}
 		//print_r($access_token);
 		/*$strFileName = "token_".$this->accnum.".txt";
 		$objFopen = fopen($strFileName, 'w');
 		fwrite($objFopen, $access_token);*/
+		$this->cnt_re_login += 1;
 		$this->api_auth = $access_token;
 	}
 	//======================================================

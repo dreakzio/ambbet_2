@@ -7,6 +7,7 @@ class Withdraw extends CI_Controller
     {
         date_default_timezone_set('Asia/Bangkok');
         parent::__construct();
+
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
             redirect('../auth');
         }
