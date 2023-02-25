@@ -65,6 +65,7 @@ $autoload['libraries'] = array(
 	'upload',
 	'image_lib',
 	'auto_withdraw_librarie',
+  'Sms_librarie',
 	'Google_authenticator_librarie'
 );
 

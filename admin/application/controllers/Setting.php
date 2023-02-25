@@ -196,4 +196,13 @@ class Setting extends CI_Controller
 			}
 		}
 	}
+
+	public function check_sms_credit()
+	{
+		$credit = $this->sms_librarie->get_credit();
+		echo json_encode([
+			'message' => 'success',
+			'result' => $credit["credit"]
+		],JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+	}
 }
