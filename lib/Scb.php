@@ -105,7 +105,7 @@ class Scb{
 			curl_setopt($ch, CURLOPT_TIMEOUT, 45);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 		}else{
-			curl_setopt($ch, CURLOPT_TIMEOUT, 180);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 		}
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
@@ -338,7 +338,7 @@ class Scb{
 		if($d['status']['code'] === "1002"){
 
 			if($this->count_login <=2){
-			//	echo $this->count_login;
+				//	echo $this->count_login;
 				$this->new_Login();
 				return $this->cnt_re_login > 1 ? [] : $this->GetBalance();
 			}else{
@@ -591,7 +591,8 @@ class Scb{
 			CURLOPT_ENCODING => '',
 			CURLOPT_MAXREDIRS => 10,
 			CURLOPT_HEADER => 1,
-			CURLOPT_TIMEOUT => 0,
+			CURLOPT_TIMEOUT => 45,
+			CURLOPT_CONNECTTIMEOUT => 30,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => 'POST',
@@ -632,7 +633,8 @@ class Scb{
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => '',
 			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 0,
+			CURLOPT_TIMEOUT => 45,
+			CURLOPT_CONNECTTIMEOUT => 30,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => 'POST',
@@ -662,7 +664,8 @@ class Scb{
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => '',
 			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 0,
+			CURLOPT_TIMEOUT => 45,
+			CURLOPT_CONNECTTIMEOUT => 30,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => 'POST',
@@ -684,7 +687,8 @@ class Scb{
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => '',
 			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 0,
+			CURLOPT_TIMEOUT => 45,
+			CURLOPT_CONNECTTIMEOUT => 30,
 			CURLOPT_HEADER => 1,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
