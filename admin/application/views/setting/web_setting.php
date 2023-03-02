@@ -361,6 +361,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<div class="card-body">
 						<h3 class="card-title">ตั้งค่า SMS</h3>
 						<hr>
+						<span>จำนวน CREDIT :</span>
+						<span style="background-color:#17a2b8;  border-radius: 12px; padding: 5px;" id="sms_credit"></span>
+						<hr>
 						<div class="form-body mt-3">
 						<div class="row">
 								<div class="col-md-4">

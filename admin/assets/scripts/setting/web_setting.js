@@ -1,3 +1,18 @@
+$(document).ready(function() {
+	$.ajax({
+		url: BaseURL + "setting/check_sms_credit",
+		method: "GET",
+		dataType: 'json',
+		async : false,
+		success: function(response) {
+			document.getElementById("sms_credit").innerHTML = response.result.amount;
+		},
+		error: function() {
+			document.getElementById("sms_credit").innerHTML = "ติดต่อแอดมินเพื่อสมัครบริการ SMS";
+		}
+	});
+});
+
 $(document).on('click', '#btn_update', function() {
 	let line = $('#line').val();
 	if (line.trim().length == 0) {
