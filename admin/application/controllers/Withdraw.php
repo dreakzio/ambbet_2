@@ -132,7 +132,19 @@ class Withdraw extends CI_Controller
 	{
 		check_parameter([], 'POST');
 		$post = $this->input->post();
-
+		if(isset($post['bank_id_withdraw']) && !empty($post['bank_id_withdraw']) && $post['status'] == "1"){
+			$chk_cache_process_withdraw_once_chk = $this->cache->file->get('process_withdraw_once_'.$post['bank_id_withdraw']);
+			if($chk_cache_process_withdraw_once_chk  !== FALSE){
+				$chk_seconds =  strtotime(date("Y-m-d H:i:s")) - strtotime($chk_cache_process_withdraw_once_chk);
+				$message_error = "กรุณารออีก ".($chk_seconds >= 65 ? "65" : $chk_seconds).' วินาทีถึงทำรายการใหม่ได้อีกครั้ง';
+				echo json_encode([
+					'message' => 'ทำรายการไม่สำเร็จ '.$message_error,
+					'error' => true
+				]);
+				exit();
+			}
+			$this->cache->file->save('process_withdraw_once_'.$post['bank_id_withdraw'],date("Y-m-d H:i:s"), 65);
+		}
 		$chk_cache_process_withdraw_chk = $this->cache->file->get('process_withdraw_'.$id);
 		if($chk_cache_process_withdraw_chk  !== FALSE){
 			$message_error = "รายการนี้กำลังถูกดำเนินการอยู่";
@@ -142,7 +154,7 @@ class Withdraw extends CI_Controller
 			]);
 			exit();
 		}else{
-			$this->cache->file->save('process_withdraw_'.$id,$_SESSION['user']['id'], 60);
+			$this->cache->file->save('process_withdraw_'.$id,$_SESSION['user']['id'], 180);
 		}
 
 		$finance = $this->Finance_model->finance_find([
@@ -267,11 +279,6 @@ class Withdraw extends CI_Controller
 						'manage_by' =>$user_admin['id'],
 						'manage_by_username' =>$user_admin['username'],
 						'manage_by_full_name' =>$user_admin['full_name'],
-					]);
-
-					$this->User_model->user_update([
-						'id' => $finance['account'],
-						//'amount_wallet' => ($finance['amount_wallet']+$finance['amount'])
 					]);
 
 					$log_deposit_id = $this->Log_deposit_withdraw_model->log_deposit_withdraw_create([
