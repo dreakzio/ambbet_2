@@ -12,72 +12,72 @@ class Scb{
 
 	private $encrypt =  array(
 		'http://188.166.220.72:80'
-	,'http://128.199.170.222:80'
-	,'http://139.59.227.226:80'
-	,'http://188.166.220.72:80'
-	,'http://128.199.75.47:80'
-	,'http://159.223.59.138:80'
-	,'http://167.99.66.200:80'
-	,'http://128.199.75.47:80'
-	,'http://188.166.220.72:80'
-	,'http://174.138.19.157:80'
-	,'http://157.230.254.67:80'
-	,'http://167.71.215.193:80'
-	,'http://139.59.227.226:80'
-	,'http://128.199.152.174:80'
-	,'http://159.65.131.181:80'
-	,'http://167.71.199.198:80'
-	,'http://188.166.211.93:80'
-	,'http://128.199.106.150:80'
-	,'http://128.199.170.222:80'
-	,'http://139.59.227.226:80'
-	,'http://159.223.65.248:80'
-	,'http://134.209.96.165:80'
-	,'http://174.138.27.157:80'
-	,'http://159.223.77.64:80'
-	,'http://128.199.78.166:80'
-	,'http://159.223.81.75:80'
-	,'http://165.22.245.42:80'
-	,'http://159.223.45.135:80'
-	,'http://157.245.193.186:80'
-	,'http://157.245.48.230:80'
-	,'http://165.22.253.107:80'
-	,'http://165.22.104.96:80'
-	,'http://128.199.252.28:80'
-	,'http://206.189.95.205:80'
-	,'http://157.230.252.99:80'
-	,'http://188.166.220.72:80'
-	,'http://178.128.119.4:80'
-	,'http://157.245.55.188:80'
-	,'http://159.223.46.82:80'
-	,'http://159.223.53.203:80'
-	,'http://178.128.124.243:80'
-	,'http://139.59.239.157:80'
-	,'http://165.22.253.107:80'
-	,'http://139.59.104.69:80'
-	,'http://178.128.81.87:80'
-	,'http://188.166.220.63:80'
-	,'http://188.166.220.72:80'
-	,'http://157.245.98.221:80'
-	,'http://165.232.170.27:80'
-	,'http://143.198.204.8:80'
-	,'https://pin.winwin289.com'
-	,'https://pin.warz168.com'
-	,'https://pin.davin888.com'
-	,'https://pin.ny168bet.com'
-	,'https://pin.goldpig168.com'
-	,'https://pin.ff88bet.com'
-	,'https://pin.nx789bet.com'
-	,'https://pin.pr289.com'
-	,'https://pin.jpotbet.com'
-	,'https://pin.betflixx.net'
-	,'https://pin.uk89bet.com'
-	,'https://pin.amb95th.com'
-	,'https://pin.barbet.pro'
-	,'https://pin.daimon345.com'
-	,'https://pin.dn789bet.com'
-	,'https://pin.2bet168.com'
-	,'https://pin.ufo234.co');
+		,'http://128.199.170.222:80'
+		,'http://139.59.227.226:80'
+		,'http://188.166.220.72:80'
+		,'http://128.199.75.47:80'
+		,'http://159.223.59.138:80'
+		,'http://167.99.66.200:80'
+		,'http://128.199.75.47:80'
+		,'http://188.166.220.72:80'
+		,'http://174.138.19.157:80'
+		,'http://157.230.254.67:80'
+		,'http://167.71.215.193:80'
+		,'http://139.59.227.226:80'
+		,'http://128.199.152.174:80'
+		,'http://159.65.131.181:80'
+		,'http://167.71.199.198:80'
+		,'http://188.166.211.93:80'
+		,'http://128.199.106.150:80'
+		,'http://128.199.170.222:80'
+		,'http://139.59.227.226:80'
+		,'http://159.223.65.248:80'
+		,'http://134.209.96.165:80'
+		,'http://174.138.27.157:80'
+		,'http://159.223.77.64:80'
+		,'http://128.199.78.166:80'
+		,'http://159.223.81.75:80'
+		,'http://165.22.245.42:80'
+		,'http://159.223.45.135:80'
+		,'http://157.245.193.186:80'
+		,'http://157.245.48.230:80'
+		,'http://165.22.253.107:80'
+		,'http://165.22.104.96:80'
+		,'http://128.199.252.28:80'
+		,'http://206.189.95.205:80'
+		,'http://157.230.252.99:80'
+		,'http://188.166.220.72:80'
+		,'http://178.128.119.4:80'
+		,'http://157.245.55.188:80'
+		,'http://159.223.46.82:80'
+		,'http://159.223.53.203:80'
+		,'http://178.128.124.243:80'
+		,'http://139.59.239.157:80'
+		,'http://165.22.253.107:80'
+		,'http://139.59.104.69:80'
+		,'http://178.128.81.87:80'
+		,'http://188.166.220.63:80'
+		,'http://188.166.220.72:80'
+		,'http://157.245.98.221:80'
+		,'http://165.232.170.27:80'
+		,'http://143.198.204.8:80'
+		,'https://pin.winwin289.com'
+		,'https://pin.warz168.com'
+		,'https://pin.davin888.com'
+		,'https://pin.ny168bet.com'
+		,'https://pin.goldpig168.com'
+		,'https://pin.ff88bet.com'
+		,'https://pin.nx789bet.com'
+		,'https://pin.pr289.com'
+		,'https://pin.jpotbet.com'
+		,'https://pin.betflixx.net'
+		,'https://pin.uk89bet.com'
+		,'https://pin.amb95th.com'
+		,'https://pin.barbet.pro'
+		,'https://pin.daimon345.com'
+		,'https://pin.dn789bet.com'
+		,'https://pin.2bet168.com'
+		,'https://pin.ufo234.co');
 	private $ip_encrypt = '';
 
 	private $proxy_url  = 'proxyprivates.com';
@@ -86,7 +86,6 @@ class Scb{
 	private $proxy_userpasswd='proxydata:f6Hj2DBefuNd7xNs';
 	public function Curl($method, $url, $header, $data, $cookie)
 	{
-
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_USERAGENT, $this->useragent);
@@ -120,7 +119,7 @@ class Scb{
 	public function __construct($deviceId,$api_refresh,$accnum) {
 		$this->deviceId = $deviceId;
 		$this->api_refresh = $api_refresh;
-		$index = rand(1,count($this->encrypt));
+		$index = rand(0,count($this->encrypt)-1);
 		$this->ip_encrypt = $this->encrypt[$index];
 
 		if(strlen($accnum) != 10){
@@ -175,7 +174,7 @@ class Scb{
 				'user-agent:  '.$this->useragent,
 				'latitude:  16.5178002 ',
 				'longitude:  104.1169243 ',
-				'accuracy:  20.0 ',
+				'accuracy:  20.0',
 				'Content-Type:  application/json; charset=UTF-8',
 			),
 		));
@@ -193,7 +192,6 @@ class Scb{
 			$json['msg'] = 'SCB error Login please get DeviceID';
 			return $json;
 		}
-
 
 		$curl1 = curl_init();
 
