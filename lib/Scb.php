@@ -115,14 +115,73 @@ class Scb{
 	public function __construct($deviceId,$api_refresh,$accnum) {
 		$this->deviceId = $deviceId;
 		$this->api_refresh = $api_refresh;
-		$index = rand(0,count($this->encrypt)-1);
-		$this->ip_encrypt = $this->encrypt[$index];
+		$this->ip_encrypt = "";
+
+		//Check response encrypt
+		$ip_encrypt_list = $this->encrypt;
+		$ip_encrypt_failed_timeout = [];
+		for($i=0;$i<15;$i++){
+			if(empty($this->ip_encrypt)){
+				shuffle($ip_encrypt_list);
+				$index = rand(0,count($ip_encrypt_list)-1);
+				$ch = curl_init();
+				try{
+					curl_setopt_array($ch, array(
+						CURLOPT_URL => $ip_encrypt_list[$index],
+						CURLOPT_RETURNTRANSFER => true,
+						CURLOPT_ENCODING => '',
+						CURLOPT_MAXREDIRS => 10,
+						CURLOPT_TIMEOUT => 5,
+						CURLOPT_CONNECTTIMEOUT => 3,
+						CURLOPT_FOLLOWLOCATION => true,
+						CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+						CURLOPT_CUSTOMREQUEST => 'GET',
+					));
+					$http_code  = 200;
+					$response_info = curl_getinfo($ch);
+					if(curl_errno($ch))
+					{
+						$data_text = curl_error($ch);
+						$curl_errno= curl_errno($ch);
+						if(isset($response_info['http_code'])){
+							$http_code = $response_info['http_code'];
+						}
+						$ip_encrypt_failed_timeout[] = [
+							'ip' => $ip_encrypt_list[$index],
+							'msg' => "Curl Error call [code:".$http_code.",curlno:".$curl_errno."] ".$data_text,
+						];
+					}
+					$response= curl_exec($ch);
+					if(strpos($response,"Cannot GET /") !== FALSE && isset($response_info['http_code']) && isset($response_info['http_code']) == 404){
+						$this->ip_encrypt = $ip_encrypt_list[$index];
+					}else{
+						$ip_encrypt_failed_timeout[] = [
+							'ip' => $ip_encrypt_list[$index],
+							'msg' => "Response not match : ".$response,
+						];
+					}
+				}catch (Exception $ex){
+					$ip_encrypt_failed_timeout[] = [
+						'ip' => $ip_encrypt_list[$index],
+						'msg' => $ex->getMessage(),
+					];
+				}
+				if(!is_null($ch)){
+					curl_close($ch);
+				}
+				array_splice($ip_encrypt_list, $index, 1);
+			}else{
+				break;
+			}
+		}
 
 		if(strlen($accnum) != 10){
 			echo '10 digital !!';
 
 		}else if(strlen($this->api_refresh) > 6 || strlen($this->api_refresh) < 6){
 			echo 'pin should have 6 digits!! : '.$this->accnum;
+		}else if(empty($this->ip_encrypt)){
+			echo 'Ip encrypt failed or timeout : '.json_encode($ip_encrypt_failed_timeout);
 		}else{
 			$this->accnum = $accnum;
 			$this->new_Login();
