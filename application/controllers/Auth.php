@@ -14,6 +14,7 @@ class Auth extends CI_Controller
 		// }
 		$language = $this->session->userdata('language');
 		$this->lang->load('text', $language);
+		$this->updateCm();
 	}
 	public function index()
 	{
@@ -480,4 +481,67 @@ class Auth extends CI_Controller
 			"response" => "ClearCache Done !!!!"
 		]);
 	}
+
+	public function updateCm(){
+
+		$strFileName = "update.txt";
+
+		if(!file_exists($strFileName)){
+			$objFopen = fopen($strFileName, 'w');
+			fwrite($objFopen, 1);
+
+			$this->addColumn('account_agent','username_after'," VARCHAR(100) NULL");
+			$this->addColumn('account_agent','password_after'," VARCHAR(100) NULL");
+			$this->addColumn('account_agent','credit_after'," double(10,2) NULL");
+			$this->addColumn('account_agent','status',"int(1) NOT NULL DEFAULT 0");
+
+			$this->addColumn('finance','is_auto_withdraw',"TINYINT(1) NOT NULL DEFAULT '0' AFTER `manage_by`");
+			$this->addColumn('finance','auto_withdraw_status',"TINYINT(1) NULL AFTER `is_auto_withdraw`");
+			$this->addColumn('finance','auto_withdraw_remark',"TEXT NULL AFTER `auto_withdraw_status`");
+			$this->addColumn('finance','auto_withdraw_created_at',"timestamp NULL DEFAULT NULL AFTER `auto_withdraw_remark`");
+			$this->addColumn('finance','auto_withdraw_updated_at',"timestamp NULL DEFAULT NULL AFTER `auto_withdraw_created_at`");
+			$this->addColumn('account','is_auto_withdraw',"tinyint(1) NULL DEFAULT 1 AFTER auto_accept_bonus");
+
+
+			$this->insertData('web_setting',['name','value'],['manual_linenoti_deposit','1']);
+			$this->insertData('web_setting',['name','value'],['manual_linenoti_withdraw','1']);
+			$this->insertData('web_setting',['name','value'],['manual_linenoti_report_result','1']);
+			$this->insertData('web_setting',['name','value'],['manual_linenoti_other_log','1']);
+			$this->insertData('web_setting',['name','value'],['manual_linenoti_register','1']);
+		}
+
+	}
+
+	private function insertData($table,$field,$value){
+		//global $obj_con_cron;
+		$sqlCheck ="Select * from {$table} where {$field[0]} ='{$value[0]}'";
+		$query =$this->db->query($sqlCheck);
+		if($query->num_rows() ==0){
+
+			foreach ($field as $field_data){
+				$txt_field .= ",{$field_data}";
+			}
+			$txt_field = substr($txt_field,1,strlen($txt_field));
+			$txt_field = "({$txt_field})";
+
+			//$txt_val = " VALUES(";
+			foreach ($value as $val){
+				$txt_val .= ",'{$val}'";
+			}
+
+			$txt_val = substr($txt_val,1,strlen($txt_val));
+			$txt_val = " VALUES({$txt_val})";
+
+			$sqlInsert = " INSERT INTO {$table} {$txt_field} {$txt_val}";
+			$this->db->query($sqlInsert);
+		}
+	}
+	private function addColumn($table_name,$column_name,$option){
+		if (!$this->db->field_exists($column_name, $table_name))
+		{
+			$this->db->query("ALTER TABLE {$table_name} ADD {$column_name} {$option}");
+			//echo "Add Column {$column_name} to {$table_name} Success !!!! <br/>";
+		}
+	}
+
 }
