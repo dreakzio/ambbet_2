@@ -120,13 +120,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </div>
 					<div class="col-md-4">
 						<div class="form-group">
-							<label class="control-label">เวลาปิดระบบฝากออโต้ (จาก) รุปแบบตัวอย่าง 00:15</label>
+							<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(จาก) รูปแบบตัวอย่าง "00:15"</font></label>
 							<input type="text" <?php echo $bank['status_withdraw'] == "0" ? "" : "readonly" ?>  id="start_time_can_not_deposit" name="start_time_can_not_deposit" class="form-control" value="<?php echo $bank['start_time_can_not_deposit']; ?>" placeholder="รุปแบบตัวอย่าง 00:30">
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="form-group">
-							<label class="control-label">เวลาปิดระบบฝากออโต้ (ถึง) รุปแบบตัวอย่าง 00:30</label>
+							<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(ถึง) รูปแบบตัวอย่าง "02:15"</font></label>
 							<input type="text" <?php echo $bank['status_withdraw'] == "0" ? "" : "readonly" ?>  id="end_time_can_not_deposit" name="end_time_can_not_deposit" class="form-control" value="<?php echo $bank['end_time_can_not_deposit']; ?>" placeholder="รุปแบบตัวอย่าง 00:30">
 						</div>
 					</div>
@@ -153,17 +153,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							</select>
 						</div>
 					</div>
-					<div class="col-md-4"></div>
+					<!-- <div class="col-md-4"></div> -->
 					<div class="col-md-4">
 						<div class="form-group">
 							<label class="control-label">จำนวนเงินถอนออโต้ได้ไม่เกิน (บาท/ครั้ง)</label>
 							<input type="number" <?php echo $bank['status_withdraw'] == "1" ? "" : "readonly" ?> id="max_amount_withdraw_auto" value="<?php echo $bank['max_amount_withdraw_auto']; ?>" name="max_amount_withdraw_auto" class="form-control" placeholder="จำนวนเงินถอนออโต้ได้ไม่เกิน (บาท/ครั้ง)">
 						</div>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-12">
 						<div class="form-group">
-							<label class="control-label">ข้อความแสดงหน้าฝากเงิน (เวลาปิดระบบฝากออโต้)</label>
-							<textarea type="text" <?php echo $bank['status_withdraw'] == "0" ? "" : "readonly" ?>  id="message_can_not_deposit" name="message_can_not_deposit" class="form-control" placeholder="ข้อความแสดงหน้าฝากเงิน (เวลาปิดระบบฝากออโต้)"  cols="3"><?php echo $bank['message_can_not_deposit']; ?></textarea>
+							<label class="control-label">ข้อความแสดงหน้าฝากเงิน <font style="color:red;">(เวลาปิดระบบฝากออโต้)</font></label>
+							<textarea type="text" rows="6" style="" <?php echo $bank['status_withdraw'] == "0" ? "" : "readonly" ?>  id="message_can_not_deposit" name="message_can_not_deposit" class="form-control" placeholder="ข้อความแสดงหน้าฝากเงิน (เวลาปิดระบบฝากออโต้)"  cols="3"><?php echo $bank['message_can_not_deposit']; ?></textarea>
 						</div>
 					</div>
                 </div>
