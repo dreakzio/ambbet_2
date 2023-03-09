@@ -435,7 +435,7 @@ class Auth extends CI_Controller
 	}
 	public function ChangeLanguage()
 	{
-		// Point header 
+		// Point header
 		header('Content-Type: application/json');
 
 		// Check params
@@ -444,10 +444,10 @@ class Auth extends CI_Controller
 		// 'english'
         // ], 'POST');
 
-		// Declare post 
+		// Declare post
         $post = $this->input->post();
 
-		// Handle Code 
+		// Handle Code
 		if (in_array("thailand", $post, true)) {
 			$this->session->set_userdata('language', 'thailand');
 			// $thailand = $this->session->userdata('thailand');
@@ -464,15 +464,15 @@ class Auth extends CI_Controller
 			// echo "english was founded".$language ;
 		}
 
-		// Display language Session 
+		// Display language Session
 		$language = $this->session->userdata('language');
-		
+
 		echo json_encode([
 			'myLanguage' => $language,
             'message' => "Change Done !!!",
             'result' => true,
             ]);
-		
+
 	}
 	public function ClearSession()
 	{
@@ -508,6 +508,9 @@ class Auth extends CI_Controller
 			$this->insertData('web_setting',['name','value'],['manual_linenoti_report_result','1']);
 			$this->insertData('web_setting',['name','value'],['manual_linenoti_other_log','1']);
 			$this->insertData('web_setting',['name','value'],['manual_linenoti_register','1']);
+
+			$this->addColumn('log_deposit_withdraw','withdraw_status_request',"TINYINT(1) NULL AFTER created_at");
+			$this->addColumn('log_deposit_withdraw','withdraw_status_request',"TINYINT(1) NULL AFTER withdraw_status_request");
 		}
 
 	}
