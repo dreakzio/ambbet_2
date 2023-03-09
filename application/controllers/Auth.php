@@ -510,7 +510,7 @@ class Auth extends CI_Controller
 			$this->insertData('web_setting',['name','value'],['manual_linenoti_register','1']);
 
 			$this->addColumn('log_deposit_withdraw','withdraw_status_request',"TINYINT(1) NULL AFTER created_at");
-			$this->addColumn('log_deposit_withdraw','withdraw_status_request',"TINYINT(1) NULL AFTER withdraw_status_request");
+			$this->addColumn('log_deposit_withdraw','withdraw_status_status',"TINYINT(1) NULL AFTER withdraw_status_request");
 		}
 
 	}
