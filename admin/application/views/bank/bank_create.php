@@ -82,6 +82,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							</select>
 						</div>
 					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<hr>
+							<span class="card-title">ข้อมูลการตั้งค่า Auto & อื่นๆ</span>
+						</div>
+					</div>
+					
                   <div class="col-md-3">
                     <div class="form-group">
                       <label class="control-label">เบอร์ PromptPay <font style="color:red;">*ใช้ได้เฉพาะไทยพาณิชย์</font></label>
@@ -99,13 +106,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </div>
 					<div class="col-md-4">
 						<div class="form-group">
-							<label class="control-label">เวลาปิดระบบฝากออโต้ (จาก) รุปแบบตัวอย่าง 00:15</label>
+						<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(จาก) รูปแบบตัวอย่าง "00:15"</font></label>
 							<input type="text" id="start_time_can_not_deposit" name="start_time_can_not_deposit" class="form-control" placeholder="เวลาปิดระบบฝากออโต้ (จาก)">
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="form-group">
-							<label class="control-label">เวลาปิดระบบฝากออโต้ (ถึง) รุปแบบตัวอย่าง 00:30</label>
+						<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(ถึง) รูปแบบตัวอย่าง "02:15"</font></label>
 							<input type="text" id="end_time_can_not_deposit" name="end_time_can_not_deposit" class="form-control" placeholder="เวลาปิดระบบฝากออโต้ (ถึง)">
 						</div>
 					</div>
@@ -128,17 +135,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							</select>
 						</div>
 					</div>
-					<div class="col-md-4"></div>
+					<!-- <div class="col-md-4"></div> -->
 					<div class="col-md-4">
 						<div class="form-group">
 							<label class="control-label">จำนวนเงินถอนออโต้ได้ไม่เกิน (บาท/ครั้ง)</label>
 							<input type="number" id="max_amount_withdraw_auto" name="max_amount_withdraw_auto" class="form-control" placeholder="จำนวนเงินถอนออโต้ได้ไม่เกิน (บาท/ครั้ง)">
 						</div>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-12">
 						<div class="form-group">
-							<label class="control-label">ข้อความแสดงหน้าฝากเงิน (เวลาปิดระบบฝากออโต้)</label>
-							<textarea type="text" id="message_can_not_deposit" name="message_can_not_deposit" class="form-control" placeholder="ข้อความแสดงหน้าฝากเงิน (เวลาปิดระบบฝากออโต้)" cols="3"></textarea>
+							<label class="control-label">ข้อความแสดงหน้าฝากเงิน <font style="color:red;">(เวลาปิดระบบฝากออโต้)</font></label>
+							<textarea type="text" rows="6" id="message_can_not_deposit" name="message_can_not_deposit" class="form-control" placeholder="ข้อความแสดงหน้าฝากเงิน (เวลาปิดระบบฝากออโต้)" cols="3"></textarea>
 						</div>
 					</div>
                 </div>
