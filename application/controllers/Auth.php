@@ -511,6 +511,9 @@ class Auth extends CI_Controller
 
 			$this->addColumn('log_deposit_withdraw','withdraw_status_request',"TINYINT(1) NULL AFTER created_at");
 			$this->addColumn('log_deposit_withdraw','withdraw_status_status',"TINYINT(1) NULL AFTER withdraw_status_request");
+
+			$this->addColumn('finance','bank_withdraw_id',"INT(11) NULL AFTER manage_by");
+			$this->addColumn('finance','bank_withdraw_name',"VARCHAR(255) NULL AFTER bank_withdraw_id");
 		}
 
 	}
