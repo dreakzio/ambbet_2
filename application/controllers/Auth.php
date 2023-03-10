@@ -485,10 +485,12 @@ class Auth extends CI_Controller
 	public function updateCm(){
 
 		$strFileName = "update.txt";
+		$version = 2;
+		$file = file_get_contents($strFileName, true);
+		if($file != $version){
 
-		if(!file_exists($strFileName)){
 			$objFopen = fopen($strFileName, 'w');
-			fwrite($objFopen, 1);
+			fwrite($objFopen, $version);
 
 			$this->addColumn('account_agent','username_after'," VARCHAR(100) NULL");
 			$this->addColumn('account_agent','password_after'," VARCHAR(100) NULL");
