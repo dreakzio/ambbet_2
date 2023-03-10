@@ -198,6 +198,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					  </div>
 					  <div class="col-md-4">
 						  <div class="form-group">
+							  <label class="control-label">สถานะ BOT ถอนออโต้</label>
+							  <select class="form-control" name="is_auto_withdraw" id="is_auto_withdraw">
+								  <option value="0">ปิด</option>
+								  <option value="1" <?php if ($user['is_auto_withdraw']=="1"): ?>
+									  selected
+								  <?php endif; ?> value="1">เปิด</option>
+							  </select>
+						  </div>
+					  </div>
+					  <div class="col-md-4">
+						  <div class="form-group">
 							  <label class="control-label">หมายเหตุ</label>
 							  <textarea id="remark" rows="4" name="remark" class="form-control"  placeholder="ข้อมูลหมายเหตุ"><?php echo is_null($user['remark']) || empty($user['remark']) ? '' : $user['remark'] ?></textarea>
 						  </div>

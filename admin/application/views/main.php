@@ -520,6 +520,8 @@ $total_online = $report_all_day['online_member_total'];
 																}
 																else if (value.bank_code ==10 || value.bank_code =='10') {
 																		url_img_bank =  base_url+"/bank/10.png";
+																}else if (value.bank_code ==11 || value.bank_code =='11') {
+																	url_img_bank =  base_url+"/bank/kkp.jpg";
 																}
 																else {
 																	url_img_bank = base_url+"/bank/not-found.png";

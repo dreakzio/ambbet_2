@@ -50,7 +50,9 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
-         DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
+         DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
+         account.ref_transaction_id,
+         account.is_auto_withdraw
        ',false);
 		if (isset($search['id']) && !is_null($search['id'])) {
 			$this->db->where('account.id', $search['id']);
@@ -136,6 +138,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
          account_agent.username as account_agent_username,
          account_agent.password as account_agent_password
@@ -161,6 +165,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
        ');
 		}
@@ -336,6 +342,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
          account_agent.username as account_agent_username,
          account_agent.password as account_agent_password
@@ -381,6 +389,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
          ');
 		if(
@@ -443,6 +453,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
        ');
 		$this->db->where('account.deleted', 0);
@@ -536,6 +548,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
          account_agent.username as account_agent_username,
          account_agent.password as account_agent_password
@@ -562,6 +576,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
        ');
 		}
@@ -727,6 +743,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+          account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
          account_agent.username as account_agent_username,
          account_agent.password as account_agent_password
@@ -753,6 +771,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
        ');
 		}
@@ -910,6 +930,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
          account_agent.username as account_agent_username,
          account_agent.password as account_agent_password
@@ -936,6 +958,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
        ');
 		}
@@ -1062,6 +1086,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
          account_agent.username as account_agent_username,
          account_agent.password as account_agent_password
@@ -1088,6 +1114,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
        ');
 		}
@@ -1190,6 +1218,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
          account_agent.username as account_agent_username,
          account_agent.password as account_agent_password
@@ -1216,6 +1246,8 @@ class User_model extends CI_Model
          account.remark,
          account.sum_amount,
          account.rank_point_sum,
+         account.ref_transaction_id,
+         account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
        ');
 		}

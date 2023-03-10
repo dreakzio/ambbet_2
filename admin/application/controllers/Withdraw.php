@@ -136,14 +136,14 @@ class Withdraw extends CI_Controller
 			$chk_cache_process_withdraw_once_chk = $this->cache->file->get('process_withdraw_once_'.$post['bank_id_withdraw']);
 			if($chk_cache_process_withdraw_once_chk  !== FALSE){
 				$chk_seconds =  strtotime(date("Y-m-d H:i:s")) - strtotime($chk_cache_process_withdraw_once_chk);
-				$message_error = "กรุณารออีก ".($chk_seconds >= 65 ? "65" : $chk_seconds).' วินาทีถึงทำรายการใหม่ได้อีกครั้ง';
+				$message_error = "กรุณารออีก ".($chk_seconds >= 45 ? "45" : $chk_seconds).' วินาทีถึงทำรายการใหม่ได้อีกครั้ง';
 				echo json_encode([
 					'message' => 'ทำรายการไม่สำเร็จ '.$message_error,
 					'error' => true
 				]);
 				exit();
 			}
-			$this->cache->file->save('process_withdraw_once_'.$post['bank_id_withdraw'],date("Y-m-d H:i:s"), 65);
+			$this->cache->file->save('process_withdraw_once_'.$post['bank_id_withdraw'],date("Y-m-d H:i:s"), 45);
 		}
 		$chk_cache_process_withdraw_chk = $this->cache->file->get('process_withdraw_'.$id);
 		if($chk_cache_process_withdraw_chk  !== FALSE){
@@ -160,22 +160,51 @@ class Withdraw extends CI_Controller
 		$finance = $this->Finance_model->finance_find([
 			'id' => $id
 		]);
-		$search_data = [
-			'id' => $finance['account'],
-		];
-		$member = $this->User_model->user_find($search_data);
-		//เพิ่ม Logs
-		$log_deposit_withdraw_id = $this->Log_deposit_withdraw_model->log_deposit_withdraw_create([
-			'account' => null,
-			'amount' => null,
-			'username' => $member['username'],
-			'amount_before' => null,
-			'type' => '2', //ถอน
-			'description' => 'ถอนเงิน',
-			'admin' =>$_SESSION['user']['id'],
-		]);
+
 
 		if ($finance!="") {
+
+			$search_data = [
+				'id' => $finance['account'],
+			];
+			$member = $this->User_model->user_find($search_data);
+			//เพิ่ม Logs
+			$log_deposit_withdraw_id = $this->Log_deposit_withdraw_model->log_deposit_withdraw_create([
+				'account' => null,
+				'amount' => null,
+				'username' => $member['username'],
+				'amount_before' => null,
+				'type' => '2', //ถอน
+				'description' => 'ถอนเงิน',
+				'admin' =>$_SESSION['user']['id'],
+				'withdraw_status_request' => $post['status'],
+			]);
+
+			if($finance['is_auto_withdraw'] == "1" && ($finance['auto_withdraw_status'] != "3" || $finance['auto_withdraw_status'] != 3)){
+				$status_bot_description = [
+					"0" => "รอดำเนินการ",
+					"1" => "กำลังดำเนินการ",
+					"2" => "สำเร็จ (ถอนออโต้)",
+					"3" => "ไม่สำเร็จ",
+				];
+				$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
+					'id' => $log_deposit_withdraw_id
+				]);
+				if($log_deposit_withdraw!=""){
+					$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
+						'id' => $log_deposit_withdraw_id,
+						'account' => $finance['account'],
+						'amount' => $finance['amount'],
+						'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ รายการ Finance#".$finance['id']." ถูก BOT จัดการอยู่, สถานะ => ".$status_bot_description[$finance['auto_withdraw_status']],
+						'withdraw_status_status' => 0,
+					]);
+					$this->cache->file->delete('process_withdraw_'.$id);}
+				echo json_encode([
+					'message' => 'ทำรายการไม่สำเร็จ รายการ Finance#'.$finance["id"].' ถูก BOT จัดการอยู่, สถานะ => '.$status_bot_description[$finance['auto_withdraw_status']],
+					'error' => true
+				]);
+				exit();
+			}
 
 			if(
 				($finance['status'] == "1" || $finance['status'] == "3") && ($post['status'] == "1" || $post['status'] == "3")
@@ -193,6 +222,7 @@ class Withdraw extends CI_Controller
 						'account' => $finance['account'],
 						'amount' => $finance['amount'],
 						'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ รายการ Finance#".$finance['id']." อยู่ในสถานะ".$status." อยู่แล้ว",
+						'withdraw_status_status' => 0,
 					]);
 							$this->cache->file->delete('process_withdraw_'.$id);}
 				echo json_encode([
@@ -215,6 +245,7 @@ class Withdraw extends CI_Controller
 								'account' => $finance['account'],
 								'amount' => $finance['amount'],
 								'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ รายการ Finance#".$finance['id']." อยู่ในสถานะ ดำเนินการถอนออโต้ อยู่ ณ ขณะนี้",
+								'withdraw_status_status' => 0,
 							]);
 									$this->cache->file->delete('process_withdraw_'.$id);}
 						echo json_encode([
@@ -247,6 +278,7 @@ class Withdraw extends CI_Controller
 						'account' => $finance['account'],
 						'amount' => $finance['amount'],
 						'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ ไม่พบสมาชิกในระบบ",
+						'withdraw_status_status' => 0,
 					]);
 							$this->cache->file->delete('process_withdraw_'.$id);}
 				echo json_encode([
@@ -301,6 +333,7 @@ class Withdraw extends CI_Controller
 							'amount' => $finance['amount'],
 							'amount_before' => $amount_before,
 							'description' => $log_deposit_withdraw['description']." | เปลี่ยนสถานะเป็นไม่อนุมัติ",
+							'withdraw_status_status' => 1,
 						]);
 					}
 				}else{
@@ -315,6 +348,7 @@ class Withdraw extends CI_Controller
 							'amount' => $finance['amount'],
 							'amount_before' => $amount_before,
 							'description' => $log_deposit_withdraw['description']." | เปลี่ยนสถานะเป็นไม่อนุมัติ ".$error_message,
+							'withdraw_status_status' => 0,
 						]);
 								$this->cache->file->delete('process_withdraw_'.$id);}
 					echo json_encode([
@@ -399,19 +433,36 @@ class Withdraw extends CI_Controller
 								$bank_can_withdraw_once = null;
 								$chk_bank_can_withdraw = false;
 								foreach($bank_can_withdraws as $bank_can_withdraw){
-									if(isset($post['bank_id_withdraw']) && !empty($post['bank_id_withdraw']) && $post['bank_id_withdraw'] == $bank_can_withdraw['id'] && ($bank_can_withdraw['bank_code'] == "05" || $bank_can_withdraw['bank_code'] == "5")){
+									if(isset($post['bank_id_withdraw']) && !empty($post['bank_id_withdraw'])
+										&& $post['bank_id_withdraw'] == $bank_can_withdraw['id']
+										&& ($bank_can_withdraw['bank_code'] == "05" || $bank_can_withdraw['bank_code'] == "5")){
 										$bank_can_withdraw_once = $bank_can_withdraw;
 										$chk_bank_can_withdraw = true;
 										break;
-									}else if(isset($post['bank_id_withdraw']) && !empty($post['bank_id_withdraw']) && $post['bank_id_withdraw'] == $bank_can_withdraw['id'] && ($bank_can_withdraw['bank_code'] == "02" || $bank_can_withdraw['bank_code'] == "2")){
+									}else if(isset($post['bank_id_withdraw']) && !empty($post['bank_id_withdraw'])
+										&& $post['bank_id_withdraw'] == $bank_can_withdraw['id']
+										&& ($bank_can_withdraw['bank_code'] == "02" || $bank_can_withdraw['bank_code'] == "2")){
 										$bank_can_withdraw_once = $bank_can_withdraw;
 										$chk_bank_can_withdraw = true;
 										break;
-									}else if(isset($post['bank_id_withdraw']) && !empty($post['bank_id_withdraw']) && $post['bank_id_withdraw'] == $bank_can_withdraw['id'] && ($bank_can_withdraw['bank_code'] == "06" || $bank_can_withdraw['bank_code'] == "6")){
+									}else if(isset($post['bank_id_withdraw']) && !empty($post['bank_id_withdraw'])
+										&& $post['bank_id_withdraw'] == $bank_can_withdraw['id']
+										&& ($bank_can_withdraw['bank_code'] == "06" || $bank_can_withdraw['bank_code'] == "6")){
 										$bank_can_withdraw_once = $bank_can_withdraw;
 										$chk_bank_can_withdraw = true;
 										break;
-									}else if(empty($post['bank_id_withdraw']) && (($bank_can_withdraw['bank_code'] == "02" || $bank_can_withdraw['bank_code'] == "2") ||  ($bank_can_withdraw['bank_code'] == "05" || $bank_can_withdraw['bank_code'] == "5")||  ($bank_can_withdraw['bank_code'] == "06" || $bank_can_withdraw['bank_code'] == "6"))){
+									}else if(isset($post['bank_id_withdraw']) && !empty($post['bank_id_withdraw'])
+										&& $post['bank_id_withdraw'] == $bank_can_withdraw['id']
+										&& ($bank_can_withdraw['bank_code'] == "11" )){
+										$bank_can_withdraw_once = $bank_can_withdraw;
+										$chk_bank_can_withdraw = true;
+										break;
+									}else if(empty($post['bank_id_withdraw'])
+										&& (($bank_can_withdraw['bank_code'] == "02" || $bank_can_withdraw['bank_code'] == "2")
+											||  ($bank_can_withdraw['bank_code'] == "05" || $bank_can_withdraw['bank_code'] == "5")
+											||  ($bank_can_withdraw['bank_code'] == "06" || $bank_can_withdraw['bank_code'] == "6")
+											||  ($bank_can_withdraw['bank_code'] == "11" )
+										)){
 										$bank_can_withdraw_once = $bank_can_withdraw;
 										$chk_bank_can_withdraw = true;
 										break;
@@ -428,7 +479,9 @@ class Withdraw extends CI_Controller
 									){
 										$this->Finance_model->finance_update([
 											'id' => $id,
-											'status' => $finance['status']
+											'status' => $finance['status'],
+											'bank_withdraw_id' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ?  $bank_can_withdraw_once['id'] : null,
+											'bank_withdraw_name' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ? $bank_can_withdraw_once['bank_name']." | ".$bank_can_withdraw_once['account_name'].' | '.$bank_can_withdraw_once['bank_number'] : null
 										]);
 										$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
 											'id' => $log_deposit_withdraw_id
@@ -437,6 +490,7 @@ class Withdraw extends CI_Controller
 											$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 												'id' => $log_deposit_withdraw_id,
 												'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ, จำนวนเงินถอนออโต้ได้ไม่เกิน ( ".number_format($bank_can_withdraw_once['max_amount_withdraw_auto'],2)." บาท/ครั้ง) | ยอดถอน ".number_format($finance['amount'],2),
+												'withdraw_status_status' => 0,
 											]);
 													$this->cache->file->delete('process_withdraw_'.$id);}
 										echo json_encode([
@@ -445,11 +499,14 @@ class Withdraw extends CI_Controller
 										]);
 									}else{
 										$chk_cache_process_withdraw = $this->cache->file->get('process_withdraw');
-										if($chk_cache_process_withdraw  !== FALSE){
+										//if($chk_cache_process_withdraw  !== FALSE){
+										if(false){
 											$this->Finance_model->finance_update([
 												'id' => $id,
 												'manage_by' => $_SESSION['user']['id'],
-												'status' => $finance['status']
+												'status' => $finance['status'],
+												'bank_withdraw_id' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ?  $bank_can_withdraw_once['id'] : null,
+												'bank_withdraw_name' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ? $bank_can_withdraw_once['bank_name']." | ".$bank_can_withdraw_once['account_name'].' | '.$bank_can_withdraw_once['bank_number'] : null
 											]);
 											$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
 												'id' => $log_deposit_withdraw_id
@@ -459,6 +516,7 @@ class Withdraw extends CI_Controller
 												$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 													'id' => $log_deposit_withdraw_id,
 													'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ ".$message_error,
+													'withdraw_status_status' => 0,
 												]);
 														$this->cache->file->delete('process_withdraw_'.$id);}
 											echo json_encode([
@@ -476,6 +534,8 @@ class Withdraw extends CI_Controller
 										}else if($bank_can_withdraw_once['bank_code'] == "06" || $bank_can_withdraw_once['bank_code'] == "6"){
 											$bank_code = getBankCodeForKrungsri()[$bank_code];
 											$res_withdraw = $this->auto_withdraw_librarie->transfer_kma($member['username'],$finance['bank_number'],$bank_code,$finance['amount'],decrypt(base64_decode($bank_can_withdraw_once['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank_can_withdraw_once['api_token_2']),$this->config->item('secret_key_salt')),$bank_can_withdraw_once['bank_number']);
+										}else if($bank_can_withdraw_once['bank_code'] == "11"){
+											$res_withdraw = $this->auto_withdraw_librarie->transfer_kkp($member['username'],$finance['bank_number'],$bank_code,$finance['amount'],decrypt(base64_decode($bank_can_withdraw_once['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank_can_withdraw_once['api_token_2']),$this->config->item('secret_key_salt')),$bank_can_withdraw_once['bank_number']);
 										}
 										if($res_withdraw['status']){
 											$this->cache->file->delete('process_withdraw');
@@ -490,10 +550,14 @@ class Withdraw extends CI_Controller
 												$qrcode = $res_withdraw['msg']['rawQr'];
 											}else if(($bank_can_withdraw_once['bank_code'] == "06" || $bank_can_withdraw_once['bank_code'] == "6" )  && isset($res_withdraw['msg']['QRCimagevalue'])){
 												$qrcode = $res_withdraw['msg']['QRCimagevalue'];
+											}else if(($bank_can_withdraw_once['bank_code'] == "11" )  && isset($res_withdraw['msg']['qrData'])){
+												$qrcode = $res_withdraw['msg']['qrData'];
 											}
 											$this->Finance_model->finance_update([
 												'id' => $id,
-												'qrcode' => $qrcode
+												'qrcode' => $qrcode,
+												'bank_withdraw_id' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ?  $bank_can_withdraw_once['id'] : null,
+												'bank_withdraw_name' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ? $bank_can_withdraw_once['bank_name']." | ".$bank_can_withdraw_once['account_name'].' | '.$bank_can_withdraw_once['bank_number'] : null
 											]);
 											$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
 												'id' => $log_deposit_withdraw_id
@@ -502,6 +566,7 @@ class Withdraw extends CI_Controller
 												$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 													'id' => $log_deposit_withdraw_id,
 													'description' => $log_deposit_withdraw['description']." | ทำรายการสำเร็จ Finance ID #".$finance['id'],
+													'withdraw_status_status' => 1,
 												]);
 											}
 
@@ -523,7 +588,9 @@ class Withdraw extends CI_Controller
 											$this->cache->file->delete('process_withdraw');
 											$this->Finance_model->finance_update([
 												'id' => $id,
-												'status' => $finance['status']
+												'status' => $finance['status'],
+												'bank_withdraw_id' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ?  $bank_can_withdraw_once['id'] : null,
+												'bank_withdraw_name' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ? $bank_can_withdraw_once['bank_name']." | ".$bank_can_withdraw_once['account_name'].' | '.$bank_can_withdraw_once['bank_number'] : null
 											]);
 
 											$sum_amount_list = $this->Finance_model->sum_amount_deposit_and_withdraw(['account_list' => [$member['id']]]);
@@ -542,6 +609,7 @@ class Withdraw extends CI_Controller
 												$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 													'id' => $log_deposit_withdraw_id,
 													'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ ".$message_error,
+													'withdraw_status_status' => 0,
 												]);
 														$this->cache->file->delete('process_withdraw_'.$id);}
 											echo json_encode([
@@ -562,18 +630,21 @@ class Withdraw extends CI_Controller
 									if($log_deposit_withdraw!=""){
 										$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 											'id' => $log_deposit_withdraw_id,
-											'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ ไม่มีธนาคารสำหรับถอนออโต้เปิดใช้งาน (SCB เท่านั้น)",
+											'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ ไม่มีธนาคารสำหรับถอนออโต้เปิดใช้งาน (SCB,KBANK,KKP) เท่านั้น",
+											'withdraw_status_status' => 0,
 										]);
 												$this->cache->file->delete('process_withdraw_'.$id);}
 									echo json_encode([
-										'message' => 'ทำรายการไม่สำเร็จ ไม่มีธนาคารสำหรับถอนออโต้เปิดใช้งาน (SCB เท่านั้น)',
+										'message' => 'ทำรายการไม่สำเร็จ ไม่มีธนาคารสำหรับถอนออโต้เปิดใช้งาน (SCB,KBANK,KKP) เท่านั้น',
 										'error' => true
 									]);
 								}
 							}catch (Exception $ex){
 								$this->Finance_model->finance_update([
 									'id' => $id,
-									'status' => $finance['status']
+									'status' => $finance['status'],
+									'bank_withdraw_id' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ?  $bank_can_withdraw_once['id'] : null,
+									'bank_withdraw_name' => !is_null($bank_can_withdraw_once) && !empty($bank_can_withdraw_once) ? $bank_can_withdraw_once['bank_name']." | ".$bank_can_withdraw_once['account_name'].' | '.$bank_can_withdraw_once['bank_number'] : null
 								]);
 								$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
 									'id' => $log_deposit_withdraw_id
@@ -582,6 +653,7 @@ class Withdraw extends CI_Controller
 									$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 										'id' => $log_deposit_withdraw_id,
 										'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ Something...",
+										'withdraw_status_status' => 0,
 									]);
 											$this->cache->file->delete('process_withdraw_'.$id);}
 								echo json_encode([
@@ -602,6 +674,7 @@ class Withdraw extends CI_Controller
 								$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 									'id' => $log_deposit_withdraw_id,
 									'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ ไม่พบธนาคารสมาชิกในระบบ#1",
+									'withdraw_status_status' => 0,
 								]);
 										$this->cache->file->delete('process_withdraw_'.$id);}
 							echo json_encode([
@@ -621,6 +694,7 @@ class Withdraw extends CI_Controller
 							$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 								'id' => $log_deposit_withdraw_id,
 								'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ ไม่พบธนาคารสมาชิกในระบบ#2",
+								'withdraw_status_status' => 0,
 							]);
 									$this->cache->file->delete('process_withdraw_'.$id);}
 						echo json_encode([
@@ -641,6 +715,7 @@ class Withdraw extends CI_Controller
 						$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 							'id' => $log_deposit_withdraw_id,
 							'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จ ไม่พบสมาชิกในระบบ",
+							'withdraw_status_status' => 0,
 						]);
 								$this->cache->file->delete('process_withdraw_'.$id);}
 					echo json_encode([
@@ -656,6 +731,7 @@ class Withdraw extends CI_Controller
 					$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
 						'id' => $log_deposit_withdraw_id,
 						'description' => $log_deposit_withdraw['description']." | ทำรายการสำเร็จ",
+						'withdraw_status_status' => 1,
 					]);
 				}
 
@@ -684,19 +760,9 @@ class Withdraw extends CI_Controller
 			}
 
 		} else {
-
-			$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
-				'id' => $log_deposit_withdraw_id
-			]);
-			if($log_deposit_withdraw!=""){
-				$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
-					'id' => $log_deposit_withdraw_id,
-					'description' => $log_deposit_withdraw['description']." | ทำรายการไม่สำเร็จไม่พบ Finance ID",
-				]);
-			}
 			$this->cache->file->delete('process_withdraw_'.$id);
 			echo json_encode([
-				'message' => 'ทำรายการไม่สำเร็จ',
+				'message' => 'ทำรายการไม่สำเร็จ, ไม่พบ Finance ID #'.$id,
 				'error' => true
 			]);
 		}

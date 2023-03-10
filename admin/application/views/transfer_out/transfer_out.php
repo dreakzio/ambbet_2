@@ -34,7 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								<select id="bank_id" name="bank_id" class="form-control" style=" width: 100%;">
 									<option value="">กรุณาเลือกธนาคารต้นทาง</option>
 									<?php foreach ($bank_list as  $value): ?>
-										<option data-bank="<?php echo $value['bank_code']; ?>" data-bank-acc-name="<?php echo $value['account_name']; ?>" data-bank-number="<?php echo $value['bank_number']; ?>" value='<?php echo $value['id'] ?>'><?php echo (array_key_exists($value['bank'],getBankList()) ?getBankList()[$value['bank']] : $value['bank'])." ".$value['bank_number']." : ".$value['account_name']  ?></option>
+										<option data-bank="<?php echo $value['bank_code']; ?>" data-bank-acc-name="<?php echo $value['account_name']; ?>" data-bank-number="<?php echo $value['bank_number']; ?>" value='<?php echo $value['id'] ?>'><?php echo (array_key_exists($value['bank'],getBankList()) ?getBankList()[$value['bank']] : $value['bank'])." ".$value['bank_number']." : ".$value['account_name'] ." : ".$value['bank_name']." : ".$value['bank_name'];  ?></option>
 									<?php endforeach; ?>
 								</select>
 							</div>

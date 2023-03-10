@@ -47,6 +47,21 @@ class Finance_model extends CI_Model
 		if (isset($search['type'])) {
 			$this->db->where('finance.type', $search['type']);
 		}
+		if (isset($search['status'])) {
+			$this->db->where('finance.status', $search['status']);
+		}
+		if (isset($search['status_list']) && is_array($search['status_list']) && count($search['status_list']) > 0) {
+			$this->db->where_in('finance.status', $search['status_list']);
+		}
+		if (isset($search['is_auto_withdraw'])) {
+			$this->db->where('finance.is_auto_withdraw', $search['is_auto_withdraw']);
+		}
+		if (isset($search['auto_withdraw_status'])) {
+			$this->db->where('finance.auto_withdraw_status', $search['auto_withdraw_status']);
+		}
+		if (isset($search['auto_withdraw_status_list']) && is_array($search['auto_withdraw_status_list']) && count($search['auto_withdraw_status_list']) > 0) {
+			$this->db->where_in('finance.auto_withdraw_status', $search['auto_withdraw_status_list']);
+		}
 		$this->db->order_by('id', 'DESC');
 		//$this->db->join('account', 'account.id = finance.account');
 		$query = $this->db->get('finance');
@@ -426,6 +441,7 @@ class Finance_model extends CI_Model
         finance.id,
         finance.created_at,
         finance.ref_transaction_id,
+         finance.created_at,
         finance.amount
         ');
 		if (isset($search['id'])) {
@@ -434,10 +450,19 @@ class Finance_model extends CI_Model
 		if (isset($search['account'])) {
 			$this->db->where('finance.account', $search['account']);
 		}
+		if (isset($search['ref_transaction_id'])) {
+			$this->db->where('finance.ref_transaction_id', $search['ref_transaction_id']);
+		}
+		if (isset($search['type'])) {
+			$this->db->where('finance.type', $search['type']);
+		}
+		if (isset($search['status'])) {
+			$this->db->where('finance.status', $search['status']);
+		}
 		$this->db->where('finance.ref_transaction_id <>', '');
 		$this->db->where('finance.ref_transaction_id IS NOT NULL');
 		$this->db->order_by('finance.id', 'DESC');
-		$this->db->join('account', 'account.id = finance.account');
+		//$this->db->join('account', 'account.id = finance.account');
 		$query = $this->db->get('finance');
 		return $query->row_array();
 	}

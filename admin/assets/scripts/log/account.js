@@ -249,6 +249,11 @@ $(document).on('click', '.btn_detail', function() {
 		'<td class="text-center '+(data_before['ref_name'] != data_after['ref_name'] ? "bg-warning" : "")+'">'+data_after['ref_name']+'</td>' +
 		'</tr>'+
 		'<tr>' +
+		'<td>สถานะ BOT ถอนออโต้</td>' +
+		'<td class="text-center '+(typeof(data_before['is_auto_withdraw'] ) != "undefined" && data_before['is_auto_withdraw'] != data_after['is_auto_withdraw'] ? "bg-warning" : "")+'">'+(typeof(data_before['is_auto_withdraw'] ) != "undefined" && data_before['is_auto_withdraw'] == "0" ? "ปิด" : "เปิด")+'</td>' +
+		'<td class="text-center '+(typeof(data_before['is_auto_withdraw'] ) != "undefined" && data_before['is_auto_withdraw'] != data_after['is_auto_withdraw'] ? "bg-warning" : "")+'">'+(typeof(data_after['is_auto_withdraw'] ) != "undefined" && data_after['is_auto_withdraw'] == "0" ? "ปิด" : "เปิด")+'</td>' +
+		'</tr>'+
+		'<tr>' +
 		'<td>หมายเหตุ</td>' +
 		'<td class="text-center '+(typeof(data_before['remark']) != "undefined" && typeof(data_after['remark']) != "undefined" && data_before['remark'] != data_after['remark'] ? "bg-warning" : "")+'">'+(typeof(data_before['remark']) != "undefined" ? data_before['remark'] : "-")+'</td>' +
 		'<td class="text-center '+(typeof(data_before['remark']) != "undefined" && typeof(data_after['remark']) != "undefined" && data_before['remark'] != data_after['remark'] ? "bg-warning" : "")+'">'+(typeof(data_after['remark']) != "undefined" ? data_after['remark'] : "-")+'</td>' +

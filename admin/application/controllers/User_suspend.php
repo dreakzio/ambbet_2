@@ -149,19 +149,21 @@ class User_suspend extends CI_Controller
 			//'turn_over'
 		],'POST');
 		$post = $this->input->post();
+		$post['full_name'] = trim(strip_tags(($post['full_name'])));
 		$post['bank_number'] = str_replace("-","",trim($post['bank_number']));
+		$post['bank_number']  = preg_replace('/[^0-9]/','',trim($post['bank_number']));
 		if(!in_array($post['role'],canManageRole()[$_SESSION['user']['role']])){
 			$this->session->set_flashdata('warning', 'ท่านไม่มีสิทธิ์จัดการผู้ใช้งานท่านนี้');
 			redirect('user_suspend/user_form_update/'.$id);
 			exit();
 		}
 		$update = [
-			'phone' => $post['phone'],
-			'full_name' => $post['full_name'],
-			'line_id' => $post['line_id'],
+			'phone' => trim(strip_tags($post['phone'])),
+			'full_name' => trim(strip_tags($post['full_name'])),
+			'line_id' => trim(strip_tags($post['line_id'])),
 			'bank' => $post['bank'],
-			'bank_number' => $post['bank_number'],
-			'bank_name' => $post['bank_name'],
+			'bank_number' => trim(strip_tags($post['bank_number'])),
+			'bank_name' => trim(strip_tags($post['bank_name'])),
 			//'amount_wallet' => $post['amount_wallet'],
 			'role' => $post['role'],
 			'agent' => $post['agent'],
@@ -221,12 +223,12 @@ class User_suspend extends CI_Controller
 			'id' => $user['ref_from_account']
 		]);
 		$data_before = [
-			'phone' => $user['phone'],
-			'full_name' => $user['full_name'],
-			'line_id' => $user['line_id'],
+			'phone' => trim(strip_tags($user['phone'])),
+			'full_name' => trim(strip_tags($user['full_name'])),
+			'line_id' => trim(strip_tags($user['line_id'])),
 			'bank' => $user['bank'],
-			'bank_number' => $user['bank_number'],
-			'bank_name' => $user['bank_name'],
+			'bank_number' => trim(strip_tags($user['bank_number'])),
+			'bank_name' => trim(strip_tags($user['bank_name'])),
 			'role' => $user['role'],
 			'agent' => $user['agent'],
 			'ref_name' => $username_ref_old != "" ? $username_ref_old['username']." (".($username_ref_old['agent'] ? "พันธมิตร" : "สมาชิกปกติ").")" : "",
@@ -241,12 +243,12 @@ class User_suspend extends CI_Controller
 			'deleted' => $user['deleted'],
 		];
 		$data_after = [
-			'phone' => $post['phone'],
-			'full_name' => $post['full_name'],
-			'line_id' => $post['line_id'],
+			'phone' => trim(strip_tags($post['phone'])),
+			'full_name' => trim(strip_tags($post['full_name'])),
+			'line_id' => trim(strip_tags($post['line_id'])),
 			'bank' => $post['bank'],
-			'bank_number' => $post['bank_number'],
-			'bank_name' => $post['bank_name'],
+			'bank_number' => trim(strip_tags($post['bank_number'])),
+			'bank_name' => trim(strip_tags($post['bank_name'])),
 			'role' => $post['role'],
 			'agent' => $post['agent'],
 			'ref_name' => isset($username_ref) && $username_ref != "" ? $username_ref['username']." (".($username_ref['agent'] ? "พันธมิตร" : "สมาชิกปกติ").")" : "",

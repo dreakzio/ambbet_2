@@ -50,7 +50,8 @@ class Account_model extends CI_Model
         account.rank,
         account.remark,
         account.sum_amount,
-        account.rank_point_sum
+        account.rank_point_sum,
+        account.is_auto_withdraw
         ');
         if (isset($search['id'])) {
             $this->db->where('account.id', $search['id']);
@@ -125,7 +126,9 @@ class Account_model extends CI_Model
         account.rank,
         account.remark,
         account.sum_amount,
-        account.rank_point_sum
+        account.ref_transaction_id,
+        account.rank_point_sum,
+         account.is_auto_withdraw
         ');
 		if (isset($search['id'])) {
 			$this->db->where('account.id', $search['id']);

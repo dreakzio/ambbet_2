@@ -132,7 +132,7 @@ function dataTable() {
 		'serverMethod': 'GET',
 		'processing': true,
 		ajax: {
-			url: BaseURL + 'credit/credit_list_page_manage_transaction/'+user_id, 
+			url: BaseURL + 'credit/credit_list_page_manage_transaction/'+user_id,
 			data: function(d) {
 				d.date_start = $('#date_start_report').val()+" "+$('#time_start_report').val();
 				d.date_end = $('#date_end_report').val()+" "+$('#time_end_report').val();
@@ -257,7 +257,7 @@ function dataTable2() {
 		// 'serverSide': false,
 		// 'serverMethod': 'get',
 		ajax: {
-			url: BaseURL + 'deposit/deposit_list_page_manage_transaction/'+user_id, 
+			url: BaseURL + 'deposit/deposit_list_page_manage_transaction/'+user_id,
 			data: function(d) {
 				d.date_start = $('#date_start_report').val()+" "+$('#time_start_report').val();
 				d.date_end = $('#date_end_report').val()+" "+$('#time_end_report').val();
@@ -489,11 +489,13 @@ function dataTable3() {
                     let {
                         created_at,
                         manage_by_fullname,
+						manage_by,
+						is_auto_withdraw,
                         ip
                     } = full;
-                    if(ip != null && ip != ''){
-                        html =  '<span class="text-warning">IP : '+ip+', โดย : '+manage_by_fullname+'</span>';
-                    }
+					if(ip != null && ip != ''){
+						html =  '<span class="text-warning">IP : '+ip+', โดย : '+((is_auto_withdraw== "1" || is_auto_withdraw== 1 ) && manage_by == null ? 'AUTO' : manage_by_fullname )+'</span>';
+					}
                     return html;
                 }
             },
@@ -670,7 +672,7 @@ function dataTable4() {
 		],
 		drawCallback: function(settings) {
 			let api = this.api();
-			Swal.close();        
+			Swal.close();
 		}
 	});
 	setInterval(function() {

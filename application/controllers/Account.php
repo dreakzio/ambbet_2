@@ -324,14 +324,14 @@ class Account extends CI_Controller
 			$linebot_userid = $_SESSION['line_login_user_id'];
 		}
 		$account_id = $this->Account_model->account_create([
-			'username' => $post['phone'],
+			'username' => trim(strip_tags($post['phone'])),
 			'password' => md5($post['password']),
-			'phone' => $post['phone'],
-			'full_name' => $post['full_name'],
+			'phone' => trim(strip_tags($post['phone'])),
+			'full_name' => trim(strip_tags($post['full_name'])),
 			'bank' => $post['bank'],
-			'bank_number' => $post['bank_number'],
+			'bank_number' => trim(strip_tags($post['bank_number'])),
 			'line_id' => '',
-			'bank_name' => $post['full_name'],
+			'bank_name' => trim(strip_tags($post['full_name'])),
 			'turn_before' => 0,
 			'turn_over' => 0,
 			'amount_wallet' => 0,

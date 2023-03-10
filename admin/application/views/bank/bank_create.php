@@ -41,6 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       <option value="06">ธนาคารกรุงศรีอยุธยา จำกัด (มหาชน)</option>
                       <option value="07">ธนาคารออมสิน จำกัด (มหาชน)</option>
                       <option value="09">ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร จำกัด (มหาชน)</option>
+                      <option value="11">ธนาคารเกียรตินาคิน จำกัด (มหาชน)</option>
                       <option value="10">ทรูมันนี่วอลเล็ท</option>
                     </select>
                     </div>
@@ -106,13 +107,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </div>
 					<div class="col-md-4">
 						<div class="form-group">
-						<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(จาก) รูปแบบตัวอย่าง "00:15"</font></label>
+							<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(จาก) รูปแบบตัวอย่าง "00:15"</font></label>
 							<input type="text" id="start_time_can_not_deposit" name="start_time_can_not_deposit" class="form-control" placeholder="เวลาปิดระบบฝากออโต้ (จาก)">
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="form-group">
-						<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(ถึง) รูปแบบตัวอย่าง "02:15"</font></label>
+							<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(ถึง) รูปแบบตัวอย่าง "02:15"</font></label>
 							<input type="text" id="end_time_can_not_deposit" name="end_time_can_not_deposit" class="form-control" placeholder="เวลาปิดระบบฝากออโต้ (ถึง)">
 						</div>
 					</div>
@@ -142,7 +143,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							<input type="number" id="max_amount_withdraw_auto" name="max_amount_withdraw_auto" class="form-control" placeholder="จำนวนเงินถอนออโต้ได้ไม่เกิน (บาท/ครั้ง)">
 						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-8">
 						<div class="form-group">
 							<label class="control-label">ข้อความแสดงหน้าฝากเงิน <font style="color:red;">(เวลาปิดระบบฝากออโต้)</font></label>
 							<textarea type="text" rows="6" id="message_can_not_deposit" name="message_can_not_deposit" class="form-control" placeholder="ข้อความแสดงหน้าฝากเงิน (เวลาปิดระบบฝากออโต้)" cols="3"></textarea>

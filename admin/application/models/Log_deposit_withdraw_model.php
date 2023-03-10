@@ -116,7 +116,7 @@ class Log_deposit_withdraw_model extends CI_Model
 			if(!empty($data['admin'])){
 				$account_id_list[] = $data['admin'];
 			}
-			$accounts =  $this->getAccountByAccountIdIn($account_id_list);
+			$accounts =  count($account_id_list) > 0 ? $this->getAccountByAccountIdIn($account_id_list) : [];
 			/*if (array_key_exists($data['account'], $accounts)) {
 				$data['username'] = $accounts[$data['account']]['username'];
 			} else {

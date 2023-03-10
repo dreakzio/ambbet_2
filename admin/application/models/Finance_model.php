@@ -19,13 +19,25 @@ class Finance_model extends CI_Model
         finance.manage_by_fullname,
         finance.manage_by,
         finance.qrcode,
-        finance.status
+        finance.status,
+        finance.is_auto_withdraw,
+        finance.auto_withdraw_status,
+        finance.auto_withdraw_created_at,
+        finance.auto_withdraw_updated_at,
+        finance.auto_withdraw_remark,
+        finance.bank_withdraw_id,
+		finance.bank_withdraw_name
         ');
 		if (isset($search['id'])) {
 			$this->db->where('finance.id', $search['id']);
 		}
 		if (isset($search['type'])) {
 			$this->db->where('finance.type', $search['type']);
+		}
+		if (isset($search['is_auto_withdraw_ignore']) && $search['is_auto_withdraw_ignore'] == true) {
+			$this->db->group_start();
+			$this->db->where('finance.is_auto_withdraw IS NULL')->or_where('finance.is_auto_withdraw',0);
+			$this->db->group_end();
 		}
 		$this->db->limit(1);
 		$query = $this->db->get('finance');
@@ -105,6 +117,21 @@ class Finance_model extends CI_Model
 			if(isset($data['status'])){
 				$response['status'] = $data['status'];
 			}
+			if(isset($data['is_auto_withdraw'])){
+				$response['is_auto_withdraw'] = $data['is_auto_withdraw'];
+			}
+			if(isset($data['auto_withdraw_status'])){
+				$response['auto_withdraw_status'] = $data['auto_withdraw_status'];
+			}
+			if(isset($data['auto_withdraw_remark'])){
+				$response['auto_withdraw_remark'] = $data['auto_withdraw_remark'];
+			}
+			if(isset($data['bank_withdraw_id'])){
+				$response['bank_withdraw_id'] = $data['bank_withdraw_id'];
+			}
+			if(isset($data['bank_withdraw_name'])){
+				$response['bank_withdraw_name'] = $data['bank_withdraw_name'];
+			}
 			return $response;
 		}else{
 			return $this->finance_find(['id'=> $data['id']]);
@@ -133,7 +160,14 @@ class Finance_model extends CI_Model
         finance.account,
         finance.status,
         finance.type,
-        finance.created_at
+         finance.created_at,
+        finance.is_auto_withdraw,
+        finance.auto_withdraw_status,
+        finance.auto_withdraw_created_at,
+        finance.auto_withdraw_updated_at,
+        finance.auto_withdraw_remark,
+		finance.bank_withdraw_id,
+		finance.bank_withdraw_name
         ');
 		$this->db->order_by('id', 'DESC');
 		if (isset($search['search']) && !empty(trim($search['search']))) {
@@ -141,6 +175,21 @@ class Finance_model extends CI_Model
 		}
 		if (isset($search['type'])) {
 			$this->db->where('finance.type', $search['type']);
+		}
+		if (isset($search['status'])) {
+			$this->db->where('finance.status', $search['status']);
+		}
+		if (isset($search['status_list']) && is_array($search['status_list']) && count($search['status_list']) > 0) {
+			$this->db->where_in('finance.status', $search['status_list']);
+		}
+		if (isset($search['is_auto_withdraw'])) {
+			$this->db->where('finance.is_auto_withdraw', $search['is_auto_withdraw']);
+		}
+		if (isset($search['auto_withdraw_status'])) {
+			$this->db->where('finance.auto_withdraw_status', $search['auto_withdraw_status']);
+		}
+		if (isset($search['auto_withdraw_status_list']) && is_array($search['auto_withdraw_status_list']) && count($search['auto_withdraw_status_list']) > 0) {
+			$this->db->where_in('finance.auto_withdraw_status', $search['auto_withdraw_status_list']);
 		}
 		$this->db->limit($search['per_page'], $search['page']);
 		$query = $this->db->get('finance');
@@ -168,7 +217,14 @@ class Finance_model extends CI_Model
 				finance.account,
 				finance.status,
 				finance.type,
-				finance.created_at
+				finance.created_at,
+				finance.is_auto_withdraw,
+				finance.auto_withdraw_status,
+				finance.auto_withdraw_created_at,
+				finance.auto_withdraw_updated_at,
+				finance.auto_withdraw_remark,
+				finance.bank_withdraw_id,
+				finance.bank_withdraw_name
 				');
 		}else{
 			$this->db->select('
@@ -176,7 +232,14 @@ class Finance_model extends CI_Model
 				finance.account,
 				finance.status,
 				finance.type,
-				finance.created_at
+				finance.created_at,
+				finance.is_auto_withdraw,
+				finance.auto_withdraw_status,
+				finance.auto_withdraw_created_at,
+				finance.auto_withdraw_updated_at,
+				finance.auto_withdraw_remark,
+				finance.bank_withdraw_id,
+				finance.bank_withdraw_name
 				');
 		}
 
@@ -186,6 +249,15 @@ class Finance_model extends CI_Model
 		}
 		if (isset($search['status'])) {
 			$this->db->where('finance.status', $search['status']);
+			if($search['status'] == "0"){
+				$this->db->where('finance.auto_withdraw_status', 0);
+			}else if($search['status'] == "1"){
+				$this->db->where('finance.auto_withdraw_status', 2);
+			}else if($search['status'] == "2"){
+				$this->db->where('finance.auto_withdraw_status', 3);
+			}else if($search['status'] == "4"){
+				$this->db->where('finance.auto_withdraw_status', 1);
+			}
 		}
 		if (isset($search['search']) && !empty(trim($search['search']))) {
 			$this->db->group_start();
@@ -205,6 +277,18 @@ class Finance_model extends CI_Model
 		}
 		if (isset($search['account'])) {
 			$this->db->where('finance.account', $search['account']);
+		}
+		if (isset($search['status_list']) && is_array($search['status_list']) && count($search['status_list']) > 0) {
+			$this->db->where_in('finance.status', $search['status_list']);
+		}
+		if (isset($search['is_auto_withdraw'])) {
+			$this->db->where('finance.is_auto_withdraw', $search['is_auto_withdraw']);
+		}
+		if (isset($search['auto_withdraw_status'])) {
+			$this->db->where('finance.auto_withdraw_status', $search['auto_withdraw_status']);
+		}
+		if (isset($search['auto_withdraw_status_list']) && is_array($search['auto_withdraw_status_list']) && count($search['auto_withdraw_status_list']) > 0) {
+			$this->db->where_in('finance.auto_withdraw_status', $search['auto_withdraw_status_list']);
 		}
 		$this->db->limit($search['per_page'], $search['page']);
 		$query = $this->db->get('finance');
@@ -357,6 +441,15 @@ class Finance_model extends CI_Model
         }
 		if (isset($search['status'])) {
 			$this->db->where('finance.status', $search['status']);
+			if($search['status'] == "0"){
+				$this->db->where('finance.auto_withdraw_status', 0);
+			}else if($search['status'] == "1"){
+				$this->db->where('finance.auto_withdraw_status', 2);
+			}else if($search['status'] == "2"){
+				$this->db->where('finance.auto_withdraw_status', 3);
+			}else if($search['status'] == "4"){
+				$this->db->where('finance.auto_withdraw_status', 1);
+			}
 		}
 		if(
 			isset($search['date_start']) && isset($search['date_end']) &&
@@ -367,6 +460,18 @@ class Finance_model extends CI_Model
 		}
 		if (isset($search['account'])) {
 			$this->db->where('finance.account', $search['account']);
+		}
+		if (isset($search['status_list']) && is_array($search['status_list']) && count($search['status_list']) > 0) {
+			$this->db->where_in('finance.status', $search['status_list']);
+		}
+		if (isset($search['is_auto_withdraw'])) {
+			$this->db->where('finance.is_auto_withdraw', $search['is_auto_withdraw']);
+		}
+		if (isset($search['auto_withdraw_status'])) {
+			$this->db->where('finance.auto_withdraw_status', $search['auto_withdraw_status']);
+		}
+		if (isset($search['auto_withdraw_status_list']) && is_array($search['auto_withdraw_status_list']) && count($search['auto_withdraw_status_list']) > 0) {
+			$this->db->where_in('finance.auto_withdraw_status', $search['auto_withdraw_status_list']);
 		}
         $query = $this->db->get('finance');
 		$cnt_row =  $query->row_array();
@@ -734,7 +839,14 @@ class Finance_model extends CI_Model
 		$this->db->select('
         finance.id,
         finance.status,
-        finance.created_at
+        finance.created_at,
+        finance.is_auto_withdraw,
+        finance.auto_withdraw_status,
+        finance.auto_withdraw_created_at,
+        finance.auto_withdraw_updated_at,
+        finance.auto_withdraw_remark,
+        finance.bank_withdraw_id,
+		finance.bank_withdraw_name
         ');
 		$this->db->order_by('id', 'DESC');
 		if (isset($search['type'])) {
@@ -888,7 +1000,14 @@ class Finance_model extends CI_Model
         finance.status,
         finance.account as account_id,
         finance.username,
-        finance.username as full_name
+        finance.username as full_name,
+         finance.is_auto_withdraw,
+        finance.auto_withdraw_status,
+        finance.auto_withdraw_created_at,
+        finance.auto_withdraw_updated_at,
+        finance.auto_withdraw_remark,
+        finance.bank_withdraw_id,
+		finance.bank_withdraw_name
         ');
 		$this->db->order_by('id', 'DESC');
 		if (isset($search['type'])) {
@@ -1036,6 +1155,92 @@ class Finance_model extends CI_Model
 				];
 			}
 		}
+		return $data;
+	}
+	public function finance_for_check_turn_find($search = [])
+	{
+		$this->db->select('
+        finance.id,
+        finance.created_at,
+        finance.ref_transaction_id,
+        finance.created_at,
+        finance.amount
+        ');
+		if (isset($search['id'])) {
+			$this->db->where('finance.id', $search['id']);
+		}
+		if (isset($search['account'])) {
+			$this->db->where('finance.account', $search['account']);
+		}
+		if (isset($search['ref_transaction_id'])) {
+			$this->db->where('finance.ref_transaction_id', $search['ref_transaction_id']);
+		}
+		if (isset($search['type'])) {
+			$this->db->where('finance.type', $search['type']);
+		}
+		if (isset($search['status'])) {
+			$this->db->where('finance.status', $search['status']);
+		}
+		$this->db->where('finance.ref_transaction_id <>', '');
+		$this->db->where('finance.ref_transaction_id IS NOT NULL');
+		$this->db->order_by('finance.id', 'DESC');
+		//$this->db->join('account', 'account.id = finance.account');
+		$query = $this->db->get('finance');
+		return $query->row_array();
+	}
+
+	public function finance_for_auto_withdraw_find($search = [])
+	{
+		$this->db->select('
+        finance.id,
+        finance.username,
+        finance.type,
+        finance.amount,
+        finance.created_at,
+        finance.bank,
+        finance.account,
+        finance.account as account_id,
+        finance.bank_name,
+        finance.bank_number,
+        finance.ip,
+        finance.manage_by_fullname,
+        finance.manage_by,
+        finance.qrcode,
+        finance.status,
+        finance.is_auto_withdraw,
+        finance.auto_withdraw_status,
+        finance.auto_withdraw_created_at,
+        finance.auto_withdraw_updated_at,
+        finance.auto_withdraw_remark,
+        finance.bank_withdraw_id,
+		finance.bank_withdraw_name
+        ');
+		if (isset($search['id'])) {
+			$this->db->where('finance.id', $search['id']);
+		}
+		if (isset($search['type'])) {
+			$this->db->where('finance.type', $search['type']);
+		}
+		if (isset($search['status'])) {
+			$this->db->where('finance.status', $search['status']);
+		}
+		if (isset($search['status_list']) && is_array($search['status_list']) && count($search['status_list']) > 0) {
+			$this->db->where_in('finance.status', $search['status_list']);
+		}
+		if (isset($search['is_auto_withdraw'])) {
+			$this->db->where('finance.is_auto_withdraw', $search['is_auto_withdraw']);
+		}
+		if (isset($search['auto_withdraw_status'])) {
+			$this->db->where('finance.auto_withdraw_status', $search['auto_withdraw_status']);
+		}
+		if (isset($search['auto_withdraw_status_list']) && is_array($search['auto_withdraw_status_list']) && count($search['auto_withdraw_status_list']) > 0) {
+			$this->db->where_in('finance.auto_withdraw_status', $search['auto_withdraw_status_list']);
+		}
+		$this->db->order_by('finance.id', 'ASC');
+		$this->db->limit(1);
+		$query = $this->db->get('finance');
+		$results = $query->result_array();
+		$data = is_array($results) && count($results) == 1 ? $results[0] : null;
 		return $data;
 	}
 }

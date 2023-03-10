@@ -1225,11 +1225,31 @@ class Api extends CI_Controller
 			$base_url .=     str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 			$curl = curl_init();
 			curl_setopt_array($curl, array(
-				CURLOPT_URL => $base_url.'admin/api/bb_auto_transfer_sfo4rsdf?api_token=rs2nvxdjJLaBr5eXXZddTshDsM4T7Tw34MXLJNWN',
+				CURLOPT_URL => $base_url.'admin/api/bank_auto_transfer_sfo4rsdf?api_token=rs2nvxdjJLaBr5eXXZddTshDsM4T7Tw34MXLJNWN',
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_ENCODING => '',
 				CURLOPT_MAXREDIRS => 10,
-				CURLOPT_TIMEOUT => 30,
+				CURLOPT_TIMEOUT => 60,
+				CURLOPT_CONNECTTIMEOUT => 10,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'GET',
+
+			));
+			$response = curl_exec($curl);
+			curl_close($curl);
+
+			//Check Finance Auto Withdraw
+			$base_url = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+			$base_url .= "://". @$_SERVER['HTTP_HOST'];
+			$base_url .=     str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => $base_url.'admin/api/finance_auto_withdraw_sfo4rsdf?api_token=rs2nvxdjJLaBr5eXXZddTshDsM4T7Tw34MXLJNWN',
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 60,
 				CURLOPT_CONNECTTIMEOUT => 10,
 				CURLOPT_FOLLOWLOCATION => true,
 				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
@@ -1308,6 +1328,22 @@ class Api extends CI_Controller
 			$clear_log_date_time_chk_1 = new DateTime(date('Y-m-d')." 03:50:00");
 			$clear_log_date_time_chk_2 = new DateTime(date('Y-m-d')." 04:00:00");
 			if ($clear_log_start_date_time->getTimestamp() >= $clear_log_date_time_chk_1->getTimestamp() && $clear_log_start_date_time->getTimestamp() < $clear_log_date_time_chk_2->getTimestamp() ) {
+
+				$cache_path =  APPPATH.'cache/';
+				$handle = opendir($cache_path);
+				while (($file = readdir($handle))!== FALSE)
+				{
+					//Leave the directory protection alone
+					if (
+						strpos($file,"process_deposit_cache_".date('Y_m_d', strtotime('-1 days'))) !== FALSE ||
+						strpos($file,"process_withdraw_cache_".date('Y_m_d', strtotime('-1 days'))) !== FALSE
+					)
+					{
+						@unlink($cache_path.'/'.$file);
+					}
+				}
+				closedir($handle);
+
 
 				require_once FCPATH .'/conn_cron.php';
 

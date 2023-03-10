@@ -14,7 +14,7 @@ class TransferOut extends CI_Controller
 	}
     public function index()
     {
-		$bank_list = $this->Bank_model->bank_list(['bank_code_list'=>["05","5","02","2","06","6"],"status"=>"1","api_type"=>"1"]);
+		$bank_list = $this->Bank_model->bank_list(['bank_code_list'=>["05","5","02","2","06","6","11"],"status"=>"1","api_type"=>"1"]);
 		$data['bank_list'] = [];
 		$bank_code_list = [];
 		$bank_list_data = [];
@@ -93,6 +93,8 @@ class TransferOut extends CI_Controller
 				}else if($bank['bank_code'] == "02" || $bank['bank_code'] == "2"){
 					$post["bank_to"] = getBankCodeForKbank()[$post["bank_to"]];
 					$res_withdraw = $this->auto_withdraw_librarie->transfer_kplus($post["bank_number_to"],$post["bank_number_to"],$post["bank_to"],str_replace(",","",$post['amount']),decrypt(base64_decode($bank['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank['api_token_2']),$this->config->item('secret_key_salt')),$bank['bank_number']);
+				}else if($bank['bank_code'] == "11"){
+					$res_withdraw = $this->auto_withdraw_librarie->transfer_kkp($post["bank_number_to"],$post["bank_number_to"],$post["bank_to"],str_replace(",","",$post['amount']),decrypt(base64_decode($bank['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank['api_token_2']),$this->config->item('secret_key_salt')),$bank['bank_number']);
 				}
 				if($res_withdraw['status']){
 					$log_transfer_out = $this->Log_transfer_out_model->log_transfer_out_find([

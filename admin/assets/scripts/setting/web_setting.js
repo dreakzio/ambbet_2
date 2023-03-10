@@ -223,3 +223,14 @@ $(document).on('click','#btn_gen_gg_2fa_secret',function(){
 			}
 		});
 });
+$(document).on('change','#auto_withdraw_status',function(){
+	if($(this).val() == "1"){
+		$("#auto_withdraw_min_amount_disabled").parents('.form-group').removeClass('d-none');
+		$("#auto_withdraw_total_per_day").parents('.form-group').removeClass('d-none');
+		$("#auto_withdraw_cnt_per_day").parents('.form-group').removeClass('d-none');
+	}else{
+		$("#auto_withdraw_min_amount_disabled").parents('.form-group').addClass('d-none');
+		$("#auto_withdraw_total_per_day").parents('.form-group').addClass('d-none');
+		$("#auto_withdraw_cnt_per_day").parents('.form-group').addClass('d-none');
+	}
+});

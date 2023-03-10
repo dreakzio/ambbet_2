@@ -55,6 +55,12 @@ class Bank extends CI_Controller
 	public function bank_create()
 	{
 		$this->checkSuperAdmin();
+
+		if($_POST['bank_code']=='11'){
+			$_POST['username']='xxxx';
+			$_POST['password']='xxxx';
+		}
+
 		check_parameter([
 			'bank_code',
 			'account_name',
@@ -99,6 +105,9 @@ class Bank extends CI_Controller
 				break;
 			case '10':
 				$bank_name = "ทรูมันนี่วอลเล็ท";
+				break;
+			case '11':
+				$bank_name = "ธนาคารเกียรตินาคิน จำกัด (มหาชน)";
 				break;
 			default :
 				break;
@@ -148,25 +157,29 @@ class Bank extends CI_Controller
 		$post['api_token_2'] = trim($post['api_token_2']);
 		$post['api_token_3'] = trim($post['api_token_3']);
 		if(
-			empty($post['api_token_1']) && in_array($post['bank_code'],["03","3","02","2","05","5","10","06","6"])
+			empty($post['api_token_1']) && in_array($post['bank_code'],["03","3","02","2","05","5","10","06","6","11"])
 		){
 			$text_message_token_1 = "Device ID";
 			if($post['bank_code'] == "03" || $post['bank_code'] == "3"){
 				$text_message_token_1 = "Account Token No";
 			}else if($post['bank_code'] == "10"){
 				$text_message_token_1 = "Pin";
+			}else if($post['bank_code'] == "11"){
+				$text_message_token_1 = "รหัสบัตรประชาชน";
 			}
 			$this->session->set_flashdata('warning', 'กรุณาระบุ '.$text_message_token_1);
 			redirect('bank/bank_form_create');
 			exit();
 		}else if(
-			empty($post['api_token_2']) && in_array($post['bank_code'],["03","3","02","2","05","5","10","06","6"])
+			empty($post['api_token_2']) && in_array($post['bank_code'],["03","3","02","2","05","5","10","06","6","11"])
 		){
 			$text_message_token_2 = "API Refresh";
 			if($post['bank_code'] == "03" || $post['bank_code'] == "3"){
 				$text_message_token_2 = "User Token ID";
 			}else if($post['bank_code'] == "10"){
 				$text_message_token_2 = "Login Token (login_token จากระบบ TMNOne)";
+			}elseif($post['bank_code'] == "11"){
+				$text_message_token_2 = "PIN";
 			}
 			$this->session->set_flashdata('warning', 'กรุณาระบุ '.$text_message_token_2);
 			redirect('bank/bank_form_create');
@@ -182,6 +195,12 @@ class Bank extends CI_Controller
 			redirect('bank/bank_form_create');
 			exit();
 		}
+		if($post['promptpay_number']==''){
+			$post['promptpay_number']='';
+		}
+		if($post['promptpay_status']==''){
+			$post['promptpay_status']='';
+		}
 		$create = [
 			'bank_name' => $bank_name,
 			'bank_code' => $post['bank_code'],
@@ -196,20 +215,82 @@ class Bank extends CI_Controller
 			'status_withdraw' => isset($post['status_withdraw']) ? $post['status_withdraw'] : 0,
 			'start_time_can_not_deposit' => $start_time_can_not_deposit,
 			'end_time_can_not_deposit' => $end_time_can_not_deposit,
-			'api_token_1' => isset($post['api_token_1']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"]) ? base64_encode(encrypt($post['api_token_1'],$this->config->item('secret_key_salt'))) : $post['api_token_1'],
-			'api_token_2' => isset($post['api_token_2']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"]) ? base64_encode(encrypt($post['api_token_2'],$this->config->item('secret_key_salt'))) : $post['api_token_2'],
+			'api_token_1' => isset($post['api_token_1']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"]) ? base64_encode(encrypt($post['api_token_1'],$this->config->item('secret_key_salt'))) : $post['api_token_1'],
+			'api_token_2' => isset($post['api_token_2']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"]) ? base64_encode(encrypt($post['api_token_2'],$this->config->item('secret_key_salt'))) : $post['api_token_2'],
 			'api_token_3' => isset($post['api_token_3']) && in_array($post['bank_code'],["03","3"]) ? base64_encode(encrypt($post['api_token_3'],$this->config->item('secret_key_salt'))) : $post['api_token_3'],
 			'max_amount_withdraw_auto' => isset($post['max_amount_withdraw_auto']) ? $post['max_amount_withdraw_auto'] : null,
 			'api_type' => isset($post['api_type']) ? $post['api_type'] : 1,
-			'auto_transfer' => isset($post['auto_transfer']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? $post['auto_transfer'] : 0,
-			'auto_min_amount_transfer' => isset($post['auto_min_amount_transfer']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? $post['auto_min_amount_transfer'] : null,
-			'auto_transfer_bank_code' => isset($post['auto_transfer_bank_code']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? $post['auto_transfer_bank_code'] : null,
-			'auto_transfer_bank_acc_name' => isset($post['auto_transfer_bank_acc_name']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? trim($post['auto_transfer_bank_acc_name']) : null,
-			'auto_transfer_bank_number' => isset($post['auto_transfer_bank_number']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? trim($post['auto_transfer_bank_number']) : null,
+			'auto_transfer' => isset($post['auto_transfer']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? $post['auto_transfer'] : 0,
+			'auto_min_amount_transfer' => isset($post['auto_min_amount_transfer']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? $post['auto_min_amount_transfer'] : null,
+			'auto_transfer_bank_code' => isset($post['auto_transfer_bank_code']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? $post['auto_transfer_bank_code'] : null,
+			'auto_transfer_bank_acc_name' => isset($post['auto_transfer_bank_acc_name']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? trim($post['auto_transfer_bank_acc_name']) : null,
+			'auto_transfer_bank_number' => isset($post['auto_transfer_bank_number']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? trim($post['auto_transfer_bank_number']) : null,
 		];
 		$this->Bank_model->bank_create($create);
 		$this->session->set_flashdata('toast', 'บันทึกข้อมูลเรียบร้อยแล้ว');
 		redirect('bank');
+	}
+	public function bank_kkp_get_otp(){
+
+		require_once FCPATH .'../lib/kkp/KkpClass.php';
+		$idCard= $_POST['idCard'];
+		$pin= $_POST['pin'];
+
+		$data = array(
+			"idCard" => trim($idCard),
+			"pin" => trim($pin),
+		);
+		//print_r($data);
+		$kkp = new KkpClass($data);
+		$res = $kkp->RequestOTP();
+
+		$json = array(
+			'referenceNo'=>$res['result']['value']['referenceNo']
+		,'verifyTransactionId'=>$res['verifyTransactionId']
+		);
+		/*$json = array(
+					'referenceNo'=>'MTGOU'
+					,'verifyTransactionId'=>"4675b063-88b3-46e7-8dcd-435a931fcd1a-4v5"
+		);*/
+
+		echo json_encode([
+			'message' => 'success',
+			'result' => $json
+		]);
+	}
+	public function bank_kkp_confirm_otp(){
+		$idCard= $_POST['idCard'];
+		$pin= $_POST['pin'];
+		$otp= $_POST['otp'];
+		$verifyTransactionId= $_POST['verifyTransactionId'];
+		$referenceNo= $_POST['referenceNo'];
+
+		$data = array(
+			"idCard" => trim($idCard),
+			"pin" => trim($pin),
+		);
+
+		require_once FCPATH .'../lib/kkp/KkpClass.php';
+		//print_r($data);
+		$kkp = new KkpClass($data);
+		$res = $kkp->SummitOTP($otp,$referenceNo,$verifyTransactionId);
+
+		//$res['result']['value']=1;
+		if($res['result']['value']==1){
+			$kkp_login = new KkpClass($data);
+			$res = $kkp_login->LoginPin();
+
+			echo json_encode([
+				'message' => 'success',
+				'result' => $res
+			]);
+		}else{
+			echo json_encode([
+				'message' => 'error',
+				'result' => $res
+			]);
+		}
+		//print_r($res);
 	}
 	public function bank_list()
 	{
@@ -344,6 +425,10 @@ class Bank extends CI_Controller
 	public function bank_update($id="")
 	{
 		$this->checkSuperAdmin();
+		if($_POST['bank_code']=='11'){
+			$_POST['username']='xxxx';
+			$_POST['password']='xxxx';
+		}
 		check_parameter([
 			'bank_code',
 			'account_name',
@@ -389,6 +474,9 @@ class Bank extends CI_Controller
 			case '10':
 				$bank_name = "ทรูมันนี่วอลเล็ท";
 				break;
+			case '11':
+				$bank_name = "ธนาคารเกียรตินาคิน จำกัด (มหาชน)";
+				break;
 			default :
 				break;
 		}
@@ -433,6 +521,12 @@ class Bank extends CI_Controller
 		if(isset($post['end_time_can_not_deposit'])){
 			$end_time_can_not_deposit = $post['end_time_can_not_deposit'];
 		}
+		if($post['promptpay_number']==''){
+			$post['promptpay_number']='';
+		}
+		if($post['promptpay_status']==''){
+			$post['promptpay_status']='';
+		}
 		$post['api_token_1'] = trim($post['api_token_1']);
 		$post['api_token_2'] = trim($post['api_token_2']);
 		$post['api_token_3'] = trim($post['api_token_3']);
@@ -456,17 +550,17 @@ class Bank extends CI_Controller
 			//'api_token_3' => isset($post['api_token_3']) && in_array($post['bank_code'],["03","3"])  ? base64_encode(encrypt($post['api_token_3'],$this->config->item('secret_key_salt'))) : $post['api_token_3'],
 			'max_amount_withdraw_auto' => isset($post['max_amount_withdraw_auto']) ? $post['max_amount_withdraw_auto'] : null,
 			'api_type' => isset($post['api_type']) ? $post['api_type'] : 1,
-			'auto_transfer' => isset($post['auto_transfer']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? $post['auto_transfer'] : 0,
-			'auto_min_amount_transfer' => isset($post['auto_min_amount_transfer']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? $post['auto_min_amount_transfer'] : null,
-			'auto_transfer_bank_code' => isset($post['auto_transfer_bank_code']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? $post['auto_transfer_bank_code'] : null,
-			'auto_transfer_bank_acc_name' => isset($post['auto_transfer_bank_acc_name']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? trim($post['auto_transfer_bank_acc_name']) : null,
-			'auto_transfer_bank_number' => isset($post['auto_transfer_bank_number']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"])  ? trim($post['auto_transfer_bank_number']) : null,
+			'auto_transfer' => isset($post['auto_transfer']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? $post['auto_transfer'] : 0,
+			'auto_min_amount_transfer' => isset($post['auto_min_amount_transfer']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? $post['auto_min_amount_transfer'] : null,
+			'auto_transfer_bank_code' => isset($post['auto_transfer_bank_code']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? $post['auto_transfer_bank_code'] : null,
+			'auto_transfer_bank_acc_name' => isset($post['auto_transfer_bank_acc_name']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? trim($post['auto_transfer_bank_acc_name']) : null,
+			'auto_transfer_bank_number' => isset($post['auto_transfer_bank_number']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"])  ? trim($post['auto_transfer_bank_number']) : null,
 		];
 		if(isset($post['api_token_1']) && !empty($post['api_token_1'])){
-			$update['api_token_1'] = isset($post['api_token_1']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"]) ? base64_encode(encrypt($post['api_token_1'],$this->config->item('secret_key_salt'))) : $post['api_token_1'];
+			$update['api_token_1'] = isset($post['api_token_1']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"]) ? base64_encode(encrypt($post['api_token_1'],$this->config->item('secret_key_salt'))) : $post['api_token_1'];
 		}
 		if(isset($post['api_token_2']) && !empty($post['api_token_2'])){
-			$update['api_token_2'] = isset($post['api_token_2']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6"]) ? base64_encode(encrypt($post['api_token_2'],$this->config->item('secret_key_salt'))) : $post['api_token_2'];
+			$update['api_token_2'] = isset($post['api_token_2']) && in_array($post['bank_code'],["03","3","02","2","05","5","06","6","11"]) ? base64_encode(encrypt($post['api_token_2'],$this->config->item('secret_key_salt'))) : $post['api_token_2'];
 		}
 		if(isset($post['api_token_3']) && !empty($post['api_token_3'])){
 			$update['api_token_3'] = isset($post['api_token_3']) && in_array($post['bank_code'],["03","3"]) ? base64_encode(encrypt($post['api_token_3'],$this->config->item('secret_key_salt'))) : $post['api_token_3'];

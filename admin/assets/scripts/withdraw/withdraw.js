@@ -393,21 +393,31 @@ function dataTable() {
                     return html;
                 }
             },
-            {
-                className: 'text-center',
-                render: function(data, type, full, meta) {
-                    let html = "-";
-                    let {
-                        created_at,
-                        manage_by_fullname,
-                        ip
-                    } = full;
-                    if(ip != null && ip != ''){
-                        html =  '<span class="text-warning">IP : '+ip+', โดย : '+manage_by_fullname+'</span>';
-                    }
-                    return html;
-                }
-            },
+			{
+				className: 'text-center',
+				render: function(data, type, full, meta) {
+					let html = "-";
+					let {
+						created_at,
+						manage_by_fullname,
+						manage_by,
+						ip,
+						is_auto_withdraw,
+						auto_withdraw_status,
+						auto_withdraw_remark,
+						status,
+						bank_withdraw_id,
+						bank_withdraw_name,
+					} = full;
+					if(ip != null && ip != ''){
+						html =  '<span class="text-warning">IP : '+ip+', โดย : '+((is_auto_withdraw== "1" || is_auto_withdraw== 1 ) && manage_by == null ? 'AUTO' : manage_by_fullname )+'</span>';
+					}
+					if(status == 1 && bank_withdraw_name != null && bank_withdraw_name != ""){
+						html += "<p class='mb-2 text-warning'>ถอนออโต้จากบช. : "+bank_withdraw_name+"</p>"
+					}
+					return html;
+				}
+			},
             {
                 className: 'text-right',
                 data: 'amount'
@@ -417,45 +427,70 @@ function dataTable() {
 				render: function(data, type, full, meta) {
 					let html = "";
 					let {
-						remark
+						remark,
+						is_auto_withdraw,
+						auto_withdraw_status,
+						auto_withdraw_remark,
 					} = full;
 					if (remark != "" && remark != null) {
 						html = remark;
 					}else{
 						html = "-"
 					}
+					if(is_auto_withdraw == "1" && auto_withdraw_remark != "" && auto_withdraw_remark != null){
+						if(html != "-"){
+							html += " | "+auto_withdraw_remark;
+						}else{
+							html = auto_withdraw_remark;
+						}
+					}
 					return html;
 				}
 			},
-            {
-                className: 'text-right',
-                render: function(data, type, full, meta) {
-                    let html = "";
-                    let {
-                        status,
-                        id
-                    } = full;
-                    let selected = status == 1 ? 'selected' : '';
-                    let selected2 = status == 2 ? 'selected' : '';
-                    let selected3 = status == 3 ? 'selected' : '';
-                    let selected4 = status == 4 ? 'selected' : '';
-                    let disabled = '';
-                    if (status > 0) {
-                        disabled = 'disabled';
-                    }
-                    html += '<select class="form-control status" ' + disabled + ' data-id="' + id + '" >';
-                    html += '<option value="0">รอตรวจสอบ</option>';
-                    html += '<option ' + selected + ' value="1">สำเร็จ (ถอนออโต้)</option>';
-                    html += '<option ' + selected3 + ' value="3">สำเร็จ (ถอนมือ)</option>';
-                    if (status == 4) {
-                        html += '<option ' + selected4 + ' value="4">ดำเนินการถอนออโต้</option>';
-                    }
+			{
+				className: 'text-right',
+				render: function(data, type, full, meta) {
+					let html = "";
+					let {
+						status,
+						id,
+						is_auto_withdraw,
+						auto_withdraw_status,
+						auto_withdraw_remark
+					} = full;
+					let selected = status == 1 ? 'selected' : '';
+					let selected2 = status == 2 ? 'selected' : '';
+					let selected3 = status == 3 ? 'selected' : '';
+					let selected4 = status == 4 ? 'selected' : '';
+					let disabled = '';
+					if (status > 0 ||  ((is_auto_withdraw == '1' || is_auto_withdraw == 1) && auto_withdraw_status != "3" && auto_withdraw_status != 3)) {
+						disabled = 'disabled';
+					}
+					html += '<select class="form-control status" ' + disabled + ' data-id="' + id + '" >';
+					if((is_auto_withdraw == '1' || is_auto_withdraw == 1)  && auto_withdraw_status != "3" && auto_withdraw_status != 3){
+						html += '<option value="0">รอตรวจสอบ (BOT)</option>';
+					}else{
+						html += '<option value="0">รอตรวจสอบ</option>';
+					}
+					if((is_auto_withdraw == '1' || is_auto_withdraw == 1) && (auto_withdraw_status == "2" || auto_withdraw_status== 2)){
+						html += '<option ' + selected + ' value="1">สำเร็จ (BOT ถอนออโต้)</option>';
+					}else{
+						html += '<option ' + selected + ' value="1">สำเร็จ (ถอนออโต้)</option>';
+					}
+					html += '<option ' + selected3 + ' value="3">สำเร็จ (ถอนมือ)</option>';
+					if (status == 4) {
+						if((is_auto_withdraw == '1' || is_auto_withdraw == 1) && (auto_withdraw_status == "1" || auto_withdraw_status == 1)){
+							html += '<option ' + selected4 + ' value="4">ดำเนินการถอนออโต้ (BOT)</option>';
+						}else{
+							html += '<option ' + selected4 + ' value="4">ดำเนินการถอนออโต้</option>';
+						}
+					}
 
-                    html += '<option ' + selected2 + ' value="2">ไม่อนุมัติ</option>';
-                    html += '</select">';
-                    return html;
-                }
-            },
+					html += '<option ' + selected2 + ' value="2">ไม่อนุมัติ</option>';
+					html += '</select">';
+					return html;
+				}
+			},
 			{
 				className: 'text-center',
 				render: function(data, type, full, meta) {
@@ -466,7 +501,8 @@ function dataTable() {
 					} = full;
 					html = "-";
 					if(status == "1" && typeof(qrcode) != "undefined" && qrcode != null && qrcode != ""){
-						html = "<img class='img-fluid img-rounded cursor-pointer btn-show-qrcode' data-qrcode='"+qrcode+"' src='https://api.qrserver.com/v1/create-qr-code/?size=80x80&data="+qrcode+"&date="+moment().format('YYYY-MM-DD')+"'/>"
+						//html = "<img class='img-fluid img-rounded cursor-pointer btn-show-qrcode' data-qrcode='"+qrcode+"' src='https://api.qrserver.com/v1/create-qr-code/?size=80x80&data="+qrcode+"&date="+moment().format('YYYY-MM-DD')+"'/>"
+						html = "<img class='img-fluid img-rounded cursor-pointer btn-show-qrcode' data-qrcode='"+qrcode+"' src='https://chart.googleapis.com/chart?chs=80x80&cht=qr&chl="+qrcode+"&choe=UTF-8&chld=L|0&date="+moment().format('YYYY-MM-DD')+"'/>"
 					}
 					return html;
 				}
@@ -907,7 +943,8 @@ $(document).on('change', '.status', function(e) {
 });
 $(document).on('click', '.btn-show-qrcode', function() {
 	let data = $(this).data();
-	$("#modal_qrcode").find("img.img-qrcode").attr("src","https://api.qrserver.com/v1/create-qr-code/?size=450x450&data="+data.qrcode+"&date="+moment().format('YYYY-MM-DD'))
+	//$("#modal_qrcode").find("img.img-qrcode").attr("src","https://api.qrserver.com/v1/create-qr-code/?size=450x450&data="+data.qrcode+"&date="+moment().format('YYYY-MM-DD'))
+	$("#modal_qrcode").find("img.img-qrcode").attr("src","https://chart.googleapis.com/chart?chs=450x450&cht=qr&chl="+data.qrcode+"&choe=UTF-8&chld=L|0&date="+moment().format('YYYY-MM-DD'))
 	setTimeout(function(){
 		$('#modal_qrcode').modal('toggle');
 	},100);

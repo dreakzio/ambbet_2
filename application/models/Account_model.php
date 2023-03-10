@@ -50,7 +50,9 @@ class Account_model extends CI_Model
         account.amount_wallet as amount_wallet,
         account.amount_wallet_ref,
         account.auto_accept_bonus,
-        account.rank
+        account.rank,
+        account.is_auto_withdraw,
+        account.phone
         ');
         if (isset($search['id'])) {
             $this->db->where('account.id', $search['id']);
@@ -160,7 +162,9 @@ class Account_model extends CI_Model
             account.point_for_return_balance,
 			account.is_active_return_balance,
 			account.rank,
-			account.rank_point_sum
+			account.rank_point_sum,
+			account.ref_transaction_id,
+			account.is_auto_withdraw
         ');
 		if (isset($search['limit'])) {
 			$this->db->limit($search['limit']);
@@ -233,7 +237,9 @@ class Account_model extends CI_Model
 			account.is_active_return_balance,
 			account.rank,
 			account.amount_deposit_auto,
-			account.rank_point_sum
+			account.rank_point_sum,
+			account.ref_transaction_id,
+			 account.is_auto_withdraw
         ');
 		if (isset($search['limit'])) {
 			$this->db->limit($search['limit']);
@@ -314,7 +320,9 @@ class Account_model extends CI_Model
         account.point_for_return_balance,
         account.amount_wallet as amount_wallet,
         account.amount_wallet_ref,
-        account.rank
+        account.ref_transaction_id,
+        account.rank,
+        account.is_auto_withdraw
         ');
 		if (isset($search['id'])) {
 			$this->db->where('account.id', $search['id']);
@@ -444,5 +452,30 @@ class Account_model extends CI_Model
 		$query = $this->db->get('account');
 		$total_online =  $query->row_array();
 		return $total_online != "" && isset($total_online['total']) && is_numeric($total_online['total']) ? (int)$total_online['total'] : 0;
+	}
+	public function get_account_by_account_agent_username($username){
+		$data = null;
+
+		$this->db->select('
+    		account_agent.*
+    	');
+		$this->db->where('BINARY LOWER(account_agent.username) =', strtolower($username));
+		$query = $this->db->get('account_agent');
+		$account_agent =  $query->row_array();
+		if($account_agent != ""){
+			$this->db->select('
+    			account.*
+    		');
+			$this->db->where('account.id', $account_agent['account_id']);
+			$this->db->where('account.deleted', 0);
+			$query = $this->db->get('account');
+			$account =  $query->row_array();
+			if($account != ""){
+				$account['account_agent_username'] = $account_agent['username'];
+				$account['account_agent_password'] = $account_agent['password'];
+				$data = $account;
+			}
+		}
+		return $data;
 	}
 }

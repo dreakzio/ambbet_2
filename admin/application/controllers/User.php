@@ -147,11 +147,12 @@ class User extends CI_Controller
 			'role',
 			'turn_date',
 			'remark',
+			'is_auto_withdraw',
 			//'turn_before',
 			//'turn_over'
 		],'POST');
 		$post = $this->input->post();
-		$post['full_name'] = trim($post['full_name']);
+		$post['full_name'] = trim(strip_tags(($post['full_name'])));
 		$post['bank_number'] = str_replace("-","",trim($post['bank_number']));
 		$post['bank_number']  = preg_replace('/[^0-9]/','',trim($post['bank_number']));
 		if(!in_array($post['role'],canManageRole()[$_SESSION['user']['role']])){
@@ -179,12 +180,12 @@ class User extends CI_Controller
 			exit();
 		}
 		$update = [
-			'phone' => $post['phone'],
-			'full_name' => $post['full_name'],
-			'line_id' => $post['line_id'],
+			'phone' => trim(strip_tags($post['phone'])),
+			'full_name' => trim(strip_tags($post['full_name'])),
+			'line_id' => trim(strip_tags($post['line_id'])),
 			'bank' => $post['bank'],
-			'bank_number' => $post['bank_number'],
-			'bank_name' => $post['bank_name'],
+			'bank_number' => trim(strip_tags($post['bank_number'])),
+			'bank_name' => trim(strip_tags($post['bank_name'])),
 			//'amount_wallet' => $post['amount_wallet'],
 			'role' => $post['role'],
 			'agent' => $post['agent'],
@@ -193,6 +194,7 @@ class User extends CI_Controller
 			'id' => $id,
 			'turn_date' => $post['turn_date'],
 			'remark' => $post['remark'],
+			'is_auto_withdraw' => $post['is_auto_withdraw'],
 			//'turn_before' => $post['turn_before'],
 			//'turn_over' => $post['turn_over']
 		];
@@ -260,6 +262,7 @@ class User extends CI_Controller
 			'turn_over' => $user['turn_over'],
 			'is_edit_pass' => "0",
 			'point_for_wheel' => $user['point_for_wheel'],
+			'is_auto_withdraw' => $user['is_auto_withdraw'],
 		];
 		$data_after = [
 			'phone' => $post['phone'],
@@ -279,6 +282,7 @@ class User extends CI_Controller
 			'turn_over' => $user['turn_over'],
 			'is_edit_pass' => isset($post['password']) && !empty($post['password']) ? "1" : "0",
 			'point_for_wheel' => $post['point_for_wheel'],
+			'is_auto_withdraw' => $post['is_auto_withdraw'],
 		];
 		foreach (game_code_list() as $game_code){
 			$data_before['turn_over_'.strtolower($game_code)] = $user['turn_over_'.strtolower($game_code)];
