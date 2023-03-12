@@ -250,13 +250,21 @@ class Finance_model extends CI_Model
 		if (isset($search['status'])) {
 			$this->db->where('finance.status', $search['status']);
 			if($search['status'] == "0"){
-				$this->db->where('finance.auto_withdraw_status', 0);
+				$this->db->group_start();
+				$this->db->where('finance.auto_withdraw_status', 0)->or_where('finance.auto_withdraw_status IS NULL');
+				$this->db->group_end();
 			}else if($search['status'] == "1"){
-				$this->db->where('finance.auto_withdraw_status', 2);
+				$this->db->group_start();
+				$this->db->where('finance.auto_withdraw_status', 2)->or_where('finance.auto_withdraw_status IS NULL');
+				$this->db->group_end();
 			}else if($search['status'] == "2"){
-				$this->db->where('finance.auto_withdraw_status', 3);
+				$this->db->group_start();
+				$this->db->where('finance.auto_withdraw_status', 3)->or_where('finance.auto_withdraw_status IS NULL');
+				$this->db->group_end();
 			}else if($search['status'] == "4"){
-				$this->db->where('finance.auto_withdraw_status', 1);
+				$this->db->group_start();
+				$this->db->where('finance.auto_withdraw_status', 1)->or_where('finance.auto_withdraw_status IS NULL');
+				$this->db->group_end();
 			}
 		}
 		if (isset($search['search']) && !empty(trim($search['search']))) {
@@ -442,13 +450,21 @@ class Finance_model extends CI_Model
 		if (isset($search['status'])) {
 			$this->db->where('finance.status', $search['status']);
 			if($search['status'] == "0"){
-				$this->db->where('finance.auto_withdraw_status', 0);
+				$this->db->group_start();
+				$this->db->where('finance.auto_withdraw_status', 0)->or_where('finance.auto_withdraw_status IS NULL');
+				$this->db->group_end();
 			}else if($search['status'] == "1"){
-				$this->db->where('finance.auto_withdraw_status', 2);
+				$this->db->group_start();
+				$this->db->where('finance.auto_withdraw_status', 2)->or_where('finance.auto_withdraw_status IS NULL');
+				$this->db->group_end();
 			}else if($search['status'] == "2"){
-				$this->db->where('finance.auto_withdraw_status', 3);
+				$this->db->group_start();
+				$this->db->where('finance.auto_withdraw_status', 3)->or_where('finance.auto_withdraw_status IS NULL');
+				$this->db->group_end();
 			}else if($search['status'] == "4"){
-				$this->db->where('finance.auto_withdraw_status', 1);
+				$this->db->group_start();
+				$this->db->where('finance.auto_withdraw_status', 1)->or_where('finance.auto_withdraw_status IS NULL');
+				$this->db->group_end();
 			}
 		}
 		if(
