@@ -194,4 +194,47 @@ class Log_deposit_withdraw_model extends CI_Model
 			return $this->log_deposit_withdraw_find(['id'=> $data['id']]);
 		}
 	}
+
+	public function log_deposit_withdraw_report_for_withdraw_auto_status($search = [])
+	{
+		$this->db->select('
+         count(1) as cnt,
+         SUM(amount) as sum_amount
+         ');
+		$this->db->where('log_deposit_withdraw.type', 2);
+		$this->db->where('log_deposit_withdraw.withdraw_status_request', 1);
+		if(
+			isset($search['date_start']) && isset($search['date_end']) &&
+			$search['date_start'] !== "" && $search['date_end'] !== ""
+		){
+			$this->db->where('log_deposit_withdraw.created_at >=', date("{$search['date_start']} 00:00:00"));
+			$this->db->where('log_deposit_withdraw.created_at <=', date("{$search['date_end']} 23:59:59"));
+		}else{
+			if(
+				isset($search['date_start']) && $search['date_start'] !== ""
+			){
+				$this->db->where('log_deposit_withdraw.created_at >=', date("{$search['date_start']} 00:00:00"));
+			}else{
+				$this->db->where('log_deposit_withdraw.created_at >=', date("Y-m-d H:i:s"));
+			}
+			if(
+				isset($search['date_end']) && $search['date_end'] !== ""
+			){
+				$this->db->where('log_deposit_withdraw.created_at <=', date("{$search['date_end']} 23:59:59"));
+			}
+		}
+		if (isset($search['account'])) {
+			$this->db->where('log_deposit_withdraw.account', $search['account']);
+		}
+		if (isset($search['withdraw_status_status'])) {
+			$this->db->where('log_deposit_withdraw.withdraw_status_status', $search['withdraw_status_status']);
+		}else if (isset($search['withdraw_status_status_ignore'])) {
+			$this->db->where('log_deposit_withdraw.withdraw_status_status <>', $search['withdraw_status_status_ignore']);
+		}else if (isset($search['withdraw_status_status_list']) && count($search['withdraw_status_status_list']) > 0) {
+			$this->db->where_in('log_deposit_withdraw.withdraw_status_status', $search['withdraw_status_status_list']);
+		}
+		$query = $this->db->get('log_deposit_withdraw');
+		$cnt_row =  $query->row_array();
+		return $cnt_row;
+	}
 }

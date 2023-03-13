@@ -530,4 +530,48 @@ class Api extends CI_Controller
 		echo json_encode(['success'=>$response['status'],"message"=>"Finance Auto Withdraw #".($response['id'])." : ".json_encode($response['message'],JSON_UNESCAPED_UNICODE)]);
 		exit();
 	}
+
+	public function withdraw_stat()
+	{
+		if(!isset($_GET['api_token']) && !$_GET['api_token'] == "rs2nvxdjJLaBr5eXXZddTshDsM4T7Tw34MXLJNWN"){
+			return;
+		}
+		$get = $this->input->get();
+		$search_params = [
+			'date_start' => '',
+			'date_end' => '',
+		];
+		if(isset($get['from'])){
+			$search_params['date_start'] = $get['from'];
+		}else{
+			$search_params['date_start'] = date('Y-m-d');
+		}
+		if(isset($get['to'])){
+			$search_params['date_end'] = $get['to'];
+		}
+		$results = [
+			'withdraw_request' => 0,
+			'withdraw_success' => 0,
+			'withdraw_fail' => 0,
+		];
+		$withdraw_request_data = $this->Log_deposit_withdraw_model->log_deposit_withdraw_report_for_withdraw_auto_status($search_params);
+		$results['withdraw_request'] += is_numeric($withdraw_request_data['cnt']) ? (int)$withdraw_request_data['cnt'] : 0;
+		$search_params['withdraw_status_status'] = 1;
+		$withdraw_success_data = $this->Log_deposit_withdraw_model->log_deposit_withdraw_report_for_withdraw_auto_status($search_params);
+		$results['withdraw_success'] += is_numeric($withdraw_success_data['cnt']) ? (int)$withdraw_success_data['cnt'] : 0;
+		unset($search_params['withdraw_status_status']);
+		$search_params['withdraw_status_status_ignore'] = 1;
+		$withdraw_fail_data = $this->Log_deposit_withdraw_model->log_deposit_withdraw_report_for_withdraw_auto_status($search_params);
+		$results['withdraw_fail'] += is_numeric($withdraw_fail_data['cnt']) ? (int)$withdraw_fail_data['cnt'] : 0;
+		header("Content-Type: application/json");
+		unset($search_params['withdraw_status_status']);
+		unset($search_params['withdraw_status_status_ignore']);
+		unset($search_params['withdraw_status_status_list']);
+		echo json_encode([
+			'message' => 'success',
+			'status' => true,
+			'result' => $results,
+			'search_data' => $search_params,
+		]);
+	}
 }
