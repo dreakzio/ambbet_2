@@ -5,7 +5,7 @@ require ('application/libraries/Game_api_librarie.php');
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 
-/*if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){*/
+if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 	//Check
 	//ob_start('ob_gzhandler');
 	$sec_rand = rand(3,8);
@@ -19,7 +19,7 @@ error_reporting(E_ALL);
 	ob_start('ob_gzhandler');
 
 	deposit_whit_promotion();
-/*}*/
+}
 function getSetting($setting_name){
 	global $obj_con_cron;
 
