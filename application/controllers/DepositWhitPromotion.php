@@ -252,7 +252,6 @@ class DepositWhitPromotion extends CI_Controller
 				}
 
 				$form_data = [];
-				$users[$i]['account_agent_username'];
 				$form_data["account_agent_username"] = $users[$i]['account_agent_username'];
 				$form_data["amount"] = $amount_deposit;
 				$form_data = member_credit_data($form_data);
