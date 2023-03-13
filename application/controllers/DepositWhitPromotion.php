@@ -103,7 +103,9 @@ class DepositWhitPromotion extends CI_Controller
 					$turn_before_keno = null;
 					//ตรวจสอบวัน turn ล่าสุดจาก ref transaction
 					$finance_chk_turn = $this->Finance_model->finance_for_check_turn_find([
-						'account' => $users[$i]['id']
+						'account' => $users[$i]['id'],
+						'type' => 1,
+						'status' => 1,
 					]);
 					if($turn_date_now == date('Y-m-d') && $finance_chk_turn != "" &&
 						strtotime($finance_chk_turn['created_at'])>=strtotime(date('Y-m-d')." 11:00")
