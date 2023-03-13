@@ -102,4 +102,39 @@ class Auto_withdraw_librarie
 			return ['status' => false, 'msg' => 'ข้อมูลไม่ถูกต้อง#1'];
 		}
 	}
+	public function transfer_kkp($username = null,$accnum = null,$code = null,$money=null,$idCard,$pin,$bank_number)
+	{
+		//require_once FCPATH .'../config.php';
+		require_once FCPATH .'../lib/kkp/KkpClass.php';
+		if(!is_null($username) && !is_null($money) && !is_null($accnum) && !is_null($code)){
+			if (is_numeric($money)) {
+				try{
+					$data = array(
+						"idCard" => trim($idCard),
+						"pin" => trim($pin),
+					);
+
+					$api = new KkpClass($data); //$deviceId,$api_refresh,$accnum
+					$res = $api->verifyTransfer($accnum, $code, $money);
+					//var_dump($res);
+					$res = $api->ConfirmTransfer($res);
+					//$json = json_decode($res, true);
+
+					if ($res['result']['responseStatus']['httpStatus'] == '') {
+						return ['status' => true, 'msg' => $res['result']['value']];
+					}elseif ($res['result']['responseStatus']['httpStatusCode'] == '410'){
+						return ['status' => false, 'msg' => $res['result']['responseStatus']['responseMessage']];
+					} else {
+						return ['status' => false, 'msg' => $res['result']['responseStatus']['responseMessage']];
+					}
+				}catch (Exception $ex){
+					return ['status'=>false,"msg"=>"เกิดข้อผิดพลาดจาก API Error : ".$ex->getMessage().", กรุณาตรวจสอบยอดถอนบน Internet Banking/Mobile App ว่าถูกถอนไปจริงหรือไม่"];
+				}
+			} else {
+				return ['status' => false, 'msg' => 'ข้อมูลไม่ถูกต้อง#2'];
+			}
+		}else{
+			return ['status' => false, 'msg' => 'ข้อมูลไม่ถูกต้อง#1'];
+		}
+	}
 }

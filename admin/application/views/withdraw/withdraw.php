@@ -138,7 +138,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <th class="text-center">ดำเนินการโดย</th>
                         <th class="text-right">จำนวนเงิน</th>
 						<th class="text-center">หมายเหตุ</th>
-                        <th class="text-center">สถานะ</th>
+                        <th class="text-center" width="10%">สถานะ</th>
                         <th class="text-center">QRCode</th>
                         <th class="text-center" >จัดการข้อมูล</th>
                       </tr>

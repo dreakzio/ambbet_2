@@ -610,10 +610,13 @@ class Deposit extends CI_Controller
 		$this->load->view('main', $data);
     }
     public function chk_bank_can_deposit($id){ // 4 is work and return result
+		if(empty($id)){
+			exit();
+		}
 		$bank_chk = $this->Bank_model->bank_find(['status'=>1,'status_withdraw' => 0,'id'=>$id]);
-    if ($bank_chk=="") {
-      $bank_chk = $this->Bank_model->bank_find(['status'=>2,'status_withdraw' => 0,'id'=>$id]);
-    }
+		if ($bank_chk=="") {
+		  $bank_chk = $this->Bank_model->bank_find(['status'=>2,'status_withdraw' => 0,'id'=>$id]);
+		}
 		date_default_timezone_set("Asia/Bangkok"); //set เขตเวลา
 		$chk = false;
 		if($bank_chk != ""){
@@ -692,6 +695,24 @@ class Deposit extends CI_Controller
         'promotion'
         ], 'POST');
         $post = $this->input->post();
+		sleep(rand(1,4));
+		$chk_process_deposit_cache =  $this->cache->file->get('process_deposit_cache_'.date('Y_m_d')."_".$_SESSION['user']['id']);
+		if($chk_process_deposit_cache !== FALSE){
+			echo json_encode([
+				'message' => "ทำรายการไม่สำเร็จ, กรุณาลองใหม่อีกครั้ง",
+				'error' => true
+			]);
+			exit();
+		}
+		$chk_process_deposit_cache =  $this->cache->file->get('process_deposit_cache_'.date('Y_m_d')."_".$_SESSION['user']['id']);
+		if($chk_process_deposit_cache !== FALSE){
+			echo json_encode([
+				'message' => "ทำรายการไม่สำเร็จ, กรุณาลองใหม่อีกครั้ง",
+				'error' => true
+			]);
+			exit();
+		}
+		$this->cache->file->save('process_deposit_cache_'.date('Y_m_d')."_".$_SESSION['user']['id'],$_SESSION['user']['id'], 5);
         $user = $this->Account_model->account_find([
         'id' => $_SESSION['user']['id']
         ]);
@@ -820,7 +841,9 @@ class Deposit extends CI_Controller
 			$turn_before_keno = null;
 			//ตรวจสอบวัน turn ล่าสุดจาก ref transaction
 			$finance_chk_turn = $this->Finance_model->finance_for_check_turn_find([
-				'account' => $user['id']
+				'account' => $user['id'],
+				'type' => 1,
+				'status' => 1,
 			]);
 			if($turn_date_now == date('Y-m-d') && $finance_chk_turn != "" &&
 				strtotime($finance_chk_turn['created_at'])>=strtotime(date('Y-m-d')." 11:00")

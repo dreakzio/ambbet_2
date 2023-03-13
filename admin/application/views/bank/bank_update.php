@@ -57,6 +57,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<option <?php if ($bank['bank_code']=='09'): ?>
                           selected
                         <?php endif; ?> value="09">ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร จำกัด (มหาชน)</option>
+						  <option <?php if ($bank['bank_code']=='11'): ?>
+							  selected
+						  <?php endif; ?> value="11">ธนาคารเกียรตินาคิน จำกัด (มหาชน)</option>
 						<option <?php if ($bank['bank_code']=='10'): ?>
                           selected
                         <?php endif; ?> value="10">ทรูมันนี่วอลเล็ท</option>
@@ -120,13 +123,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </div>
 					<div class="col-md-4">
 						<div class="form-group">
-							<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(จาก) รูปแบบตัวอย่าง "00:15"</font></label>
+						<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(จาก) รูปแบบตัวอย่าง "00:15"</font></label>
 							<input type="text" <?php echo $bank['status_withdraw'] == "0" ? "" : "readonly" ?>  id="start_time_can_not_deposit" name="start_time_can_not_deposit" class="form-control" value="<?php echo $bank['start_time_can_not_deposit']; ?>" placeholder="รุปแบบตัวอย่าง 00:30">
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="form-group">
-							<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(ถึง) รูปแบบตัวอย่าง "02:15"</font></label>
+						<label class="control-label">เวลาปิดระบบฝากออโต้ <font style="color:red;">(ถึง) รูปแบบตัวอย่าง "02:15"</font></label>
 							<input type="text" <?php echo $bank['status_withdraw'] == "0" ? "" : "readonly" ?>  id="end_time_can_not_deposit" name="end_time_can_not_deposit" class="form-control" value="<?php echo $bank['end_time_can_not_deposit']; ?>" placeholder="รุปแบบตัวอย่าง 00:30">
 						</div>
 					</div>
@@ -162,7 +165,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					</div>
 					<div class="col-md-12">
 						<div class="form-group">
-							<label class="control-label">ข้อความแสดงหน้าฝากเงิน <font style="color:red;">(เวลาปิดระบบฝากออโต้)</font></label>
+						<label class="control-label">ข้อความแสดงหน้าฝากเงิน <font style="color:red;">(เวลาปิดระบบฝากออโต้)</font></label>
 							<textarea type="text" rows="6" style="" <?php echo $bank['status_withdraw'] == "0" ? "" : "readonly" ?>  id="message_can_not_deposit" name="message_can_not_deposit" class="form-control" placeholder="ข้อความแสดงหน้าฝากเงิน (เวลาปิดระบบฝากออโต้)"  cols="3"><?php echo $bank['message_can_not_deposit']; ?></textarea>
 						</div>
 					</div>

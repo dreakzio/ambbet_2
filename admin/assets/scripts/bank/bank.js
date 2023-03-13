@@ -58,7 +58,7 @@ function dataTable() {
 					} = full;
 
 					html = bank_name;
-					if(bank_code == "02" || bank_code == "2" || bank_code == "06" || bank_code == "6" || bank_code == "05" || bank_code == "5"){
+					if(bank_code == "02" || bank_code == "2" || bank_code == "06" || bank_code == "6" || bank_code == "05" || bank_code == "5" || bank_code == "11"){
 						if(api_type == "1"){
 							html += "<br/><p class='text-success mb-0'>App</p>"
 						}else{
@@ -129,7 +129,7 @@ function dataTable() {
 						id,
 						bank_code,
 					} = full;
-					if(api_type == "1" && auto_transfer == "1" && (bank_code == "02" || bank_code == "2" || bank_code == "03" || bank_code == "3" || bank_code == "05" || bank_code == "5" || bank_code == "06" || bank_code == "6")){
+					if(api_type == "1" && auto_transfer == "1" && (bank_code == "02" || bank_code == "2" || bank_code == "03" || bank_code == "3" || bank_code == "05" || bank_code == "5" || bank_code == "06" || bank_code == "6" || bank_code == "11")){
 						html = "<i class='fa fa-check text-success'></i>";
 					}
 

@@ -68,6 +68,24 @@ class Withdraw extends CI_Controller
 			'amount',
 		], 'POST');
 		$post = $this->input->post();
+		sleep(rand(1,4));
+		$chk_process_withdraw_cache =  $this->cache->file->get('process_withdraw_cache_'.date('Y_m_d')."_".$_SESSION['user']['id']);
+		if($chk_process_withdraw_cache !== FALSE){
+			echo json_encode([
+				'message' => "ทำรายการไม่สำเร็จ, กรุณาลองใหม่อีกครั้ง",
+				'error' => true
+			]);
+			exit();
+		}
+		$chk_process_withdraw_cache =  $this->cache->file->get('process_withdraw_cache_'.date('Y_m_d')."_".$_SESSION['user']['id']);
+		if($chk_process_withdraw_cache !== FALSE){
+			echo json_encode([
+				'message' => "ทำรายการไม่สำเร็จ, กรุณาลองใหม่อีกครั้ง",
+				'error' => true
+			]);
+			exit();
+		}
+		$this->cache->file->save('process_withdraw_cache_'.date('Y_m_d')."_".$_SESSION['user']['id'],$_SESSION['user']['id'], 5);
 		$user = $this->Account_model->account_find([
 			'id' => $_SESSION['user']['id']
 		]);
@@ -337,7 +355,77 @@ class Withdraw extends CI_Controller
 				}
 				$this->Account_model->account_update($data_user_update);
 			}
+			$web_auto_withdraw_status = $this->Setting_model->setting_find([
+				'name' => 'auto_withdraw_status'
+			]);
+			$web_auto_withdraw_status = $web_auto_withdraw_status==''?0:$web_auto_withdraw_status['value'];
+			$auto_withdraw_status = null;
+			$auto_withdraw_remark = null;
+			if($web_auto_withdraw_status == "1" || $web_auto_withdraw_status == 1){
 
+				//0 = รอดำเนินการ, 1 = กำลังดำเนินการ, 2 = สำเร็จ (ถอนออโต้), 3 = ไม่สำเร็จ (ให้อัพเดท field auto_withdraw_remark ว่าเพราะอะไร)
+				$auto_withdraw_status = 0;
+				if($user['is_auto_withdraw'] == "1"){
+					//Validate auto withdraw
+					//จำนวนเงินขั้นต่ำที่สามารถถอนออโต้ได้
+					$web_auto_withdraw_min_amount_disabled = $this->Setting_model->setting_find([
+						'name' => 'auto_withdraw_min_amount_disabled'
+					]);
+					$web_auto_withdraw_min_amount_disabled = $web_auto_withdraw_min_amount_disabled==''?0.00: (float)$web_auto_withdraw_min_amount_disabled['value'];
+
+					//จำนวนครั้งที่สามารถส่งคำขอถอนออโต้ได้/วัน/คน
+					$web_auto_withdraw_cnt_per_day = $this->Setting_model->setting_find([
+						'name' => 'auto_withdraw_cnt_per_day'
+					]);
+					$web_auto_withdraw_cnt_per_day =  $web_auto_withdraw_cnt_per_day  == "" ? 0 : (int)$web_auto_withdraw_cnt_per_day['value'];
+
+					//จำนวนเงินถอนออโต้รวมที่สามารถถอนได้/วัน/คน
+					$web_auto_withdraw_total_per_day = $this->Setting_model->setting_find([
+						'name' => 'auto_withdraw_total_per_day'
+					]);
+					$web_auto_withdraw_total_per_day =  $web_auto_withdraw_total_per_day  == "" ? 0.00 : (float)$web_auto_withdraw_total_per_day['value'];
+
+					if((float)$post['amount'] <  $web_auto_withdraw_min_amount_disabled){
+						$auto_withdraw_status = 3;
+						$auto_withdraw_remark = "ยอดถอนน้อยกว่า ".number_format($web_auto_withdraw_min_amount_disabled,2);
+					}else{
+
+						if($web_auto_withdraw_cnt_per_day > 0){
+							$finance_auto_withdraw_list  = $this->Finance_model->finance_list([
+								'account' => $user['id'],
+								'type' => '2',
+								'is_auto_withdraw' => '1',
+								'auto_withdraw_status_list' => [0,1,2,3],
+							]);
+							if(count($finance_auto_withdraw_list) >= $web_auto_withdraw_cnt_per_day){
+								$auto_withdraw_status = 3;
+								$auto_withdraw_remark = "จำนวนครั้งที่สามารถส่งคำขอถอนออโต้ได้ครบแล้ว, ไม่เกิน ".number_format($web_auto_withdraw_min_amount_disabled,0)." ครั้ง/วัน/คน";
+							}
+						}
+
+						if($auto_withdraw_status == 0 && $web_auto_withdraw_total_per_day > 0.00){
+							$finance_auto_withdraw_list  = $this->Finance_model->finance_list([
+								'account' => $user['id'],
+								'type' => '2',
+								'is_auto_withdraw' => '1',
+								'auto_withdraw_status_list' => [0,1,2],
+							]);
+							$finance_withdraw_sum = (float)$post['amount'];
+							foreach ($finance_auto_withdraw_list as $finance_auto_withdraw){
+								$finance_withdraw_sum += (float)$finance_auto_withdraw['amount'];
+							}
+							if($finance_withdraw_sum > $web_auto_withdraw_total_per_day){
+								$auto_withdraw_status = 3;
+								$auto_withdraw_remark = "จำนวนเงินถอนออโต้รวมที่สามารถถอนได้ครบแล้ว, ไม่เกิน ".number_format($web_auto_withdraw_total_per_day,2)." บาท/วัน/คน";
+							}
+						}
+
+					}
+				}else{
+					$auto_withdraw_status = 3;
+					$auto_withdraw_remark = "สถานะ BOT ถอนออโต้ ของยูสนี้ถูกปิดใช้งาน";
+				}
+			}
 			$this->Finance_model->finance_create([
 				'account' => $user['id'],
 				'amount' => $post['amount'],
@@ -345,7 +433,12 @@ class Withdraw extends CI_Controller
 				'bank_number' => $user['bank_number'],
 				'bank_name' => $user['bank_name'],
 				'username' => $user['username'],
-				'type' => 2
+				'type' => 2,
+				'is_auto_withdraw' => $web_auto_withdraw_status == "1" || $web_auto_withdraw_status == 1 ? 1 : 0,
+				'auto_withdraw_status' => $auto_withdraw_status,
+				'auto_withdraw_created_at' => date('Y-m-d H:i:s'),
+				'auto_withdraw_updated_at' => date('Y-m-d H:i:s'),
+				'auto_withdraw_remark' => !empty($auto_withdraw_remark) && !is_null($auto_withdraw_remark) ? $auto_withdraw_remark.", ให้แอดมินดำเนินการแทน BOT" : null,
 			]);
 
 			$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([

@@ -145,6 +145,7 @@ function line_notify_message($type = "4", $message, $line_notify_id = null) {
         ]);
     }
     // $message_new = $message;
+	$message_new = "";
     $manual_linenoti_deposit = $CI->Setting_model->setting_find(['name' => 'manual_linenoti_deposit']); // รับสถานะแจ้งฝาก
     $manual_linenoti_withdraw = $CI->Setting_model->setting_find(['name' => 'manual_linenoti_withdraw']); // รับสถานะแจ้งถอน
     $manual_linenoti_report_result = $CI->Setting_model->setting_find(['name' => 'manual_linenoti_report_result']); // รับสถานะแจ้งรายงานผล
@@ -184,21 +185,21 @@ function line_notify_message($type = "4", $message, $line_notify_id = null) {
             // ------- End Old code -------
             if ($type == "1" && $manual_linenoti_deposit['value'] == "1") {
                 $message_new = "" . $message;
-                
+
             } else if ($type == "2" && $manual_linenoti_withdraw['value'] == "1") {
                 $message_new = "" . $message;
-                
+
             } else if ($type == "3" && $manual_linenoti_report_result['value'] == "1") {
                 $message_new = "" . $message;
-                
+
             } else if ($type == "4" && $manual_linenoti_other_log['value'] == "1") {
                 $domain = str_replace("www.", "", $CI->config->item('domain_name'));
                 $domain = str_replace(".com", "", $domain);
                 $message_new = $CI->config->item('api_prefix_username') . " (" . $domain . ") => " . $message;
-                
+
             } else if ($type == "5" && $manual_linenoti_register['value'] == "1") {
                 $message_new = "" . $message;
-                
+
             }
             $LINE_API = "https://notify-api.line.me/api/notify";
             $headers = ['Content-Type: application/x-www-form-urlencoded', 'Authorization: Bearer ' . trim($line_notify_token['value']) ];
@@ -235,7 +236,7 @@ function line_notify_message($type = "4", $message, $line_notify_id = null) {
                 return ['response' => ["status" => false, "Error : " . $ex->getMessage() ], ];
             }
             // End old req code
-            
+
         } else {
             if (!is_null($line_notify_id)) {
                 $log_line_notify_id = $CI->Log_line_notify_model->log_line_notify_update(['id' => $line_notify_id, 'message' => $message_new, 'status' => 1, 'response' => json_encode(["status" => false, "Line Notify token : Empty"], JSON_UNESCAPED_UNICODE), 'type' => $type]);

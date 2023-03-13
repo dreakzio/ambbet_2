@@ -147,7 +147,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="row">
 								<div class="col-md-4">
 									<div class="form-group">
@@ -967,6 +967,61 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 												'name' => 'login_turn'
 										]); ?>
 										<input type="text" id="login_turn" name="web_setting[login_turn]" oninput="validateInputNumber(this)" class="form-control" value="<?php echo $login_turn['value'] ?>"  placeholder="ข้อมูล Turn">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div class="content-body">
+			<section class="card">
+				<div class="card-content">
+					<div class="card-body">
+						<h3 class="card-title">ข้อมูล BOT ถอนเงินออโต้</h3>
+						<hr>
+						<div class="form-body mt-3">
+							<div class="row ">
+								<div class="col-md-4">
+									<div class="form-group">
+										<label class="control-label">สถานะ</label>
+										<?php $auto_withdraw_status = $this->Setting_model->setting_find([
+												'name' => 'auto_withdraw_status'
+										]); ?>
+										<select class="form-control" name="web_setting[auto_withdraw_status]" id="auto_withdraw_status">
+											<option value="0">ปิดใช้งาน</option>
+											<option value="1" <?php if ($auto_withdraw_status['value']==1): ?>
+												selected
+											<?php endif; ?>>เปิดใช้งาน</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group <?php echo $auto_withdraw_status['value'] == "0" || empty($auto_withdraw_status['value']) ? 'd-none' : '' ?>">
+										<label class="control-label">จำนวนเงินขั้นต่ำที่สามารถถอนออโต้ได้</label>
+										<?php $auto_withdraw_min_amount_disabled = $this->Setting_model->setting_find([
+												'name' => 'auto_withdraw_min_amount_disabled'
+										]); ?>
+										<input type="text" id="auto_withdraw_min_amount_disabled" name="web_setting[auto_withdraw_min_amount_disabled]" oninput="validateInputNumber(this)" class="form-control" value="<?php echo $auto_withdraw_min_amount_disabled['value'] ?>"  placeholder="ข้อมูล จำนวนเงินขั้นต่ำที่สามารถถอนออโต้ได้">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group <?php echo $auto_withdraw_status['value'] == "0" || empty($auto_withdraw_status['value']) ? 'd-none' : '' ?>">
+										<label class="control-label">จำนวนเงินถอนออโต้รวมที่สามารถถอนได้/วัน/คน <span class="text-danger">( 0 = ไม่จำกัด)</span></label>
+										<?php $auto_withdraw_total_per_day = $this->Setting_model->setting_find([
+												'name' => 'auto_withdraw_total_per_day'
+										]); ?>
+										<input type="text" id="auto_withdraw_total_per_day" name="web_setting[auto_withdraw_total_per_day]" oninput="validateInputNumber(this)" class="form-control" value="<?php echo $auto_withdraw_total_per_day['value'] ?>"  placeholder="ข้อมูล จำนวนเงินถอนออโต้รวมที่สามารถถอนได้/วัน/คน">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group <?php echo $auto_withdraw_status['value'] == "0" || empty($auto_withdraw_status['value']) ? 'd-none' : '' ?>">
+										<label class="control-label">จำนวนครั้งที่สามารถส่งคำขอถอนออโต้ได้/วัน/คน  <span class="text-danger">( 0 = ไม่จำกัด)</span></label>
+										<?php $auto_withdraw_cnt_per_day = $this->Setting_model->setting_find([
+												'name' => 'auto_withdraw_cnt_per_day'
+										]); ?>
+										<input type="text" id="auto_withdraw_cnt_per_day" name="web_setting[auto_withdraw_cnt_per_day]" oninput="validateInputNumber(this)" class="form-control" value="<?php echo $auto_withdraw_cnt_per_day['value'] ?>"  placeholder="ข้อมูล จำนวนครั้งที่สามารถส่งคำขอถอนออโต้ได้/วัน/คน">
 									</div>
 								</div>
 							</div>
