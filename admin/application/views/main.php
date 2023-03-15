@@ -238,6 +238,9 @@ $total_online = $report_all_day['online_member_total'];
 			<li class="<?php if ($this->uri->segment(1)=="agent"): ?>
                   active
                 <?php endif; ?> nav-item"><a href="<?php echo site_url('agent') ?>"  ><i class="feather icon-users info "></i><span class="menu-title" >พันธมิตร</span></a></li>
+			<li class="<?php if ($this->uri->segment(1)=="transfer_marketing"): ?>
+                  active
+                <?php endif; ?> nav-item"><a href="<?php echo site_url('transfer_marketing') ?>"  ><i class="feather icon-users info "></i><span class="menu-title" >โยกสมาชิกการตลาด</span></a></li>
 
 			<li class="<?php if ($this->uri->segment(1)=="ref"&&$this->uri->segment(2)==""): ?>
 									active

@@ -175,6 +175,7 @@ $autoload['model'] = array(
 	'Log_add_credit_model',
 	'Log_return_balance_model',
 	'Log_account_model',
+  'Transfer_marketing_model',
 	'Report_business_benefit_model',
 );
 
