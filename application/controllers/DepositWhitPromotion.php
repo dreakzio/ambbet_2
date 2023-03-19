@@ -26,147 +26,81 @@ class DepositWhitPromotion extends CI_Controller
 		/*print_r($users);
 		die();*/
 		$totalAcc =  count($users);
-		for($i=0; $i <= $totalAcc; $i++){
+		for($i=0; $i < $totalAcc; $i++) {
 
-				$amount_deposit_auto_old = $users[$i]["amount_deposit_auto"];
-				$this->Account_model->account_update([
-					'id' => $users[$i]['id'],
-					'amount_deposit_auto' => 0,
-				]);
+			$amount_deposit_auto_old = $users[$i]["amount_deposit_auto"];
+			$this->Account_model->account_update([
+				'id' => $users[$i]['id'],
+				'amount_deposit_auto' => 0,
+			]);
 
-				$remaining_credit = $this->remaining_credit($users[$i]);
+			$remaining_credit = $this->remaining_credit($users[$i]);
+			if(is_numeric($remaining_credit)){
 
-				$clear_turn = $this->Setting_model->setting_find([
-					'name' => 'clear_turn'
-				]);
-				$clear_turn = $clear_turn==''?10:$clear_turn['value'];
-				$turn_date = $users[$i]['turn_date'];
-				$turn_over = $users[$i]['turn_over'];
-				$turn_over_football = $users[$i]['turn_over_football'];
-				$turn_over_step = $users[$i]['turn_over_step'];
-				$turn_over_parlay = $users[$i]['turn_over_parlay'];
-				$turn_over_game = $users[$i]['turn_over_game'];
-				$turn_over_casino = $users[$i]['turn_over_casino'];
-				$turn_over_lotto = $users[$i]['turn_over_lotto'];
-				$turn_over_m2 = $users[$i]['turn_over_m2'];
-				$turn_over_multi_player = $users[$i]['turn_over_multi_player'];
-				$turn_over_trading = $users[$i]['turn_over_trading'];
-				$turn_over_keno = $users[$i]['turn_over_keno'];
-				if ($turn_date=='' || is_null($turn_date)) {
-					if (
-						strtotime(date('Y-m-d H:i'))>=strtotime(date('Y-m-d')." 11:00")
-						&&
-						strtotime(date('Y-m-d H:i')) <=strtotime(date('Y-m-d')." 23:59")
-					) {
-						$turn_date = date('Y-m-d');
-					} else {
-						$turn_date = date('Y-m-d', strtotime('-1 days'));
-					}
-				} else {
+				$turn_before_data = $this->check_turn_before($users[$i]);
+				if(is_null($turn_before_data)){
+					echo json_encode([
+						'message' => "ทำรายการไม่สำเร็จ, ไม่สามารถดึงเทิร์นได้",
+						'error' => true,
+					]);
+				}else {
+					$clear_turn = $this->Setting_model->setting_find([
+						'name' => 'clear_turn'
+					]);
+
+
+					$clear_turn = $clear_turn == '' ? 10 : $clear_turn['value'];
 					$turn_date = $users[$i]['turn_date'];
-				}
-				try{
-					$turn_date = new DateTime($turn_date);
-					$turn_date = $turn_date->format('Y-m-d');
-				}catch (Exception $ex){
-					if (
-						strtotime(date('Y-m-d H:i'))>=strtotime(date('Y-m-d')." 11:00")
-						&&
-						strtotime(date('Y-m-d H:i')) <=strtotime(date('Y-m-d')." 23:59")
-					) {
-						$turn_date = date('Y-m-d');
-					} else {
-						$turn_date = date('Y-m-d', strtotime('-1 days'));
-					}
-				}
-				//=====
-				if (floor($remaining_credit)<=$clear_turn) {
-					if (
-						strtotime(date('Y-m-d H:i'))>=strtotime(date('Y-m-d')." 11:00")
-						&&
-						strtotime(date('Y-m-d H:i')) <=strtotime(date('Y-m-d')." 23:59")
-					) {
-						$turn_date_now = date('Y-m-d');
-					} else {
-						$turn_date_now = date('Y-m-d', strtotime('-1 days'));
-					}
-					$turn_before = null;
-					$turn_before_football = null;
-					$turn_before_step = null;
-					$turn_before_parlay = null;
-					$turn_before_game = null;
-					$turn_before_casino = null;
-					$turn_before_lotto = null;
-					$turn_before_m2 = null;
-					$turn_before_multi_player = null;
-					$turn_before_trading = null;
-					$turn_before_keno = null;
-					//ตรวจสอบวัน turn ล่าสุดจาก ref transaction
-					$finance_chk_turn = $this->Finance_model->finance_for_check_turn_find([
-						'account' => $users[$i]['id'],
-						'type' => 1,
-						'status' => 1,
-					]);
-					if($turn_date_now == date('Y-m-d') && $finance_chk_turn != "" &&
-						strtotime($finance_chk_turn['created_at'])>=strtotime(date('Y-m-d')." 11:00")
-						&&
-						strtotime($finance_chk_turn['created_at']) <=strtotime(date('Y-m-d')." 23:59")
-					){
-						$users[$i]['turn_date'] = $turn_date_now;
-						$users[$i]['date_end'] = $turn_date_now;
-						$turn_before = 0;
-						$turn_before_data = $this->check_turn_before($users[$i]);
-						foreach (game_code_list() as $game_code){
-							if(array_key_exists($game_code,$turn_before_data)){
-								$turn_before += (float)$turn_before_data[$game_code]['amount'];
-								//${'turn_before_'.strtolower($game_code)} = (float)$turn_before_data[$game_code]['amount'];
-								${'turn_before_'.strtolower($game_code)} = 0;
-							}
+					$turn_over = $users[$i]['turn_over'];
+					$turn_over_football = $users[$i]['turn_over_football'];
+					$turn_over_step = $users[$i]['turn_over_step'];
+					$turn_over_parlay = $users[$i]['turn_over_parlay'];
+					$turn_over_game = $users[$i]['turn_over_game'];
+					$turn_over_casino = $users[$i]['turn_over_casino'];
+					$turn_over_lotto = $users[$i]['turn_over_lotto'];
+					$turn_over_m2 = $users[$i]['turn_over_m2'];
+					$turn_over_multi_player = $users[$i]['turn_over_multi_player'];
+					$turn_over_trading = $users[$i]['turn_over_trading'];
+					$turn_over_keno = $users[$i]['turn_over_keno'];
+					if ($turn_date == '' || is_null($turn_date)) {
+						if (
+							strtotime(date('Y-m-d H:i')) >= strtotime(date('Y-m-d') . " 00:00:00")
+							&&
+							strtotime(date('Y-m-d H:i')) <= strtotime(date('Y-m-d') . " 23:59:59")
+						) {
+							$turn_date = date('Y-m-d');
+						} else {
+							$turn_date = date('Y-m-d', strtotime('-1 days'));
 						}
-
+					} else {
+						$turn_date = $users[$i]['turn_date'];
 					}
-					$this->Account_model->account_update([
-						'id' => $users[$i]['id'],
-						'turn_date' => $turn_date_now,
-						'turn_before' => $turn_before,
-						'turn_before_football' => $turn_before_football,
-						'turn_before_step' => $turn_before_step,
-						'turn_before_parlay' => $turn_before_parlay,
-						'turn_before_game' => $turn_before_game,
-						'turn_before_casino' => $turn_before_casino,
-						'turn_before_lotto' => $turn_before_lotto,
-						'turn_before_m2' => $turn_before_m2,
-						'turn_before_multi_player' => $turn_before_multi_player,
-						'turn_before_trading' => $turn_before_trading,
-						'turn_before_keno' => $turn_before_keno,
-						'turn_over' => 0,
-						'turn_over_football' => 0,
-						'turn_over_step' => 0,
-						'turn_over_parlay' => 0,
-						'turn_over_game' => 0,
-						'turn_over_casino' => 0,
-						'turn_over_lotto' => 0,
-						'turn_over_m2' => 0,
-						'turn_over_multi_player' => 0,
-						'turn_over_trading' => 0,
-						'turn_over_keno' => 0,
-						'sha1_acount' => '',
-						'ref_transaction_id' => '',
-					]);
-					$turn_over = 0;
-					$turn_over_football = 0;
-					$turn_over_step = 0;
-					$turn_over_parlay = 0;
-					$turn_over_game = 0;
-					$turn_over_casino = 0;
-					$turn_over_lotto = 0;
-					$turn_over_m2 = 0;
-					$turn_over_multi_player = 0;
-					$turn_date = $turn_date_now;
-				} else {
-					$users[$i]['turn_date'] = $turn_date;
-					$users[$i]['date_end'] = $turn_date;
-					if(is_null($users[$i]['turn_before'])){
+					try {
+						$turn_date = new DateTime($turn_date);
+						$turn_date = $turn_date->format('Y-m-d');
+					} catch (Exception $ex) {
+						if (
+							strtotime(date('Y-m-d H:i')) >= strtotime(date('Y-m-d') . " 00:00:00")
+							&&
+							strtotime(date('Y-m-d H:i')) <= strtotime(date('Y-m-d') . " 23:59:59")
+						) {
+							$turn_date = date('Y-m-d');
+						} else {
+							$turn_date = date('Y-m-d', strtotime('-1 days'));
+						}
+					}
+					//=====
+					if (floor($remaining_credit) <= $clear_turn) {
+						if (
+							strtotime(date('Y-m-d H:i')) >= strtotime(date('Y-m-d') . " 00:00:00")
+							&&
+							strtotime(date('Y-m-d H:i')) <= strtotime(date('Y-m-d') . " 23:59:59")
+						) {
+							$turn_date_now = date('Y-m-d');
+						} else {
+							$turn_date_now = date('Y-m-d', strtotime('-1 days'));
+						}
+						$turn_before = null;
 						$turn_before_football = null;
 						$turn_before_step = null;
 						$turn_before_parlay = null;
@@ -175,326 +109,420 @@ class DepositWhitPromotion extends CI_Controller
 						$turn_before_lotto = null;
 						$turn_before_m2 = null;
 						$turn_before_multi_player = null;
-						$turn_before = 0;
-						$turn_before_data = $this->check_turn_before($users[$i]);
-						foreach (game_code_list() as $game_code){
-							if(array_key_exists($game_code,$turn_before_data)){
-								$turn_before += (float)$turn_before_data[$game_code]['amount'];
-								${'turn_before_'.strtolower($game_code)} = (float)$turn_before_data[$game_code]['amount'];
+						$turn_before_trading = null;
+						$turn_before_keno = null;
+						//ตรวจสอบวัน turn ล่าสุดจาก ref transaction
+						$finance_chk_turn = $this->Finance_model->finance_for_check_turn_find([
+							'account' => $users[$i]['id'],
+							'type' => 1,
+							'status' => 1,
+						]);
+						if ($turn_date_now == date('Y-m-d') && $finance_chk_turn != "" &&
+							strtotime($finance_chk_turn['created_at']) >= strtotime(date('Y-m-d') . " 00:00:00")
+							&&
+							strtotime($finance_chk_turn['created_at']) <= strtotime(date('Y-m-d') . " 23:59:59")
+						) {
+							$users[$i]['turn_date'] = $turn_date_now;
+							$users[$i]['date_end'] = $turn_date_now;
+							$turn_before = 0;
+							//$turn_before_data = $this->check_turn_before($users[$i]);
+							foreach (game_code_list() as $game_code) {
+								if (array_key_exists($game_code, $turn_before_data)) {
+									$turn_before += (float)$turn_before_data[$game_code]['amount'];
+									//${'turn_before_'.strtolower($game_code)} = (float)$turn_before_data[$game_code]['amount'];
+									${'turn_before_' . strtolower($game_code)} = 0;
+								}
 							}
+
 						}
-					}else{
-						$turn_before = $users[$i]['turn_before'];
-						$turn_before_football = $users[$i]['turn_before_football'];
-						$turn_before_step = $users[$i]['turn_before_step'];
-						$turn_before_parlay = $users[$i]['turn_before_parlay'];
-						$turn_before_game = $users[$i]['turn_before_game'];
-						$turn_before_casino = $users[$i]['turn_before_casino'];
-						$turn_before_lotto = $users[$i]['turn_before_lotto'];
-						$turn_before_m2 = $users[$i]['turn_before_m2'];
-						$turn_before_multi_player = $users[$i]['turn_before_multi_player'];
-						$turn_before_trading = $users[$i]['turn_before_trading'];
-						$turn_before_keno = $users[$i]['turn_before_keno'];
-					}
-				}
+						$this->Account_model->account_update([
+							'id' => $users[$i]['id'],
+							'turn_date' => $turn_date_now,
+							'turn_before' => $turn_before,
+							'turn_before_football' => $turn_before_football,
+							'turn_before_step' => $turn_before_step,
+							'turn_before_parlay' => $turn_before_parlay,
+							'turn_before_game' => $turn_before_game,
+							'turn_before_casino' => $turn_before_casino,
+							'turn_before_lotto' => $turn_before_lotto,
+							'turn_before_m2' => $turn_before_m2,
+							'turn_before_multi_player' => $turn_before_multi_player,
+							'turn_before_trading' => $turn_before_trading,
+							'turn_before_keno' => $turn_before_keno,
+							'turn_over' => 0,
+							'turn_over_football' => 0,
+							'turn_over_step' => 0,
+							'turn_over_parlay' => 0,
+							'turn_over_game' => 0,
+							'turn_over_casino' => 0,
+							'turn_over_lotto' => 0,
+							'turn_over_m2' => 0,
+							'turn_over_multi_player' => 0,
+							'turn_over_trading' => 0,
+							'turn_over_keno' => 0,
+							'sha1_acount' => '',
+							'ref_transaction_id' => '',
+						]);
+						$turn_over = 0;
+						$turn_over_football = 0;
+						$turn_over_step = 0;
+						$turn_over_parlay = 0;
+						$turn_over_game = 0;
+						$turn_over_casino = 0;
+						$turn_over_lotto = 0;
+						$turn_over_m2 = 0;
+						$turn_over_multi_player = 0;
+						$turn_date = $turn_date_now;
+					} else {
+						$users[$i]['turn_date'] = $turn_date;
+						$users[$i]['date_end'] = $turn_date;
+						if (is_null($users[$i]['turn_before'])) {
+							$turn_before_football = null;
+							$turn_before_step = null;
+							$turn_before_parlay = null;
+							$turn_before_game = null;
+							$turn_before_casino = null;
+							$turn_before_lotto = null;
+							$turn_before_m2 = null;
+							$turn_before_multi_player = null;
+							$turn_before = 0;
 
-				$best_promotions = $this->Promotion_model->promotion_find_best(['amount_deposit_auto' => $users[$i]['amount_deposit_auto']]);
-				foreach ($best_promotions as $best_promotion){
-					$promotion = $this->checkUsePromotion($users[$i]['id'],$best_promotion);
-					if($promotion['canUsePro']==1){
-						$best_promotion['remaining']=$promotion['remaining'];
-						$best_promotion['canUsePro']=$promotion['canUsePro'];
-						//return $promotion;
-						break;
+							foreach (game_code_list() as $game_code) {
+								if (array_key_exists($game_code, $turn_before_data)) {
+									$turn_before += (float)$turn_before_data[$game_code]['amount'];
+									${'turn_before_' . strtolower($game_code)} = (float)$turn_before_data[$game_code]['amount'];
+								}
+							}
+						} else {
+							$turn_before = $users[$i]['turn_before'];
+							$turn_before_football = $users[$i]['turn_before_football'];
+							$turn_before_step = $users[$i]['turn_before_step'];
+							$turn_before_parlay = $users[$i]['turn_before_parlay'];
+							$turn_before_game = $users[$i]['turn_before_game'];
+							$turn_before_casino = $users[$i]['turn_before_casino'];
+							$turn_before_lotto = $users[$i]['turn_before_lotto'];
+							$turn_before_m2 = $users[$i]['turn_before_m2'];
+							$turn_before_multi_player = $users[$i]['turn_before_multi_player'];
+							$turn_before_trading = $users[$i]['turn_before_trading'];
+							$turn_before_keno = $users[$i]['turn_before_keno'];
+						}
 					}
-				}
 
-				if($best_promotion['category'] == "2"){
-					if(
-						is_null($best_promotion['fix_amount_deposit']) ||
-						(
-							!is_null($best_promotion['fix_amount_deposit']) &&
-							(float)$users[$i]['amount_deposit_auto'] != (float)$best_promotion['fix_amount_deposit']
-						)
-					){
+					$best_promotions = $this->Promotion_model->promotion_find_best(['amount_deposit_auto' => $users[$i]['amount_deposit_auto']]);
+					foreach ($best_promotions as $best_promotion){
+						$promotion = $this->checkUsePromotion($users[$i]['id'],$best_promotion);
+						//print_r($promotion);
+						if($promotion['canUsePro']==1){
+							$best_promotion['remaining']=$promotion['remaining'];
+							$best_promotion['canUsePro']=$promotion['canUsePro'];
+							//return $promotion;
+							break;
+						}else{
+							$best_promotion['remaining']=0;
+							$best_promotion['canUsePro']=0;
+						}
+					}
+
+					if($best_promotion['canUsePro']==0){
+						$best_promotion = $this->Promotion_model->promotion_find([
+							'id' => 1
+						]);
+					}
+
+					if ($best_promotion['category'] == "2") {
+						if (
+							is_null($best_promotion['fix_amount_deposit']) ||
+							(
+								!is_null($best_promotion['fix_amount_deposit']) &&
+								(float)$users[$i]['amount_deposit_auto'] != (float)$best_promotion['fix_amount_deposit']
+							)
+						) {
+							$this->Account_model->account_update([
+								'id' => $users[$i]['id'],
+								'amount_deposit_auto' => $amount_deposit_auto_old,
+							]);
+							echo json_encode([
+								'message' => "ยอดเงินฝากไม่เข้าเงื่อนไขในการรับโปรโมชั่นนี้",
+								'error' => true
+							]);
+							exit();
+						} else {
+							$percent_calculate = is_null($best_promotion['fix_amount_deposit_bonus']) ? 0 : (float)$best_promotion['fix_amount_deposit_bonus'];
+						}
+					} else {
+						$percent_calculate = round_up(($best_promotion['percent'] * $users[$i]['amount_deposit_auto']) / 100, 2);
+						if ($percent_calculate > $best_promotion['max_value']) {
+							$percent_calculate = $best_promotion['max_value'];
+						}
+					}
+					$amount_deposit = ($users[$i]['amount_deposit_auto'] + $percent_calculate);
+					$amount_deposit_auto_remain = 0;
+					if ($turn_over > 0) {
+						$turn_over = $turn_over + ($amount_deposit * $best_promotion['turn']);
+					} else {
+						$turn_over = ($amount_deposit * $best_promotion['turn']);
+					}
+
+					foreach (game_code_list() as $game_code) {
+						if (${'turn_over_' . strtolower($game_code)} > 0) {
+							${'turn_over_' . strtolower($game_code)} = ${'turn_over_' . strtolower($game_code)} + ($amount_deposit * $best_promotion['turn_' . strtolower($game_code)]);
+						} else {
+							${'turn_over_' . strtolower($game_code)} = ($amount_deposit * $best_promotion['turn_' . strtolower($game_code)]);
+						}
+					}
+
+					$form_data = [];
+					$form_data["account_agent_username"] = $users[$i]['account_agent_username'];
+					$form_data["amount"] = $amount_deposit;
+					$form_data = member_credit_data($form_data);
+					//print_r($form_data);
+					//die();
+					if (!empty($best_promotion)) {
+						//$promotion = $best_promotion;
+						$promotion_name = "" . $best_promotion['name'];
+						if ($best_promotion['max_value'] > 0 && $best_promotion['category'] == "1") {
+							$text_append_promotion_name = "";
+							foreach (game_code_list() as $index => $game_code) {
+								if ($index == 0) {
+									$text_append_promotion_name .= "" . game_code_text_list()[$game_code] . " " . $best_promotion['turn_' . strtolower($game_code)] . " เท่า";
+								} else {
+									$text_append_promotion_name .= ", " . game_code_text_list()[$game_code] . " " . $best_promotion['turn_' . strtolower($game_code)] . " เท่า";
+								}
+							}
+							$promotion_name .= " สูงสุด " . number_format($best_promotion['max_value']) . " บาท ( ทำเทิร์น : " . $text_append_promotion_name . " )";
+						} else if ($best_promotion['category'] == "2") {
+							$text_append_promotion_name = "";
+							foreach (game_code_list() as $index => $game_code) {
+								if ($index == 0) {
+									$text_append_promotion_name .= "" . game_code_text_list()[$game_code] . " " . $best_promotion['turn_' . strtolower($game_code)] . " เท่า";
+								} else {
+									$text_append_promotion_name .= ", " . game_code_text_list()[$game_code] . " " . $best_promotion['turn_' . strtolower($game_code)] . " เท่า";
+								}
+							}
+							$promotion_name .= " ( ทำเทิร์น : " . $text_append_promotion_name . " )";
+						}
+						if ($best_promotion['type'] > 1) {
+							$promotion_name .= " ใช้ไปแล้ว (" . ((float)$best_promotion['max_use'] - (float)$best_promotion['remaining']) . "/" . $best_promotion['max_use'] . ")";
+						}
+					}
+					$log_deposit_withdraw_id = $this->Log_deposit_withdraw_model->log_deposit_withdraw_create([
+						'account' => $users[$i]['id'],
+						'username' => $users[$i]['username'],
+						'amount' => $form_data["amount"],
+						'amount_before' => $remaining_credit,
+						'type' => '1', //ฝาก
+						'description' => 'ฝากเงิน',
+						'admin' => $users[$i]['id'],
+						'promotion_name' => $promotion_name,
+					]);
+
+					//print_r($form_data);
+					$response = $this->game_api_librarie->deposit($form_data);
+					//print_r($response);
+					if (isset($response['ref'])) {
+
+						if ((float)$form_data["amount"] > (float)$users[$i]['amount_deposit_auto']) {
+							$log_add_credit_id = $this->Log_add_credit_model->log_add_credit_create([
+								'account' => $users[$i]['id'],
+								'username' => $users[$i]['username'],
+								'full_name' => $users[$i]['full_name'],
+								'from_amount' => $users[$i]['amount_deposit_auto'],
+								'amount' => (float)$form_data["amount"] - (float)$users[$i]['amount_deposit_auto'],
+								'type' => 'bonus_promotion',
+								'description' => "ฝากเงิน " . $promotion_name,
+								'manage_by' => $users[$i]['id'],
+								'manage_by_username' => $users[$i]['username'],
+								'manage_by_full_name' => $users[$i]['full_name'],
+							]);
+						} else {
+							$log_add_credit_id = $this->Log_add_credit_model->log_add_credit_create([
+								'account' => $users[$i]['id'],
+								'username' => $users[$i]['username'],
+								'full_name' => $users[$i]['full_name'],
+								'from_amount' => $users[$i]['amount_deposit_auto'],
+								'amount' => 0,
+								'type' => 'bonus_not_use_promotion',
+								'description' => "ฝากเงิน " . $promotion_name,
+								'manage_by' => $users[$i]['id'],
+								'manage_by_username' => $users[$i]['username'],
+								'manage_by_full_name' => $users[$i]['full_name'],
+							]);
+						}
+
+						$user_new = $this->Account_model->account_find([
+							'id' => $users[$i]['id']
+						]);
+
+						$finance_id = $this->Finance_model->finance_create([
+							'account' => $users[$i]['id'],
+							'amount' => $users[$i]['amount_deposit_auto'],
+							'from_amount' => (float)$form_data["amount"] - (float)$users[$i]['amount_deposit_auto'],
+							'bank' => $users[$i]['bank'],
+							'bank_number' => $users[$i]['bank_number'],
+							'bank_name' => $users[$i]['bank_name'],
+							'ref_transaction_id' => $response['ref'],
+							'username' => $users[$i]['username'],
+							'type' => 1,
+							'status' => 1
+						]);
+						$this->Use_promotion_model->use_promotion_create([
+							'finance' => $finance_id,
+							'promotion' => $best_promotion['id'],
+							'promotion_name' => $best_promotion['name'],
+							'percent' => $best_promotion['percent'],
+							'turn' => $best_promotion['turn'],
+							'turn_football' => $best_promotion['turn_football'],
+							'turn_step' => $best_promotion['turn_step'],
+							'turn_parlay' => $best_promotion['turn_parlay'],
+							'turn_game' => $best_promotion['turn_game'],
+							'turn_casino' => $best_promotion['turn_casino'],
+							'turn_lotto' => $best_promotion['turn_lotto'],
+							'turn_m2' => $best_promotion['turn_m2'],
+							'turn_multi_player' => $best_promotion['turn_multi_player'],
+							'turn_trading' => $best_promotion['turn_trading'],
+							'turn_keno' => $best_promotion['turn_keno'],
+							'max_value' => $best_promotion['max_value'],
+							'sum_amount' => $amount_deposit,
+							'amount' => $amount_deposit_auto_old,
+							'max_use' => $best_promotion['max_use'],
+							'type' => $best_promotion['type']
+						]);
+
+						$sum_amount_list = $this->Finance_model->sum_amount_deposit_and_withdraw(['account_list' => [$users[$i]['id']]]);
+						$sum_amount = 0.00;
+						if (array_key_exists($users[$i]['id'], $sum_amount_list)) {
+							$sum_amount = $sum_amount_list[$users[$i]['id']]['sum_amount'];
+						}
+
+						if ($user_new != "" && empty($user_new['ref_transaction_id'])) {
+							$this->Account_model->account_update([
+								'id' => $users[$i]['id'],
+								'amount_deposit_auto' => $amount_deposit_auto_remain,
+								'turn_before' => $turn_before,
+								'turn_before_football' => $turn_before_football,
+								'turn_before_step' => $turn_before_step,
+								'turn_before_parlay' => $turn_before_parlay,
+								'turn_before_game' => $turn_before_game,
+								'turn_before_casino' => $turn_before_casino,
+								'turn_before_lotto' => $turn_before_lotto,
+								'turn_before_m2' => $turn_before_m2,
+								'turn_before_multi_player' => $turn_before_multi_player,
+								'turn_before_trading' => $turn_before_trading,
+								'turn_before_keno' => $turn_before_keno,
+								'ref_transaction_id' => $response['ref'],
+								'turn_over' => $turn_over,
+								'turn_over_football' => $turn_over_football,
+								'turn_over_step' => $turn_over_step,
+								'turn_over_parlay' => $turn_over_parlay,
+								'turn_over_game' => $turn_over_game,
+								'turn_over_casino' => $turn_over_casino,
+								'turn_over_lotto' => $turn_over_lotto,
+								'turn_over_m2' => $turn_over_m2,
+								'turn_over_multi_player' => $turn_over_multi_player,
+								'turn_over_trading' => $turn_over_trading,
+								'turn_over_keno' => $turn_over_keno,
+								'turn_date' => $turn_date,
+								'sum_amount' => $sum_amount,
+							]);
+						} else {
+							$this->Account_model->account_update([
+								'id' => $users[$i]['id'],
+								'amount_deposit_auto' => $amount_deposit_auto_remain,
+								'turn_before' => $turn_before,
+								'turn_before_football' => $turn_before_football,
+								'turn_before_step' => $turn_before_step,
+								'turn_before_parlay' => $turn_before_parlay,
+								'turn_before_game' => $turn_before_game,
+								'turn_before_casino' => $turn_before_casino,
+								'turn_before_lotto' => $turn_before_lotto,
+								'turn_before_m2' => $turn_before_m2,
+								'turn_over' => $turn_over,
+								'turn_over_football' => $turn_over_football,
+								'turn_over_step' => $turn_over_step,
+								'turn_over_parlay' => $turn_over_parlay,
+								'turn_over_game' => $turn_over_game,
+								'turn_over_casino' => $turn_over_casino,
+								'turn_over_lotto' => $turn_over_lotto,
+								'turn_over_m2' => $turn_over_m2,
+								'turn_over_multi_player' => $turn_over_multi_player,
+								'turn_over_trading' => $turn_over_trading,
+								'turn_over_keno' => $turn_over_keno,
+								'turn_date' => $turn_date,
+								'sum_amount' => $sum_amount,
+							]);
+						}
+
+						$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
+							'id' => $log_deposit_withdraw_id
+						]);
+						if ($log_deposit_withdraw != "") {
+							$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
+								'id' => $log_deposit_withdraw_id,
+								'description' => $log_deposit_withdraw['description'] . " (Add Credit Auto) | ทำรายการสำเร็จ",
+							]);
+						}
+
+						$wheel_amount_per_point = $this->Setting_model->setting_find([
+							'name' => 'wheel_amount_per_point'
+						]);
+						$feature_wheel = $this->Feature_status_model->setting_find([
+							'name' => 'wheel'
+						]);
+						if ($feature_wheel != "" && $feature_wheel['value'] == "1") {
+							if ($wheel_amount_per_point != "" && is_numeric($wheel_amount_per_point['value']) && (float)$wheel_amount_per_point['value'] > 0 && (float)$users[$i]['amount_deposit_auto'] >= (float)$wheel_amount_per_point['value']) {
+								$point = round((float)$user['amount_deposit_auto'] / (float)$wheel_amount_per_point['value'], 0, PHP_ROUND_HALF_UP);
+								if ($point > 0) {
+									$this->Account_model->account_update([
+										'id' => $users[$i]['id'],
+										'point_for_wheel' => (float)$users[$i]['point_for_wheel'] + $point,
+									]);
+									$log_wheel_id = $this->Log_wheel_model->log_wheel_create([
+										'account' => $users[$i]['id'],
+										'username' => $users[$i]['username'],
+										'point_before' => $users[$i]['point_for_wheel'],
+										'point_after' => (float)$users[$i]['point_for_wheel'] + $point,
+										'point' => $point,
+										'amount' => $users[$i]['amount_deposit_auto'],
+										'description' => "เงินฝาก " . number_format($users[$i]['amount_deposit_auto'], 2) . " บาท (คำนวณจาก " . $wheel_amount_per_point['value'] . " บาท/ 1 เหรียญ)",
+										'type' => '0', //เติม
+										'status' => '1', //สำเร็จ
+									]);
+								}
+							}
+
+						}
+
+						//$this->ref_bonus($user, $finance_id);
+						echo json_encode([
+							'message' => 'success',
+							'result' => true
+						]);
+					} else {
+						$error_message = isset($response['code']) && !empty($response['code']) ? "#" . $response['code'] : 'ทำรายการไม่สำเร็จ';
+
+						$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
+							'id' => $log_deposit_withdraw_id
+						]);
+						if ($log_deposit_withdraw != "") {
+							$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
+								'id' => $log_deposit_withdraw_id,
+								'description' => $log_deposit_withdraw['description'] . " | " . $error_message,
+							]);
+						}
 						$this->Account_model->account_update([
 							'id' => $users[$i]['id'],
 							'amount_deposit_auto' => $amount_deposit_auto_old,
 						]);
 						echo json_encode([
-							'message' => "ยอดเงินฝากไม่เข้าเงื่อนไขในการรับโปรโมชั่นนี้",
-							'error' => true
+							'message' => $error_message,
+							'error' => true,
 						]);
-						exit();
-					}else{
-						$percent_calculate = is_null($best_promotion['fix_amount_deposit_bonus']) ? 0 : (float)$best_promotion['fix_amount_deposit_bonus'];
-					}
-				}else{
-					$percent_calculate = round_up(($best_promotion['percent']*$users[$i]['amount_deposit_auto'])/100,2);
-					if ($percent_calculate>$best_promotion['max_value']) {
-						$percent_calculate = $best_promotion['max_value'];
 					}
 				}
-				$amount_deposit = ($users[$i]['amount_deposit_auto']+$percent_calculate);
-				$amount_deposit_auto_remain = 0;
-				if ($turn_over>0) {
-					$turn_over = $turn_over+($amount_deposit*$best_promotion['turn']);
-				} else {
-					$turn_over = ($amount_deposit*$best_promotion['turn']);
-				}
-
-				foreach (game_code_list() as $game_code){
-					if (${'turn_over_'.strtolower($game_code)}>0) {
-						${'turn_over_'.strtolower($game_code)} = ${'turn_over_'.strtolower($game_code)}+($amount_deposit*$best_promotion['turn_'.strtolower($game_code)]);
-					} else {
-						${'turn_over_'.strtolower($game_code)} = ($amount_deposit*$best_promotion['turn_'.strtolower($game_code)]);
-					}
-				}
-
-				$form_data = [];
-				$form_data["account_agent_username"] = $users[$i]['account_agent_username'];
-				$form_data["amount"] = $amount_deposit;
-				$form_data = member_credit_data($form_data);
-				//print_r($form_data);
-				//die();
-				if($best_promotion!=""){
-					$promotion = $best_promotion;
-					$promotion_name = "".$promotion['name'];
-					if($promotion['max_value']>0 && $promotion['category'] == "1"){
-						$text_append_promotion_name = "";
-						foreach (game_code_list() as $index => $game_code){
-							if($index == 0){
-								$text_append_promotion_name .= "".game_code_text_list()[$game_code]." ".$promotion['turn_'.strtolower($game_code)]." เท่า";
-							}else{
-								$text_append_promotion_name .= ", ".game_code_text_list()[$game_code]." ".$promotion['turn_'.strtolower($game_code)]." เท่า";
-							}
-						}
-						$promotion_name .= " สูงสุด ".number_format($promotion['max_value'])." บาท ( ทำเทิร์น : ".$text_append_promotion_name." )";
-					}else if($promotion['category'] == "2"){
-						$text_append_promotion_name = "";
-						foreach (game_code_list() as $index => $game_code){
-							if($index == 0){
-								$text_append_promotion_name .= "".game_code_text_list()[$game_code]." ".$promotion['turn_'.strtolower($game_code)]." เท่า";
-							}else{
-								$text_append_promotion_name .= ", ".game_code_text_list()[$game_code]." ".$promotion['turn_'.strtolower($game_code)]." เท่า";
-							}
-						}
-						$promotion_name .= " ( ทำเทิร์น : ".$text_append_promotion_name." )";
-					}
-					if($promotion['type']>1){
-						$promotion_name .= " ใช้ไปแล้ว (".((float)$promotion['max_use']-(float)$promotion['remaining'] )."/".$promotion['max_use'].")";
-					}
-				}
-			$log_deposit_withdraw_id = $this->Log_deposit_withdraw_model->log_deposit_withdraw_create([
-				'account' => $users[$i]['id'],
-				'username' => $users[$i]['username'],
-				'amount' => $form_data["amount"],
-				'amount_before' => $remaining_credit,
-				'type' => '1', //ฝาก
-				'description' => 'ฝากเงิน',
-				'admin' =>$users[$i]['id'],
-				'promotion_name' =>$promotion_name,
-			]);
-
-			//print_r($form_data);
-			$response = $this->game_api_librarie->deposit($form_data);
-			//print_r($response);
-			if (isset($response['ref'])) {
-
-				if((float)$form_data["amount"] > (float)$users[$i]['amount_deposit_auto']){
-					$log_add_credit_id = $this->Log_add_credit_model->log_add_credit_create([
-						'account' => $users[$i]['id'],
-						'username' => $users[$i]['username'],
-						'full_name' => $users[$i]['full_name'],
-						'from_amount' => $users[$i]['amount_deposit_auto'],
-						'amount' => (float)$form_data["amount"] - (float)$users[$i]['amount_deposit_auto'],
-						'type' => 'bonus_promotion',
-						'description' => "ฝากเงิน ".$promotion_name,
-						'manage_by' =>$users[$i]['id'],
-						'manage_by_username' =>$users[$i]['username'],
-						'manage_by_full_name' =>$users[$i]['full_name'],
-					]);
-				}else{
-					$log_add_credit_id = $this->Log_add_credit_model->log_add_credit_create([
-						'account' => $users[$i]['id'],
-						'username' => $users[$i]['username'],
-						'full_name' => $users[$i]['full_name'],
-						'from_amount' => $users[$i]['amount_deposit_auto'],
-						'amount' => 0,
-						'type' => 'bonus_not_use_promotion',
-						'description' => "ฝากเงิน ".$promotion_name,
-						'manage_by' =>$users[$i]['id'],
-						'manage_by_username' =>$users[$i]['username'],
-						'manage_by_full_name' =>$users[$i]['full_name'],
-					]);
-				}
-
-				$user_new = $this->Account_model->account_find([
-					'id' => $users[$i]['id']
-				]);
-
-				$finance_id = $this->Finance_model->finance_create([
-					'account' => $users[$i]['id'],
-					'amount' => $users[$i]['amount_deposit_auto'],
-					'from_amount' => (float)$form_data["amount"] - (float)$users[$i]['amount_deposit_auto'],
-					'bank' => $users[$i]['bank'],
-					'bank_number' => $users[$i]['bank_number'],
-					'bank_name' => $users[$i]['bank_name'],
-					'ref_transaction_id' => $response['ref'],
-					'username' => $users[$i]['username'],
-					'type' => 1,
-					'status' => 1
-				]);
-				$this->Use_promotion_model->use_promotion_create([
-					'finance' => $finance_id,
-					'promotion' => $promotion['id'],
-					'promotion_name' => $promotion['name'],
-					'percent' => $promotion['percent'],
-					'turn' => $promotion['turn'],
-					'turn_football' => $promotion['turn_football'],
-					'turn_step' => $promotion['turn_step'],
-					'turn_parlay' => $promotion['turn_parlay'],
-					'turn_game' => $promotion['turn_game'],
-					'turn_casino' => $promotion['turn_casino'],
-					'turn_lotto' => $promotion['turn_lotto'],
-					'turn_m2' => $promotion['turn_m2'],
-					'turn_multi_player' => $promotion['turn_multi_player'],
-					'turn_trading' => $promotion['turn_trading'],
-					'turn_keno' => $promotion['turn_keno'],
-					'max_value' => $promotion['max_value'],
-					'sum_amount' => $amount_deposit,
-					'amount' => $amount_deposit_auto_old,
-					'max_use' => $promotion['max_use'],
-					'type' => $promotion['type']
-				]);
-
-				$sum_amount_list = $this->Finance_model->sum_amount_deposit_and_withdraw(['account_list' => [$users[$i]['id']]]);
-				$sum_amount = 0.00;
-				if(array_key_exists($users[$i]['id'],$sum_amount_list)){
-					$sum_amount = $sum_amount_list[$users[$i]['id']]['sum_amount'];
-				}
-
-				if($user_new!="" && empty($user_new['ref_transaction_id'])){
-					$this->Account_model->account_update([
-						'id' => $users[$i]['id'],
-						'amount_deposit_auto' => $amount_deposit_auto_remain,
-						'turn_before' => $turn_before,
-						'turn_before_football' => $turn_before_football,
-						'turn_before_step' => $turn_before_step,
-						'turn_before_parlay' => $turn_before_parlay,
-						'turn_before_game' => $turn_before_game,
-						'turn_before_casino' => $turn_before_casino,
-						'turn_before_lotto' => $turn_before_lotto,
-						'turn_before_m2' => $turn_before_m2,
-						'turn_before_multi_player' => $turn_before_multi_player,
-						'turn_before_trading' => $turn_before_trading,
-						'turn_before_keno' => $turn_before_keno,
-						'ref_transaction_id' => $response['ref'],
-						'turn_over' => $turn_over,
-						'turn_over_football' => $turn_over_football,
-						'turn_over_step' => $turn_over_step,
-						'turn_over_parlay' => $turn_over_parlay,
-						'turn_over_game' => $turn_over_game,
-						'turn_over_casino' => $turn_over_casino,
-						'turn_over_lotto' => $turn_over_lotto,
-						'turn_over_m2' => $turn_over_m2,
-						'turn_over_multi_player' => $turn_over_multi_player,
-						'turn_over_trading' => $turn_over_trading,
-						'turn_over_keno' => $turn_over_keno,
-						'turn_date' => $turn_date,
-						'sum_amount' => $sum_amount,
-					]);
-				}else{
-					$this->Account_model->account_update([
-						'id' => $users[$i]['id'],
-						'amount_deposit_auto' => $amount_deposit_auto_remain,
-						'turn_before' => $turn_before,
-						'turn_before_football' => $turn_before_football,
-						'turn_before_step' => $turn_before_step,
-						'turn_before_parlay' => $turn_before_parlay,
-						'turn_before_game' => $turn_before_game,
-						'turn_before_casino' => $turn_before_casino,
-						'turn_before_lotto' => $turn_before_lotto,
-						'turn_before_m2' => $turn_before_m2,
-						'turn_over' => $turn_over,
-						'turn_over_football' => $turn_over_football,
-						'turn_over_step' => $turn_over_step,
-						'turn_over_parlay' => $turn_over_parlay,
-						'turn_over_game' => $turn_over_game,
-						'turn_over_casino' => $turn_over_casino,
-						'turn_over_lotto' => $turn_over_lotto,
-						'turn_over_m2' => $turn_over_m2,
-						'turn_over_multi_player' => $turn_over_multi_player,
-						'turn_over_trading' => $turn_over_trading,
-						'turn_over_keno' => $turn_over_keno,
-						'turn_date' => $turn_date,
-						'sum_amount' => $sum_amount,
-					]);
-				}
-
-				$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
-					'id' => $log_deposit_withdraw_id
-				]);
-				if($log_deposit_withdraw!=""){
-					$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
-						'id' => $log_deposit_withdraw_id,
-						'description' => $log_deposit_withdraw['description']." (Add Credit Auto) | ทำรายการสำเร็จ",
-					]);
-				}
-
-				$wheel_amount_per_point = $this->Setting_model->setting_find([
-					'name' => 'wheel_amount_per_point'
-				]);
-				$feature_wheel = $this->Feature_status_model->setting_find([
-					'name' => 'wheel'
-				]);
-				if($feature_wheel != "" && $feature_wheel['value'] == "1"){
-					if($wheel_amount_per_point != "" && is_numeric($wheel_amount_per_point['value']) && (float)$wheel_amount_per_point['value'] > 0 && (float)$users[$i]['amount_deposit_auto'] >= (float)$wheel_amount_per_point['value']){
-						$point = round((float)$user['amount_deposit_auto']/(float)$wheel_amount_per_point['value'], 0, PHP_ROUND_HALF_UP);
-						if($point > 0){
-							$this->Account_model->account_update([
-								'id' => $users[$i]['id'],
-								'point_for_wheel' =>  (float)$users[$i]['point_for_wheel'] + $point,
-							]);
-							$log_wheel_id = $this->Log_wheel_model->log_wheel_create([
-								'account' => $users[$i]['id'],
-								'username' => $users[$i]['username'],
-								'point_before' => $users[$i]['point_for_wheel'],
-								'point_after' => (float)$users[$i]['point_for_wheel'] + $point,
-								'point' => $point,
-								'amount' => $users[$i]['amount_deposit_auto'],
-								'description' => "เงินฝาก ".number_format( $users[$i]['amount_deposit_auto'],2)." บาท (คำนวณจาก ".$wheel_amount_per_point['value']." บาท/ 1 เหรียญ)",
-								'type' => '0', //เติม
-								'status' => '1', //สำเร็จ
-							]);
-						}
-					}
-
-				}
-
-				//$this->ref_bonus($user, $finance_id);
+		}else{
 				echo json_encode([
-					'message' => 'success',
-					'result' => true
-				]);
-			} else {
-				$error_message = isset($response['code']) && !empty($response['code']) ? "#".$response['code'] : 'ทำรายการไม่สำเร็จ';
-
-				$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
-					'id' => $log_deposit_withdraw_id
-				]);
-				if($log_deposit_withdraw!=""){
-					$this->Log_deposit_withdraw_model->log_deposit_withdraw_update([
-						'id' => $log_deposit_withdraw_id,
-						'description' => $log_deposit_withdraw['description']." | ".$error_message,
-					]);
-				}
-				$this->Account_model->account_update([
-					'id' => $users[$i]['id'],
-					'amount_deposit_auto' => $amount_deposit_auto_old,
-				]);
-				echo json_encode([
-					'message' => $error_message,
+					'message' => "ทำรายการไม่สำเร็จ, ดึงยอดคงเหลือไม่สำเร็จ",
+					'code' => "bal_not_available",
 					'error' => true,
 				]);
 			}

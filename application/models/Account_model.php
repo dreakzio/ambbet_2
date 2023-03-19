@@ -208,6 +208,10 @@ class Account_model extends CI_Model
 		$this->db->select('
 			account.id,
 			account.username,
+			account.bank,
+			account.bank_number,
+			account.bank_name,
+			account.full_name,
 			account.agent,
 			 account.turn_before,
 			 account.turn_before_football,
