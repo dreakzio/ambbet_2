@@ -280,7 +280,7 @@ class DepositWhitPromotion extends CI_Controller
 					if (!empty($best_promotion)) {
 						//$promotion = $best_promotion;
 						$promotion_name = "".$best_promotion['name'];
-						if($best_promotion['id']!=1){
+
 						if ($best_promotion['max_value'] > 0 && $best_promotion['category'] == "1") {
 							$text_append_promotion_name = "";
 							foreach (game_code_list() as $index => $game_code) {
@@ -305,9 +305,7 @@ class DepositWhitPromotion extends CI_Controller
 						if ($best_promotion['type'] > 1) {
 							$promotion_name .= " ใช้ไปแล้ว (" . ((float)$best_promotion['max_use'] - (float)$best_promotion['remaining']) . "/" . $best_promotion['max_use'] . ")";
 						}
-						}else{
-							$promotion_name = "".$best_promotion['name'];
-						}
+
 					}
 					$log_deposit_withdraw_id = $this->Log_deposit_withdraw_model->log_deposit_withdraw_create([
 						'account' => $users[$i]['id'],
