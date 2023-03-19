@@ -552,6 +552,56 @@ class Withdraw extends CI_Controller
 												$qrcode = $res_withdraw['msg']['QRCimagevalue'];
 											}else if(($bank_can_withdraw_once['bank_code'] == "11" )  && isset($res_withdraw['msg']['qrData'])){
 												$qrcode = $res_withdraw['msg']['qrData'];
+
+												$report_id = $res_withdraw['msg']['transactionRef'];
+												$datetime_kk_tr = explode(" ",$res_withdraw['msg']['txnDate']);
+												$date_kkp_tr = explode("/",$datetime_kk_tr[0]);
+												$date_time_kkp_trs = $date_kkp_tr[2].'-'.$date_kkp_tr[1].'-'.$date_kkp_tr[0].' '.$datetime_kk_tr[1];
+												$data_kkp_trans =array(
+													'date_bank'=>$date_time_kkp_trs
+												,'amount'=>$res_withdraw['msg']['transferAmount']
+												,'account'=>$member['id']
+												,'type'=>2
+												,'bank_number'=>$finance['bank_number']
+												);
+
+												$this->Transaction_model->transaction_create($data_kkp_trans);
+
+												/*
+													$data_kkp_credit = array(
+														'process' => $res_withdraw['msg']['transferAmount']
+														  , 'credit_before'=>$member['amount_deposit_auto']
+														,'credit_after' => $member['amount_deposit_auto']-$res_withdraw['msg']['transferAmount']
+														,'type'=>'2'
+														,'account' =>$member['id']
+														,'transaction'=>0
+														,'admin'=>$_SESSION['user']['id']
+														,'date_bank'=>$date_time_kkp_trs
+														,'bank_id'=>$bank_can_withdraw_once['id']
+														,'bank_name'=>$member['full_name']
+														,'bank_number'=>$finance['bank_number']
+														,'bank_code'=>'11'
+														,'username'=>$member['username']
+													);
+													$this->Credit_model->credit_create($data_kkp_credit);*/
+
+												$bank_list_kkp = getBankListUniqueTextCode();
+												$data_reportsms = array(
+													'config_api_id'=>$bank_can_withdraw_once['id']
+												, 'payment_gateway'=>'โอนไป  '.$bank_list_kkp[$bank_code].' '.$finance['bank_number'].' '.$res_withdraw['msg']['toAccountInformation']['accountName']
+												,'amount'=>$res_withdraw['msg']['transferAmount']
+												,'created_at'=>$date_time_kkp_trs
+												,'is_bot_running'=>0
+												,'create_date'=>$date_kkp_tr[2].'-'.$date_kkp_tr[1].'-'.$date_kkp_tr[0]
+												,'create_time'=>$datetime_kk_tr[1]
+												,'type_deposit_withdraw'=>'W'
+												,'type'=>'KKP APP'
+												,'report_id'=>$report_id
+												);
+
+												$this->Report_sms_model->report_sms_create($data_reportsms);
+												$this->Bank_model->bank_update(['id'=>$bank_can_withdraw_once['id'],'balance'=>$res_withdraw['balance']]);
+
 											}
 											$this->Finance_model->finance_update([
 												'id' => $id,

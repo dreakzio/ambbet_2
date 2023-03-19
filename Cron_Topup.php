@@ -425,7 +425,8 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 																					$check_add_once = true;
 																				}
 																				if($check_add_once){
-																					$sql ="INSERT INTO `transaction` (`id`, `date_bank`, `amount`,`account`,`type`,`bank_number`,`updated_at`) VALUES (NULL, '".$v['date']." ".$v['time']."', '".$balance."', '".$rs_acc['id']."', '1', '".$rs_acc['bank_number']."', current_timestamp())";
+																					$sql ="INSERT INTO `transaction` (`id`, `date_bank`, `amount`,`account`,`type`,`bank_number`,`updated_at`)
+																								VALUES (NULL, '".$v['date']." ".$v['time']."', '".$balance."', '".$rs_acc['id']."', '1', '".$rs_acc['bank_number']."', current_timestamp())";
 																					$check_all = $obj_con_cron->query($sql);
 																					if($check_all){
 																						$credit_before = $rs_acc['amount_deposit_auto'];

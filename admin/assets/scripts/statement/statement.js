@@ -151,6 +151,9 @@ function dataTable() {
 					if (bank_bank_code == '10') {
 						image = BaseURL + 'assets/images/bank/10.png';
 					}
+					if (bank_bank_code == '11') {
+						image = BaseURL + 'assets/images/bank/kkp.png';
+					}
 					html = '<ul class="list-unstyled users-list m-0   align-items-center">\n' +
 						'<li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="'+(typeof(bank_list[bank_bank_code]) != "undefined" ? bank_list[bank_bank_code] : "-")+'" class="avatar pull-up m-0">' +
 						'<img class="media-object rounded" src="'+image+'" alt="Avatar" height="40" width="40"></li></ul>';

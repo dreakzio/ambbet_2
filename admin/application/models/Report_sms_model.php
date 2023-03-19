@@ -215,4 +215,12 @@ class Report_sms_model extends CI_Model
 		$cnt_row =  $query->row_array();
 		return $cnt_row != "" && isset($cnt_row['cnt_row']) && is_numeric($cnt_row['cnt_row']) ? (int)$cnt_row['cnt_row'] : 0;
 	}
+	public function report_sms_create($data = [])
+	{
+		date_default_timezone_set("Asia/Bangkok"); //set เขตเวลา
+		$data['created_at'] = isset($data['created_at']) ? $data['created_at'] : date('Y-m-d H:i:s');
+		$this->db->insert('report_smses', $data);
+		$id = $this->db->insert_id();
+		return $id;
+	}
 }

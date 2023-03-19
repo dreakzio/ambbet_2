@@ -85,6 +85,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 															  }
 															  else if (value.bank_code ==10 || value.bank_code =='10') {
 																  url_img_bank =  base_url+"/bank/10.png";
+															  }else if (value.bank_code ==11 || value.bank_code =='11') {
+																  url_img_bank =  base_url+"/bank/kkp.png";
 															  }
 															  else {
 																  url_img_bank = base_url+"/bank/not-found.png";

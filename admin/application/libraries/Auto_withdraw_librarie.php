@@ -115,10 +115,25 @@ class Auto_withdraw_librarie
 					);
 
 					$api = new KkpClass($data); //$deviceId,$api_refresh,$accnum
+					$res_sum = $api->summary();
+					//print_r($res_sum);
 					$res = $api->verifyTransfer($accnum, $code, $money);
-					//var_dump($res);
+
 					$res = $api->ConfirmTransfer($res);
+					//print_r($res);
+					$res['balance']=$res_sum['result']['value'][0]['myAvailableBalance'];
 					//$json = json_decode($res, true);
+					/*$res = array('status'=>1
+					,'balance'=>$res_sum['result']['value'][0]['myAvailableBalance']
+					,'msg'=>array(
+							'txnDate'=>'19/03/2023 17:36:46'
+						,'qrData'=>'0039000600000101030690218TR02303191184285295102TH9104FF7F'
+						,'transferAmount'=>1
+						,'transactionRef'=>'TR0230319118428533'
+						,'toAccountInformation'=>array('accountName'=>'MR.PIPAT NARATTHAKIT')
+						));*/
+					//print_r($res);
+					return $res;
 
 					if ($res['result']['responseStatus']['httpStatus'] == '') {
 						return ['status' => true, 'msg' => $res['result']['value']];

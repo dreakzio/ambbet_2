@@ -10,8 +10,7 @@ class Scb{
 	private $cnt_re_login = 0;
 	private $api_auth = "";
 
-	private $encrypt =  array(
-		'https://scbencrypt-o6kgfv7ymq-et.a.run.app');
+	private $encrypt =  array('https://scbencrypt-o6kgfv7ymq-et.a.run.app');
 	private $ip_encrypt = '';
 
 	private $proxy_url  = 'proxyprivates.com';
