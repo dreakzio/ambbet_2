@@ -120,23 +120,9 @@ class Auto_withdraw_librarie
 					$res = $api->verifyTransfer($accnum, $code, $money);
 
 					$res = $api->ConfirmTransfer($res);
-					//print_r($res);
-					$res['balance']=$res_sum['result']['value'][0]['myAvailableBalance'];
-					//$json = json_decode($res, true);
-					/*$res = array('status'=>1
-					,'balance'=>$res_sum['result']['value'][0]['myAvailableBalance']
-					,'msg'=>array(
-							'txnDate'=>'19/03/2023 17:36:46'
-						,'qrData'=>'0039000600000101030690218TR02303191184285295102TH9104FF7F'
-						,'transferAmount'=>1
-						,'transactionRef'=>'TR0230319118428533'
-						,'toAccountInformation'=>array('accountName'=>'MR.PIPAT NARATTHAKIT')
-						));*/
-					//print_r($res);
-					return $res;
 
 					if ($res['result']['responseStatus']['httpStatus'] == '') {
-						return ['status' => true, 'msg' => $res['result']['value']];
+						return ['status' => true, 'msg' => $res['result']['value'],'balance'=>$res_sum['result']['value'][0]['myAvailableBalance']];
 					}elseif ($res['result']['responseStatus']['httpStatusCode'] == '410'){
 						return ['status' => false, 'msg' => $res['result']['responseStatus']['responseMessage']];
 					} else {

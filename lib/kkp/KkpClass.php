@@ -11,7 +11,7 @@ class KkpClass
 	public $config_path = null;
 	public $config = array();
 	public $curl_options = null;
-	public $version = "2.4.0";
+	public $version = "2.4.1";
 	public $curr_re_try =0;
 
 
@@ -456,6 +456,7 @@ class KkpClass
 			return $result;
 		}
 
+
 	}
 	public function setPublicKey()
 	{
@@ -637,21 +638,11 @@ class KkpClass
 			"tokenID" => "",
 			"deviceId" => $this->config["deviceId"],
 		));
-		if($result['error_response']['responseStatus']['httpStatusCode']!=''){
-			if($this->curr_re_try <2){
-				//echo "test";
-				$this->LoginPin();
-				$this->verifyTransfer($toAccount, $toBankCode, $amount);
-				$this->curr_re_try++;
-			}else{
-				return $result;
-			}
-		}else{
-			if (isset($result["result"]["value"]["accessToken"])) $this->config["access_token"] = $result["result"]["value"]["accessToken"];
-			if (isset($result["result"]["value"]["sessionToken"])) $this->config["sessionToken"] = $result["result"]["value"]["sessionToken"];
-			//echo date("d/m/Y");
-			return $result;
-		}
+
+		if (isset($result["result"]["value"]["accessToken"])) $this->config["access_token"] = $result["result"]["value"]["accessToken"];
+		if (isset($result["result"]["value"]["sessionToken"])) $this->config["sessionToken"] = $result["result"]["value"]["sessionToken"];
+		//echo date("d/m/Y");
+		return $result;
 
 
 	}
@@ -747,6 +738,7 @@ class KkpClass
 			"tokenID" => "",
 			"deviceId" => $this->config["deviceId"],
 		));
+
 		if (isset($result["result"]["value"]["accessToken"])) $this->config["access_token"] = $result["result"]["value"]["accessToken"];
 		if (isset($result["result"]["value"]["sessionToken"])) $this->config["sessionToken"] = $result["result"]["value"]["sessionToken"];
 		return $result;
@@ -910,4 +902,6 @@ class KkpClass
 		));
 		return $result;
 	}
+
+
 }
