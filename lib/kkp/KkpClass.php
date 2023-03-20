@@ -438,7 +438,7 @@ class KkpClass
 		));
 
 		if($result['error_response']['responseStatus']['httpStatusCode']!=''){
-			if($this->curr_re_try <2){
+			if($this->curr_re_try < 3){
 				//echo "test";
 				$this->LoginPin();
 				$this->summary();
@@ -455,8 +455,6 @@ class KkpClass
 
 			return $result;
 		}
-
-
 	}
 	public function setPublicKey()
 	{
