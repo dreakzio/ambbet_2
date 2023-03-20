@@ -20,6 +20,7 @@ function getBankList(){
 		'8' => 'ทีเอ็มบีธนชาต',
 		'9' => 'ธ.ก.ส.',
 		'10' => 'ทรูมันนี่วอลเล็ท',
+		'11' => 'เกียรตินาคิน',
 	);
 }
 function getBankListUniqueCode(){
@@ -34,6 +35,7 @@ function getBankListUniqueCode(){
 		'08' => 'ทีเอ็มบีธนชาต',
 		'09' => 'ธ.ก.ส.',
 		'10' => 'ทรูมันนี่วอลเล็ท',
+		'11' => 'เกียรตินาคิน',
 	);
 }
 function getBankListUniqueTextCode(){
@@ -47,6 +49,7 @@ function getBankListUniqueTextCode(){
 		'030' => 'ออมสิน',
 		'065' => 'ทีเอ็มบีธนชาต',
 		'034' => 'ธ.ก.ส.',
+		'069' => 'เกียรตินาคิน',
 	);
 }
 function getKeyBankList(){
@@ -60,6 +63,7 @@ function getKeyBankList(){
 		'ออมสิน' => ['07','7'],
 		'ทีเอ็มบีธนชาต' => ['08','8'],
 		'ธ.ก.ส.' => ['09','9'],
+		'เกียรตินาคิน' => ['11'],
 	);
 }
 function member_credit_data($form_data)

@@ -375,7 +375,7 @@ class Api extends CI_Controller
 													$date_time_kkp_trs = $date_kkp_tr[2].'-'.$date_kkp_tr[1].'-'.$date_kkp_tr[0].' '.$datetime_kk_tr[1];
 													$data_kkp_trans =array(
 														'date_bank'=>$date_time_kkp_trs
-													,'amount'=>$res_withdraw['msg']['transferAmount']
+													,'amount'=>(float)str_replace(",",'',$res_withdraw['msg']['transferAmount'])
 													,'account'=>$finance_auto_withdraw['account']
 													,'type'=>2
 													,'bank_number'=>$finance_auto_withdraw['bank_number']
@@ -387,7 +387,7 @@ class Api extends CI_Controller
 													$data_reportsms = array(
 													  'config_api_id'=>$bank_can_autos['id']
 													, 'payment_gateway'=>'โอนไป  '.$bank_list_kkp[$bank_code].' '.$finance_auto_withdraw['bank_number'].' '.$res_withdraw['msg']['toAccountInformation']['accountName']
-													,'amount'=>$res_withdraw['msg']['transferAmount']
+													,'amount'=>(float)str_replace(",",'',$res_withdraw['msg']['transferAmount'])
 													,'created_at'=>$date_time_kkp_trs
 													,'is_bot_running'=>0
 													,'create_date'=>$date_kkp_tr[2].'-'.$date_kkp_tr[1].'-'.$date_kkp_tr[0]
@@ -399,7 +399,7 @@ class Api extends CI_Controller
 
 													$this->Report_sms_model->report_sms_create($data_reportsms);
 
-													$this->Bank_model->bank_update(['id'=>$bank_can_auto['id'],'balance'=>$res_withdraw['balance']]);
+													$this->Bank_model->bank_update(['id'=>$bank_can_auto['id'],'balance'=>(float)str_replace(",",'',$res_withdraw['balance'])]);
 												}
 												$this->Finance_model->finance_update([
 													'id' => $finance_auto_withdraw['id'],

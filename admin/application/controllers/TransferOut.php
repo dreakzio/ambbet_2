@@ -84,7 +84,7 @@ class TransferOut extends CI_Controller
 
 		try{
 			$bank = $this->Bank_model->bank_find(['id'=>$post['bank_id'],'security_api'=>true]);
-			if($bank != "" && $bank['status'] == "1" && ($bank['bank_code'] == "05" || $bank['bank_code'] == "5" || $bank['bank_code'] == "02" || $bank['bank_code'] == "2"|| $bank['bank_code'] == "06" || $bank['bank_code'] == "6")){
+			if($bank != "" && $bank['status'] == "1" && ($bank['bank_code'] == "05" || $bank['bank_code'] == "5" || $bank['bank_code'] == "02" || $bank['bank_code'] == "2"|| $bank['bank_code'] == "06" || $bank['bank_code'] == "6" || $bank['bank_code'] == "11")){
 				if($bank['bank_code'] == "05" || $bank['bank_code'] == "5"){
 					$res_withdraw = $this->auto_withdraw_librarie->transfer($post["bank_number_to"],$post["bank_number_to"],$post["bank_to"],str_replace(",","",$post['amount']),decrypt(base64_decode($bank['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank['api_token_2']),$this->config->item('secret_key_salt')),$bank['bank_number']);
 				}else if($bank['bank_code'] == "06" || $bank['bank_code'] == "6"){
@@ -95,7 +95,7 @@ class TransferOut extends CI_Controller
 					$res_withdraw = $this->auto_withdraw_librarie->transfer_kplus($post["bank_number_to"],$post["bank_number_to"],$post["bank_to"],str_replace(",","",$post['amount']),decrypt(base64_decode($bank['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank['api_token_2']),$this->config->item('secret_key_salt')),$bank['bank_number']);
 				}else if($bank['bank_code'] == "11"){
 					$res_withdraw = $this->auto_withdraw_librarie->transfer_kkp($post["bank_number_to"],$post["bank_number_to"],$post["bank_to"],str_replace(",","",$post['amount']),decrypt(base64_decode($bank['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank['api_token_2']),$this->config->item('secret_key_salt')),$bank['bank_number']);
-					$this->Bank_model->bank_update(['id'=>$post['bank_id'],'balance'=>$res_withdraw['balance']]);
+					$this->Bank_model->bank_update(['id'=>$post['bank_id'],'balance'=>(float)str_replace(",",'',$res_withdraw['balance'])]);
 				}
 				if($res_withdraw['status']){
 					$log_transfer_out = $this->Log_transfer_out_model->log_transfer_out_find([
