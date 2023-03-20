@@ -369,6 +369,7 @@ class Api extends CI_Controller
 													$qrcode = $res_withdraw['msg']['QRCimagevalue'];
 												}else if(($bank_can_auto['bank_code'] == "11" )  && isset($res_withdraw['msg']['qrData'])){
 													$qrcode = $res_withdraw['msg']['qrData'];
+													$this->Bank_model->bank_update(['id'=>$bank_can_auto['id'],'balance'=>$res_withdraw['balance']]);
 												}
 												$this->Finance_model->finance_update([
 													'id' => $finance_auto_withdraw['id'],
