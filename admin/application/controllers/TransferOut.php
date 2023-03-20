@@ -98,6 +98,32 @@ class TransferOut extends CI_Controller
 					$this->Bank_model->bank_update(['id'=>$post['bank_id'],'balance'=>(float)str_replace(",",'',$res_withdraw['balance'])]);
 				}
 				if($res_withdraw['status']){
+					if($bank['bank_code']=='11'){
+
+						$report_id = $res_withdraw['msg']['transactionRef'];
+						$datetime_kk_tr = explode(" ",$res_withdraw['msg']['txnDate']);
+						$date_kkp_tr = explode("/",$datetime_kk_tr[0]);
+						$date_time_kkp_trs = $date_kkp_tr[2].'-'.$date_kkp_tr[1].'-'.$date_kkp_tr[0].' '.$datetime_kk_tr[1];
+
+						$bank_list_kkp = getBankListUniqueTextCode();
+						$data_reportsms = array(
+							'config_api_id'=>$bank['id']
+						, 'payment_gateway'=>'โอนไป  '.$bank_list_kkp[$post["bank_to"]].' '.$post["bank_number_to"].' '.$res_withdraw['msg']['toAccountInformation']['accountName']
+						,'amount'=>(float)str_replace(",",'',$res_withdraw['msg']['transferAmount'])
+						,'created_at'=>$date_time_kkp_trs
+						,'is_bot_running'=>0
+						,'create_date'=>$date_kkp_tr[2].'-'.$date_kkp_tr[1].'-'.$date_kkp_tr[0]
+						,'create_time'=>$datetime_kk_tr[1]
+						,'type_deposit_withdraw'=>'W'
+						,'type'=>'KKP APP'
+						,'report_id'=>$report_id
+						);
+
+						$report_sms_id = $this->Report_sms_model->report_sms_create($data_reportsms);
+
+						$this->Bank_model->bank_update(['id'=>$post['bank_id'],'balance'=>(float)str_replace(",",'',$res_withdraw['balance'])]);
+					}
+
 					$log_transfer_out = $this->Log_transfer_out_model->log_transfer_out_find([
 						'id' => $log_transfer_out_id
 					]);
