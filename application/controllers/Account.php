@@ -97,7 +97,7 @@ class Account extends CI_Controller
         'password',
         ], 'POST');
 		$post = $this->input->post();
-		if((!isset($_SESSION['register_step']) || !isset($_SESSION['register_data'])) || ($_SESSION['register_step'] != '3') || (empty($_SESSION['register_data']['phone']))){
+		if((!isset($_SESSION['register_step']) || !isset($_SESSION['register_data'])) || ($_SESSION['register_step'] != '3' && $_SESSION['register_step'] != '2') || (empty($_SESSION['register_data']['phone']))){
 			echo json_encode([
 				'message' => 'เบอร์โทรไม่ควรเป็นค่าว่าง',
 				'error' => true
