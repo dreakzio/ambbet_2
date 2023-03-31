@@ -11,7 +11,7 @@ class KkpClass
 	public $config_path = null;
 	public $config = array();
 	public $curl_options = null;
-	public $version = "2.4.1";
+	public $version = "2.4.2";
 	public $curr_re_try =0;
 
 
