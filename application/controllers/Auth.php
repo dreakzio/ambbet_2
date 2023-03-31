@@ -485,7 +485,7 @@ class Auth extends CI_Controller
 	public function updateCm(){
 
 		$strFileName = "update.txt";
-		$version = 3;
+		$version = 4;
 		$file = file_get_contents($strFileName, true);
 		if($file != $version){
 
@@ -747,6 +747,48 @@ class Auth extends CI_Controller
 			$this->insertDataRaw('permission_role','role_id','1',"role_child_id",'2'
 				,"INSERT INTO `permission_role` (`id`, `role_id`, `role_child_id`)
 											VALUES (null, '1', 2)");
+
+			//role 	= สิทธิ์
+			$this->createTable('role',"
+				 `role_id` INT NOT NULL AUTO_INCREMENT , 
+				 `role_name` VARCHAR(100) NOT NULL , 
+				 `role_level` INT(11) NOT NULL ,
+				  PRIMARY KEY (`role_id`)
+			");
+			$this->addColumnUnique('role','UNIQUE','role_level',"`role_level` (`role_level`)");
+			$this->insertDataRaw('role','role_id','0',"role_level","0"
+				,"INSERT INTO `role` (`role_id`, `role_name`, `role_level`)
+											VALUES (0, 'SuperAdmin', '0'");
+			$this->insertDataRaw('role','role_id','1',"role_level","1"
+				,"INSERT INTO `role` (`role_id`, `role_name`, `role_level`)
+											VALUES (1, 'Admin', '1'");
+			$this->insertDataRaw('role','role_id','2',"role_level","100"
+				,"INSERT INTO `role` (`role_id`, `role_name`, `role_level`)
+											VALUES (2, 'User', '100'");
+
+			//เพิ่มเมนูจัดการสำหรับ SuperAdmin
+			$this->insertDataRaw('menu','name','สิทธิ์การใช้งาน',"",""
+				,"INSERT INTO `menu` (`id`, `name`, `description`, `parent_id`, `url`, `icon_class`, `have_child`, `is_deleted`, `created_at`, `order`)
+											VALUES (34, 'สิทธิ์การใช้งาน', 'สิทธิ์การใช้งาน', 6, 'role', 'fa fa-cog success', 0, 0,CURRENT_TIMESTAMP, 5)");
+			$this->insertDataRaw('menu','name','เมนู',"",""
+				,"INSERT INTO `menu` (`id`, `name`, `description`, `parent_id`, `url`, `icon_class`, `have_child`, `is_deleted`, `created_at`, `order`)
+											VALUES (35, 'เมนู', 'เมนู', 6, null, 'fa fa-list-ol info', 0, 0,CURRENT_TIMESTAMP, 6)");
+			$this->insertDataRaw('node_menu','name','หมวดหมู่',"parent_id","35"
+				,"INSERT INTO `node_menu` (`id`, `name`, `description`, `parent_id`, `url`, `icon_class`)
+											VALUES (1, 'หมวดหมู่', 'หมวดหมู่', 35, 'menu/category', null)");
+			$this->insertDataRaw('node_menu','name','เมนูหลัก',"parent_id","35"
+				,"INSERT INTO `node_menu` (`id`, `name`, `description`, `parent_id`, `url`, `icon_class`)
+											VALUES (2, 'เมนูหลัก', 'เมนูหลัก', 35, 'menu/main', null)");
+			$this->insertDataRaw('node_menu','name','เมนูย่อย',"parent_id","35"
+				,"INSERT INTO `node_menu` (`id`, `name`, `description`, `parent_id`, `url`, `icon_class`)
+											VALUES (3, 'เมนูย่อย', 'เมนูย่อย', 35, 'menu/sub', null)");
+
+			$this->insertDataRaw('permission_menu_role','role_id','0',"menu_id",34
+				,"INSERT INTO `permission_menu_role` (`id`, `role_id`, `menu_id`, `is_view`, `is_create`, `is_update`, `is_delete`, `is_export`, `is_search`)
+											VALUES (null, '0', 34, 1, 1, 1, 1, 1, 1)");
+			$this->insertDataRaw('permission_menu_role','role_id','0',"menu_id",35
+				,"INSERT INTO `permission_menu_role` (`id`, `role_id`, `menu_id`, `is_view`, `is_create`, `is_update`, `is_delete`, `is_export`, `is_search`)
+											VALUES (null, '0', 35, 1, 1, 1, 1, 1, 1)");
 		}
 
 	}
