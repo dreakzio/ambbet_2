@@ -75,6 +75,8 @@ class Check_User extends CI_Controller{
 										'gg_2fa_chk' => isset($_SESSION['user']['gg_2fa_chk']) ? $_SESSION['user']['gg_2fa_chk'] : false,
 										'gg_2fa_secret' => isset($_SESSION['user']['gg_2fa_secret']) ? $_SESSION['user']['gg_2fa_secret'] : "",
 									];
+									//ตรวจสอบการผูก user_role
+									init_role($account['id']);
 								}
 							}
 						}catch (Exception $ex){
@@ -108,6 +110,10 @@ class Check_User extends CI_Controller{
 								'gg_2fa_chk' => isset($_SESSION['user']['gg_2fa_chk']) ? $_SESSION['user']['gg_2fa_chk'] : false,
 								'gg_2fa_secret' => isset($_SESSION['user']['gg_2fa_secret']) ? $_SESSION['user']['gg_2fa_secret'] : "",
 							];
+
+							//ตรวจสอบการผูก user_role
+							init_role($account['id']);
+
 							$login_status = $this->CI->Setting_model->setting_find([
 								'name' => "login_status"
 							]);
@@ -177,6 +183,10 @@ class Check_User extends CI_Controller{
 									'gg_2fa_chk' => isset($_SESSION['user']['gg_2fa_chk']) ? $_SESSION['user']['gg_2fa_chk'] : false,
 									'gg_2fa_secret' => isset($_SESSION['user']['gg_2fa_secret']) ? $_SESSION['user']['gg_2fa_secret'] : "",
 								];
+
+								//ตรวจสอบการผูก user_role
+								init_role($account['id']);
+
 								$this->CI->Account_model->account_update([
 									'id' => $_SESSION['user']['id'],
 									'last_activity' => date('Y-m-d H:i:s'),

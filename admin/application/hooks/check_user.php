@@ -75,6 +75,9 @@ class Check_User extends CI_Controller{
 								'gg_2fa_chk' => isset($_SESSION['user']['gg_2fa_chk']) ? $_SESSION['user']['gg_2fa_chk'] : false,
 								'gg_2fa_secret' => isset($_SESSION['user']['gg_2fa_secret']) ? $_SESSION['user']['gg_2fa_secret'] : "",
 							];
+
+							//ตรวจสอบการผูก user_role
+							init_role($account['id']);
 						}
 					}
 				}else{
