@@ -1238,6 +1238,7 @@ class Api extends CI_Controller
 			));
 			$response = curl_exec($curl);
 			curl_close($curl);
+			echo "Bot bank_auto_transfer api response : ".$response;
 
 			//Check Finance Auto Withdraw
 			$base_url = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
@@ -1258,6 +1259,7 @@ class Api extends CI_Controller
 			));
 			$response = curl_exec($curl);
 			curl_close($curl);
+			echo "Bot finance_auto_withdraw api response : ".$response;
 
 			$start_date_time = new DateTime(date('Y-m-d H:i:s'));
 			if($start_date_time->format('H') == "01" && in_array($start_date_time->format('i'),["05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20"])){
