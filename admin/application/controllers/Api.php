@@ -272,6 +272,7 @@ class Api extends CI_Controller
 								'auto_withdraw_status' => 1,
 								'ip' => "127.0.0.1",
 								'status' => 4,
+								'auto_withdraw_updated_at' => date('Y-m-d H:i:s'),
 								'bank_withdraw_id' => !is_null($bank_can_auto) && !empty($bank_can_auto) ?  $bank_can_auto['id'] : null,
 								'bank_withdraw_name' => !is_null($bank_can_auto) && !empty($bank_can_auto) ? $bank_can_auto['bank_name']." | ".$bank_can_auto['account_name'].' | '.$bank_can_auto['bank_number'] : null
 							]);
@@ -546,6 +547,32 @@ class Api extends CI_Controller
 					$response['status'] = true;
 					$response['message'] = 'Finance auto withdraw list = 0';
 				}
+
+				//Process check pending status=4 >= 5 minute
+				$finance_auto_withdraw_pending = $this->Finance_model->finance_for_auto_withdraw_find([
+					'type' => '2',
+					'status' => 4,
+					'is_auto_withdraw' => 1,
+					'auto_withdraw_status' => 1,
+				]);
+				if(!is_null($finance_auto_withdraw_pending) && !empty($finance_auto_withdraw_pending) && !empty($finance_auto_withdraw_pending['auto_withdraw_updated_at'])){
+					$chk_seconds =  strtotime(date("Y-m-d H:i:s")) - strtotime($finance_auto_withdraw_pending['auto_withdraw_updated_at']);
+
+					//Reset status,remark if status=4 pending > 300 seconds (5 minute)
+					if($chk_seconds > 300){
+						$this->Finance_model->finance_update([
+							'id' => $finance_auto_withdraw_pending['id'],
+							'ip' => "127.0.0.1",
+							'auto_withdraw_updated_at' => date('Y-m-d H:i:s'),
+							'auto_withdraw_status' => 3,
+							'status' => 0,
+							'auto_withdraw_remark' => (empty($finance_auto_withdraw_pending['auto_withdraw_remark']) ? '' : $finance_auto_withdraw_pending['auto_withdraw_remark'].', ')
+								.'ถอนออโต้ไม่สำเร็จ, ให้แอดมินตรวจสอบยอดนั้นว่าถูกถอนไปจริงหรือไม่? [หากถูกถอนไปแล้วให้เปลี่ยนสถานะเป็นถอนมือ], [หากยังไม่ถูกถอนให้ดำเนินการแทน BOT]',
+						]);
+					}
+				}
+
+
 			}catch (Exception $ex){
 				if(isset($finance_auto_withdraw) && !empty($finance_auto_withdraw) && !is_null($finance_auto_withdraw)){
 					$this->cache->file->delete('process_auto_finance_withdraw_'.$finance_auto_withdraw['id']);
