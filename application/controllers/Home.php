@@ -408,8 +408,10 @@ class Home extends CI_Controller
 			]);
 		}
 	}
+
 	public function lobby($game)
 	{
+		// $game = pg_game
 		$this->check_login();
 		$game_list = array(
 			'live22_game' => 'Live22 Gaming',
@@ -468,7 +470,18 @@ class Home extends CI_Controller
 			'wmcasino_game' => 'Wmcasino',
 		);
 		if(array_key_exists($game,$game_list)){
-			$response = $this->game_api_librarie->getGameList($this->code_login[strtolower($game)]);
+			$response = $this->game_api_librarie->getGameList($this->code_login[strtolower($game)]); // code_login = "pg"
+			$count_response = count($response);
+			$percentage = [];
+			$expire = 3600;
+		for ($x = 0; $x <= $count_response; $x++) {
+				if(strtolower($response[$x]['gameType'])=='slot' || strtolower($response[$x]['gameType'])=='table') { // different slot SLOT
+					if(!$this->session->has_userdata('percentage_' .strtolower($game))) {
+						$percentage['percentage_' .strtolower($game)][$response[$x]['gameId']] = rand(1, 100); // name id = pct
+					}	
+				}
+			}
+			$this->session->set_tempdata($percentage,NULL,$expire);
 			$data['header_menu'] = 'header_menu';
 			$data['middle_bar'] = 'middle_bar';
 			$data['page'] = 'lobby';
@@ -479,7 +492,7 @@ class Home extends CI_Controller
 				'id' => $_SESSION['user']['id']
 			]);
 			$data['footer_menu'] = 'footer_menu';
-			$this->load->view('main', $data);
+			$this->load->view('main', $data); 
 		}else{
 			redirect('dashboard');
 		}
