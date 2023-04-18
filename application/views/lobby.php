@@ -4,6 +4,18 @@
 	  color : #0B0B0B;
   }
 </style>
+<script>
+	$(document).ready(function(){
+		$('.progress').hide(); // hide class 1st
+		$('#btn_write').click(function () {
+			if ($('.progress').is(':hidden')) {
+				$('.progress').show();
+			} else {
+				$('.progress').hide();
+			}
+		});
+	});
+</script>
 <section class="lobby">
 	<a style="
     padding-top: 6px;
@@ -17,6 +29,17 @@
 		echo empty($game_name) ? "" : " ".$game_name; 
 		?>
 	</span>
+	<button id="btn_write" type="button" class="btn btn-info " style="
+	  background-color: #4CAF50;
+	  border: none;
+	  color: white;
+	  padding: 15px 25px;
+	  text-align: center;
+	  text-decoration: none;
+	  display: inline-block;
+	  font-size: 16px;">
+		<?php echo $this->lang->line('winrate'); ?> :
+	</button>
 	<hr style="margin-top: 15px">
 </section>
 <div class="page-content" >

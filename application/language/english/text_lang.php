@@ -162,5 +162,6 @@
     $lang['minimum_withdrawal'] = "Minimum withdrawal";
     $lang['withdraw_money'] = "Withdraw money";
     $lang['withdraw_history_20'] = "Withdrawal history (last 20 transactions)";
+    $lang['winrate'] = "Shows winrate";
 
 ?>

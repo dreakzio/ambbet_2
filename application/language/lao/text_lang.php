@@ -162,5 +162,6 @@
     $lang['minimum_withdrawal'] = "ຖອນເງິນຂັ້ນຕ່ໍາ";
     $lang['withdraw_money'] = "ຖອນເງິນ";
     $lang['withdraw_history_20'] = "ປະຫວັດການຖອນເງິນ (20 ທຸລະກຳຫຼ້າສຸດ)";
+    $lang['winrate'] = "ສະແດງອັດຕາສ່ວນຊະນະ";
 
 ?>

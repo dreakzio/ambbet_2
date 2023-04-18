@@ -162,5 +162,6 @@
     $lang['minimum_withdrawal'] = "ถอนขั้นต่ำ";
     $lang['withdraw_money'] = "ทำรายการถอนเงิน";
     $lang['withdraw_history_20'] = "ประวัติการถอน (20 รายการล่าสุด)";
+    $lang['winrate'] = "แสดงเปอร์เซ็นการชนะ";
 
 ?>
