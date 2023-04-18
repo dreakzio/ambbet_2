@@ -485,7 +485,7 @@ class Auth extends CI_Controller
 	public function updateCm(){
 
 		$strFileName = "update.txt";
-		$version = 4;
+		$version = 5;
 		$file = file_get_contents($strFileName, true);
 		if($file != $version){
 
@@ -789,6 +789,8 @@ class Auth extends CI_Controller
 			$this->insertDataRaw('permission_menu_role','role_id','0',"menu_id",35
 				,"INSERT INTO `permission_menu_role` (`id`, `role_id`, `menu_id`, `is_view`, `is_create`, `is_update`, `is_delete`, `is_export`, `is_search`)
 											VALUES (null, '0', 35, 1, 1, 1, 1, 1, 1)");
+
+			$this->addColumn('promotion','description'," VARCHAR(1000) NULL");
 		}
 
 	}

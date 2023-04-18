@@ -57,11 +57,11 @@
 												<?php echo $this->lang->line('max'); ?> <?php echo number_format($value['max_value']) ?> <?php echo $this->lang->line('bath'); ?> (<?php echo $this->lang->line('do_turn'); ?> <a
 														href="#" data-toggle="modal" style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>"><?php echo $this->lang->line('detail'); ?></a>)
 											<?php elseif ($value['category'] == "2"): ?>
-												(<?php echo $this->lang->line('do_turn'); ?> <a
+												(<?php echo $this->lang->line('promotion'); ?> & <?php echo $this->lang->line('do_turn'); ?> <a
 														href="#" data-toggle="modal"  style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>"><?php echo $this->lang->line('detail'); ?></a>)
 											<?php endif; ?>
 											<?php if ($value['max_value']==0 && $value['percent'] == 0 && $value['category'] == "1"): ?>
-												(<?php echo $this->lang->line('do_turn'); ?> <a
+												(<?php echo $this->lang->line('promotion'); ?> & <?php echo $this->lang->line('do_turn'); ?> <a
 														href="#" data-toggle="modal"  style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>"><?php echo $this->lang->line('detail'); ?></a>)
 											<?php endif; ?>
 											<?php if ($value['type']>1): ?>
@@ -72,12 +72,17 @@
 											<div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
 												<div class="modal-content">
 													<div class="modal-header" style="background-color: var(--base-color-main)">
-														<h5 class="modal-title text-white" ><?php echo $this->lang->line('detail_do_turn'); ?></h5>
+														<h5 class="modal-title text-white" ><?php echo $this->lang->line('detail_do_turn'); ?> & <?php echo $this->lang->line('promotion'); ?></h5>
 														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 															<span aria-hidden="true">&times;</span>
 														</button>
 													</div>
 													<div class="modal-body">
+														<h5 class="text-danger font-weight-bold"><?php echo $this->lang->line('detail_promotion'); ?> : </h5>
+														<div class="mb-0">
+															<?php echo empty($value['description']) ? '-' : $value['description'];  ?>&nbsp;
+														</div>
+														<hr class="mt-1 mb-1">
 														<h5 class="text-danger font-weight-bold">** <?php echo $this->lang->line('just_do_some_turn'); ?></h5>
 														<hr class="mt-1 mb-1">
 														<div class="row">
@@ -152,7 +157,7 @@
 					<div class="align-self-center text-center">
 						<?php
 						$backend_url = $this->config->item('backend_url');
-						?>	
+						?>
 						<div class="text-center">
 							<?php switch($value['bank_code']):
 								case '01': ?>
@@ -302,7 +307,7 @@
                         </div>
                         <div class="deposit-content align-self-center ml-sm-0 ml-3 d-none d-sm-block">
                             <div class="">
-                                
+
                             </div>
                             <h6 class="">
                                 <input type="number" placeholder="กรอกจำนวนเงิน" class="form-control" v-model="qrcode_amount"/>

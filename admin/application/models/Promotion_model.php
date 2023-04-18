@@ -31,6 +31,7 @@ class Promotion_model extends CI_Model
         promotion.end_time,
         promotion.number_of_deposit_days,
         promotion.image,
+        promotion.description,
         IF(promotion.image!="", CONCAT("'.site_url().'assets/images/promotion/'.'",promotion.image), null) as image_url
         ');
         $this->db->order_by('promotion.id', 'DESC');
@@ -80,6 +81,7 @@ class Promotion_model extends CI_Model
           promotion.end_time,
           promotion.number_of_deposit_days,
           promotion.image,
+          promotion.description,
           IF(promotion.image!="", CONCAT("'.site_url().'assets/images/promotion/'.'",promotion.image), null) as image_url
          ');
         $this->db->where('promotion.deleted', 0);

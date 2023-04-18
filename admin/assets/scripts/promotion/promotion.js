@@ -99,6 +99,17 @@ function dataTable() {
 				data: 'name'
 			},
 			{
+				className: 'text-center',
+				render: function(data, type, full, meta) {
+					let html = "";
+					let {
+						turn
+					} = full;
+					html = "<button type='button' data-all='" + JSON.stringify(full) + "' class='btn_description btn bg-gradient-warning waves-effect waves-light' >รายละเอียด</button>";
+					return html;
+				}
+			},
+			{
 				className: 'text-right',
 				render: function(data, type, full, meta) {
 					let html = "";
@@ -198,6 +209,7 @@ $(document).on('click', '.btn_turn', function() {
 	let all_data = $(this).data();
 	let data = all_data.all;
 	$('#modal_turn .modal-body .row:eq(0)').empty();
+	$('#modal_turn .modal-title:eq(0)').text('คูณยอดเทิร์น');
 	for(let i =0;i<game_code_list.length;i++){
 		if(typeof(data['turn_'+game_code_list[i].toString().toLowerCase()]) != "undefined"){
 			$('#modal_turn .modal-body .row:eq(0)').append('<div class="col-md-6">\n' +
@@ -206,6 +218,17 @@ $(document).on('click', '.btn_turn', function() {
 		}
 	}
 	$('#modal_turn').modal('toggle');
+});
+$(document).on('click', '.btn_description', function() {
+	let all_data = $(this).data();
+	let data = all_data.all;
+	let description = data['description'] != null && data['description'] != '' ? data['description'] : ''
+	$('#modal_promotion .modal-title:eq(0)').text('รายละเอียดโปรโมชั่น');
+	$('#modal_promotion .modal-body .row:eq(0)').empty();
+	$('#modal_promotion .modal-body .row:eq(0)').append('<div class="col-md-12">\n' +
+		'\t\t<span class="">'+description+'</span>\n' +
+		'\t</div>')
+	$('#modal_promotion').modal('toggle');
 });
 $(document).on('click', '.btn_delete', function() {
 	let data = $(this).data();

@@ -42,6 +42,12 @@
 											<?php elseif ($promotion['category'] == "2"): ?>
 											<?php endif; ?>
 										</h4>
+										<hr class="mt-1 mb-1">
+										<h6 class="text-danger font-weight-bold"><?php echo $this->lang->line('detail_promotion'); ?> : </h6>
+										<div class="mb-0">
+											<?php echo empty($promotion['description']) ? '-' : $promotion['description'];  ?>&nbsp;
+										</div>
+										<hr class="mt-1 mb-1">
 										<h6 class="text-danger font-weight-bold">** <?php echo $this->lang->line('just_do_some_turn'); ?></h6>
 										<hr class="mt-1 mb-1">
 										<div class="row">

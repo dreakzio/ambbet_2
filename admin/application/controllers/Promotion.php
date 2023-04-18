@@ -70,7 +70,8 @@ class Promotion extends CI_Controller
 			'type' => $post['type'],
 			'start_time' => $post['start_time'] == '' ? NULL : $post['start_time'],
 			'end_time' => $post['end_time'] == '' ? NULL : $post['end_time'],
-			'number_of_deposit_days' => $post['number_of_deposit_days'] == '' ? NULL : $post['number_of_deposit_days']
+			'number_of_deposit_days' => $post['number_of_deposit_days'] == '' ? NULL : $post['number_of_deposit_days'],
+			'description' => isset($post['description']) ?  $post['description'] : NULL
 		];
 		foreach (game_code_list() as $game_code){
 			if(isset($post['turn_'.strtolower($game_code)])){
@@ -142,7 +143,8 @@ class Promotion extends CI_Controller
 			'type' => $post['type'],
 			'start_time' => $post['start_time'] == '' ? NULL : $post['start_time'],
 			'end_time' => $post['end_time'] == '' ? NULL : $post['end_time'],
-			'number_of_deposit_days' => $post['number_of_deposit_days'] == '' ? NULL : $post['number_of_deposit_days']
+			'number_of_deposit_days' => $post['number_of_deposit_days'] == '' ? NULL : $post['number_of_deposit_days'],
+			'description' => isset($post['description']) ?  $post['description'] : NULL
 		];
 		foreach (game_code_list() as $game_code){
 			if(isset($post['turn_'.strtolower($game_code)])){

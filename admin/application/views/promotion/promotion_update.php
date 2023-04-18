@@ -149,6 +149,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						</div>
 					</div>
 					<?php endforeach; ?>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="control-label">รายละเอียดโปรโมชั่น</label>
+							<div id="container-description">
+								<textarea type="text" id="description" name="description" class="form-control"  placeholder="ข้อมูลรายละเอียดโปรโมชั่น"><?php echo $promotion['description']; ?></textarea>
+							</div>
+						</div>
+					</div>
                 </div>
                 <hr />
                 <div class="row">
@@ -167,6 +175,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       </section>
     </div>
   </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.2/tinymce.min.js" referrerpolicy="origin"></script>
   <script src="<?php echo base_url('assets/plugins/dropify/dist/js/dropify.min.js') ?>"></script>
   <script src="<?php echo base_url('assets/plugins/numeral/min/numeral.min.js') ?>"></script>
   <script src="<?php echo base_url('assets/scripts/promotion/promotion_update.js?'.time()) ?>"></script>

@@ -31,6 +31,7 @@ class Promotion_model extends CI_Model
         promotion.end_time,
         promotion.number_of_deposit_days,
         promotion.image,
+        promotion.description,
          IF(promotion.image!="", CONCAT("'.site_url().'admin/assets/images/promotion/'.'",promotion.image), null) as image_url
         ');
 		$this->db->order_by('promotion.max_value', 'ASC');
@@ -79,6 +80,7 @@ class Promotion_model extends CI_Model
 	        promotion.end_time,
 	        promotion.number_of_deposit_days,
           promotion.image,
+          promotion.description,
          IF(promotion.image!="", CONCAT("'.site_url().'admin/assets/images/promotion/'.'",promotion.image), null) as image_url
          ');
 		$this->db->where('promotion.deleted', 0);
@@ -122,6 +124,7 @@ class Promotion_model extends CI_Model
 	        promotion.end_time,
 	        promotion.number_of_deposit_days,
           promotion.image,
+          promotion.description,
          IF(category=1,(percent*'.$search['amount_deposit_auto'].')/100,if(fix_amount_deposit='.$search['amount_deposit_auto'].',fix_amount_deposit_bonus,0)) as pro_cal
          ');
 

@@ -78,6 +78,7 @@
     $lang['detail'] = "รายละเอียด";
     $lang['used'] = "ใช้ไปแล้ว";
     $lang['detail_do_turn'] = "รายละเอียดการทำเทิร์น";
+	$lang['detail_promotion'] = "รายละเอียดโปรโมชั่น";
     $lang['just_do_some_turn'] = "เพียงทำเทิร์นให้ครบบางอย่างเท่านั้น";
     $lang['tao'] = "เท่า";
     $lang['ok'] = "ตกลง";

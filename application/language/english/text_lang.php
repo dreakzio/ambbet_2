@@ -78,6 +78,7 @@
     $lang['detail'] = "Detail";
     $lang['used'] = "Used";
     $lang['detail_do_turn'] = "Detail for turn";
+	$lang['detail_promotion'] = "Detail for promotion";
     $lang['just_do_some_turn'] = "Just complete certain turns.";
     $lang['tao'] = "Fold";
     $lang['ok'] = "Ok";

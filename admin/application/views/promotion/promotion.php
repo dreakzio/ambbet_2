@@ -34,6 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <th class="text-center">รูปแบบ</th>
                         <th class="text-center">ประเภท</th>
                         <th class="text-center">ชื่อโปรโมชั่น</th>
+						  <th class="text-center">รายละเอียด</th>
 						<th class="text-right">Fix ยอดฝาก / โบนัส (บาท)</th>
                         <th class="text-right">จำนวนโบนัส (%)</th>
                         <th class="text-right">โบนัสสูงสุด (บาท)</th>
@@ -75,6 +76,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
       </div>
   </div>
+<div class="modal fade" id="modal_promotion" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >รายละเอียดโปรโมชั่น</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn bg-gradient-primary" data-dismiss="modal">ตกลง</button>
+			</div>
+		</div>
+	</div>
+</div>
   <script src="<?php echo base_url('assets/plugins/numeral/min/numeral.min.js') ?>"></script>
   <script src="<?php echo base_url('assets/plugins/datatables/jquery.dataTables.min.js') ?>"></script>
   <script src="<?php echo base_url('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>

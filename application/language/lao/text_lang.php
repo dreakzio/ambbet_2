@@ -78,6 +78,7 @@
     $lang['detail'] = "ລາຍລະອຽດ";
     $lang['used'] = "ໃຊ້ແລ້ວ";
     $lang['detail_do_turn'] = "ຫັນລາຍລະອຽດ";
+	$lang['detail_promotion'] = "ລາຍລະອຽດໂປຣໂມຊັນ";
     $lang['just_do_some_turn'] = "ພຽງແຕ່ເຮັດສໍາເລັດການຫັນບາງ";
     $lang['tao'] = "ເທົ່າ​";
     $lang['ok'] = "ຕົກລົງ";
