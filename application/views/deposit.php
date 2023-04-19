@@ -54,7 +54,7 @@
 												<span class="text-warning"><?php echo $this->lang->line('continue'); ?> <?php echo $value['number_of_deposit_days']?> <?php echo $this->lang->line('day'); ?></span>
 											<?php endif; ?>
 											<?php if ($value['max_value']>0 && $value['category'] == "1"): ?>
-												<?php echo $this->lang->line('max'); ?> <?php echo number_format($value['max_value']) ?> <?php echo $this->lang->line('bath'); ?> (<?php echo $this->lang->line('do_turn'); ?> <a
+												<?php echo $this->lang->line('max'); ?> <?php echo number_format($value['max_value']) ?> <?php echo $this->lang->line('bath'); ?> (<?php echo $this->lang->line('promotion'); ?> & <?php echo $this->lang->line('do_turn'); ?> <a
 														href="#" data-toggle="modal" style="text-decoration: underline;color: var(--base-color-main)" data-target="#modal_turn_<?php echo $value['id']; ?>"><?php echo $this->lang->line('detail'); ?></a>)
 											<?php elseif ($value['category'] == "2"): ?>
 												(<?php echo $this->lang->line('promotion'); ?> & <?php echo $this->lang->line('do_turn'); ?> <a
