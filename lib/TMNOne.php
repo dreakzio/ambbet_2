@@ -4,14 +4,14 @@ class TMNOne
 {
 
 	private $tmnone_endpoint = 'https://api.tmn.one/api.php';
-	private $wallet_endpoint = 'https://tmn-mobile-gateway.truemoney.com/tmn-mobile-gateway/';
+	private $wallet_endpoint = 'https://tmn-mobile-gateway.public-a-cloud1p.ascendmoney.io/tmn-mobile-gateway/';
 	private $wallet_user_agent = 'okhttp/4.4.0';
 	private $tmnone_keyid = 0;
 	private $wallet_msisdn, $wallet_login_token, $wallet_tmn_id, $wallet_device_id, $wallet_access_token = '';
 	private $proxy_data = [
 		"proxy_type" => CURLPROXY_HTTP,
 		"proxy_port" => 22225,
-		"proxy_user" => "brd-customer-hl_ebdb3c0e-zone-data_center",
+		"proxy_user" => "brd-customer-hl_ebdb3c0e-zone-data_center-country-th",
 		"proxy_pass" => "0pi1xakwwrg5",
 		"proxy_list" => [
 			"zproxy.lum-superproxy.io",
@@ -287,7 +287,7 @@ class TMNOne
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-KeyID: ' . $this->tmnone_keyid, 'Content-Type: application/json'));
-		curl_setopt($curl, CURLOPT_USERAGENT, 'okhttp/4.4.0/202207111432/' . $this->tmnone_keyid);
+		curl_setopt($curl, CURLOPT_USERAGENT, 'okhttp/4.4.0/202304200255/' . $this->tmnone_keyid);
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $request_body);
 		$response_body = curl_exec($curl);
