@@ -106,6 +106,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<option <?php if ($withdraw['bank']=="09"): ?>
                         selected
                       <?php endif; ?> value="09">ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร จำกัด (มหาชน)</option>
+						<option <?php if ($withdraw['bank']=="10"): ?>
+							selected
+						<?php endif; ?> value="10">ทรูมันนี่วอลเล็ท (TRUE MONEY WALLET)</option>
                     </select>
                     </div>
                   </div>
