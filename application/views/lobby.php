@@ -3,6 +3,171 @@
     font-size: 15px !important;
 	  color : #0B0B0B;
   }
+  .btn-toggle {
+	  top: 50%;
+	  transform: translateY(-50%);
+  }
+  .btn-toggle {
+	  margin: 0 4rem;
+	  padding: 0;
+	  position: relative;
+	  border: none;
+	  height: 1.5rem;
+	  width: 3rem;
+	  border-radius: 1.5rem;
+	  color: #6b7381;
+	  background: #bdc1c8;
+  }
+  .btn-toggle:focus, .btn-toggle:focus.active, .btn-toggle.focus, .btn-toggle.focus.active {
+	  outline: none;
+  }
+  .btn-toggle:before, .btn-toggle:after {
+	  line-height: 1.5rem;
+	  width: 4rem;
+	  text-align: center;
+	  font-weight: 600;
+	  font-size: .75rem;
+	  text-transform: uppercase;
+	  letter-spacing: 2px;
+	  position: absolute;
+	  bottom: 0;
+	  transition: opacity .25s;
+  }
+  .btn-toggle:before {
+	  content: 'Off';
+	  left: -4rem;
+  }
+  .btn-toggle:after {
+	  content: 'On';
+	  right: -4rem;
+	  opacity: .5;
+  }
+  .btn-toggle > .handle {
+	  position: absolute;
+	  top: 0.1875rem;
+	  left: 0.1875rem;
+	  width: 1.125rem;
+	  height: 1.125rem;
+	  border-radius: 1.125rem;
+	  background: #fff;
+	  transition: left .25s;
+  }
+  .btn-toggle.active {
+	  transition: background-color .25s;
+  }
+  .btn-toggle.active > .handle {
+	  left: 1.6875rem;
+	  transition: left .25s;
+  }
+  .btn-toggle.active:before {
+	  opacity: .5;
+  }
+  .btn-toggle.active:after {
+	  opacity: 1;
+  }
+  .btn-toggle.btn-sm:before, .btn-toggle.btn-sm:after {
+	  line-height: -0.5rem;
+	  color: #fff;
+	  letter-spacing: .75px;
+	  left: 0.4125rem;
+	  width: 2.325rem;
+  }
+  .btn-toggle.btn-sm:before {
+	  text-align: right;
+  }
+  .btn-toggle.btn-sm:after {
+	  text-align: left;
+	  opacity: 0;
+  }
+  .btn-toggle.btn-sm.active:before {
+	  opacity: 0;
+  }
+  .btn-toggle.btn-sm.active:after {
+	  opacity: 1;
+  }
+  .btn-toggle:before, .btn-toggle:after {
+	  color: #6b7381;
+  }
+  .btn-toggle.active {
+	  background-color: #29b5a8;
+  }
+  .btn-toggle.btn-sm {
+	  margin: 0 .5rem;
+	  padding: 0;
+	  position: relative;
+	  border: none;
+	  height: 1.5rem;
+	  width: 3rem;
+	  border-radius: 1.5rem;
+  }
+  .btn-toggle.btn-sm:focus, .btn-toggle.btn-sm:focus.active, .btn-toggle.btn-sm.focus, .btn-toggle.btn-sm.focus.active {
+	  outline: none;
+  }
+  .btn-toggle.btn-sm:before, .btn-toggle.btn-sm:after {
+	  line-height: 1.5rem;
+	  width: .5rem;
+	  text-align: center;
+	  font-weight: 600;
+	  font-size: .55rem;
+	  text-transform: uppercase;
+	  letter-spacing: 2px;
+	  position: absolute;
+	  bottom: 0;
+	  transition: opacity .25s;
+  }
+  .btn-toggle.btn-sm:before {
+	  content: 'Off';
+	  left: -0.5rem;
+  }
+  .btn-toggle.btn-sm:after {
+	  content: 'On';
+	  right: -0.5rem;
+	  opacity: .5;
+  }
+  .btn-toggle.btn-sm > .handle {
+	  position: absolute;
+	  top: 0.1875rem;
+	  left: 0.1875rem;
+	  width: 1.125rem;
+	  height: 1.125rem;
+	  border-radius: 1.125rem;
+	  background: #fff;
+	  transition: left .25s;
+  }
+  .btn-toggle.btn-sm.active {
+	  transition: background-color .25s;
+  }
+  .btn-toggle.btn-sm.active > .handle {
+	  left: 1.6875rem;
+	  transition: left .25s;
+  }
+  .btn-toggle.btn-sm.active:before {
+	  opacity: .5;
+  }
+  .btn-toggle.btn-sm.active:after {
+	  opacity: 1;
+  }
+  .btn-toggle.btn-sm.btn-sm:before, .btn-toggle.btn-sm.btn-sm:after {
+	  line-height: -0.5rem;
+	  color: #fff;
+	  letter-spacing: .75px;
+	  left: 0.4125rem;
+	  width: 2.325rem;
+  }
+  .btn-toggle.btn-sm.btn-sm:before {
+	  text-align: right;
+  }
+  .btn-toggle.btn-sm.btn-sm:after {
+	  text-align: left;
+	  opacity: 0;
+  }
+  .btn-toggle.btn-sm.btn-sm.active:before {
+	  opacity: 0;
+  }
+  .btn-toggle.btn-sm.btn-sm.active:after {
+	  opacity: 1;
+  }
+
 </style>
 <script>
 	$(document).ready(function(){
@@ -29,16 +194,9 @@
 		echo empty($game_name) ? "" : " ".$game_name; 
 		?>
 	</span>
-	<button id="btn_write" type="button" class="btn btn-info " style="
-	  background-color: #4CAF50;
-	  border: none;
-	  color: white;
-	  padding: 15px 25px;
-	  text-align: center;
-	  text-decoration: none;
-	  display: inline-block;
-	  font-size: 16px;">
-		<?php echo $this->lang->line('winrate'); ?> :
+	<span><?php echo $this->lang->line('winrate'); ?></span>
+	<button type="button" id="btn_write" class="btn btn-sm btn-toggle" style="top: 10px; bottom: 10px;" data-toggle="button" aria-pressed="false" autocomplete="off">
+		<div class="handle"></div>
 	</button>
 	<hr style="margin-top: 15px">
 </section>
