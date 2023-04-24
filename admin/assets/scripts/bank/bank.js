@@ -145,7 +145,7 @@ function dataTable() {
 						id
 					} = full;
 					let selected = status == 1 ? 'selected' : '';
-					html += '<select class="form-control status" data-id="' + id + '">';
+					html += '<select class="form-control status" style="width: auto " data-id="' + id + '">';
 					html += '<option value="0">ปิด</option>';
 					html += '<option ' + selected + ' value="1">เปิด</option>';
 					html += '</select>';
@@ -162,7 +162,7 @@ function dataTable() {
 						id
 					} = full;
 					let selected = status_withdraw == 1 ? 'selected' : '';
-					html += '<select class="form-control status_withdraw" data-id="' + id + '">';
+					html += '<select class="form-control status_withdraw" style="width: auto " data-id="' + id + '">';
 					html += '<option value="0">ปิด</option>';
 					html += '<option ' + selected + ' value="1">เปิด</option>';
 					html += '</select>';
