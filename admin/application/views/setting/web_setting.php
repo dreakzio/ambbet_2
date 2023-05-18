@@ -695,6 +695,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</div>
 										</div>
 										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label">ขั้นต่ำการโยกเงินแนะนำเพื่อน</label>
+												<?php $minimum_com = $this->Setting_model->setting_find([
+														'name' => 'minimum_com'
+												]); ?>
+												<input type="text" id="minimum_com" name="web_setting[minimum_com]" oninput="validateInputNumber(this)" class="form-control" value="<?php echo $minimum_com['value'] ?>" placeholder="ข้อมูลขั้นต่ำการโยกเงินแนะนำเพื่อน">
+											</div>
+										</div>
+										<div class="col-md-4">
 											<div class="form-group <?php echo $ref_step2_status['value'] == "0" || empty($ref_step2_status['value']) ? 'd-none' : '' ?>">
 												<label class="control-label">Percent จากยอดเล่น</label>
 												<?php $ref_step2_percent = $this->Setting_model->setting_find([

@@ -45,9 +45,16 @@
 		</div>
 		<center>
 			<div class="form-group">
-				<button :disabled="pre_loader" @click.prevent="transferToMainWallet()" type="button" class="btn btn-light btn-lg btn-block" style="font-size: 20px">
-					<i class="fas fa-paper-plane"></i> <?php echo $this->lang->line('tranferpoint'); ?>
-				</button>
+				<div v-if="parseFloat(commission) >= parseFloat(minimum_com)">
+					<button :disabled="pre_loader" @click.prevent="transferToMainWallet()" type="button" class="btn btn-light btn-lg btn-block" style="font-size: 20px">
+						<i class="fas fa-paper-plane"></i> <?php echo $this->lang->line('tranferpoint'); ?>
+					</button>
+				</div>
+				<div v-else>
+					<button  @click.prevent="transferToMainWallet()" type="button" class="btn btn-danger btn-lg btn-block" style="font-size: 20px" disabled>
+						<i class="fas fa-paper-plane"></i> ค่าคอมมิชชั่นต้องมีมากกว่า {{minimum_com}} จึงสามารถโยกได้
+					</button>
+				</div>
 			</div>
 		</center>
 	</div>
@@ -194,6 +201,7 @@
 <script>
 	const ref_turn = "<?php echo isset($web_setting['ref_turn']) && !empty($web_setting['ref_turn']['value']) ? $web_setting['ref_turn']['value'] : '0'?>"
 	const user_id = "<?php echo $user['id']; ?>"
+	const minimum_com = "<?php echo floatval($web_setting['minimum_com']['value']); ?>"
 </script>
 <script src="<?php echo base_url('assets/plugins/numeral/min/numeral.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/plugins/qrcode/qrcode.min.js') ?>"></script>

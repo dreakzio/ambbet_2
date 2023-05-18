@@ -3,6 +3,7 @@ new Vue({
 	data (){
 		return {
 			commission : 0,
+			minimum_com : minimum_com,
 			user_id : user_id,
 			ref_turn : ref_turn,
 			loading_commission : false,

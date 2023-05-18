@@ -109,6 +109,9 @@ $web_setting['football_status'] = $this->Setting_model->setting_find([
 $web_setting['lotto_status'] = $this->Setting_model->setting_find([
 		'name' => 'lotto_status'
 ]);
+$web_setting['minimum_com'] = $this->Setting_model->setting_find([
+	'name' => 'minimum_com'
+]);
 error_reporting(0);
 ?>
 <html lang="en">
