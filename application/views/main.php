@@ -112,6 +112,9 @@ $web_setting['lotto_status'] = $this->Setting_model->setting_find([
 $web_setting['minimum_com'] = $this->Setting_model->setting_find([
 	'name' => 'minimum_com'
 ]);
+$web_setting['withdraw_all_status'] = $this->Setting_model->setting_find([
+	'name' => 'withdraw_all_status'
+]);
 error_reporting(0);
 ?>
 <html lang="en">

@@ -146,6 +146,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 										</select>
 									</div>
 								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label class="control-label">บังคับถอนทั้งหมดในบัญชี</label>
+										<?php $withdraw_all_status = $this->Setting_model->setting_find([
+												'name' => 'withdraw_all_status'
+										]); ?>
+										<select class="form-control" name="web_setting[withdraw_all_status]" id="withdraw_all_status">
+											<option value="0">ปิดใช้งาน</option>
+											<option value="1" <?php if ($withdraw_all_status['value']==1): ?>
+												selected
+											<?php endif; ?>>เปิดใช้งาน</option>
+										</select>
+									</div>
+								</div>
 							</div>
 
 							<div class="row">

@@ -4,6 +4,7 @@ new Vue({
 	el: "#"+page_id,
 	data (){
 		return {
+			withdraw_all_status : withdraw_all_status,
 			withdraw_min_amount : withdraw_min_amount,
 			amount : 0,
 			amount_withdraw : 0,

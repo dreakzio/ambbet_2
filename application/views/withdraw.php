@@ -80,7 +80,14 @@
 			<label><?php echo $this->lang->line('minimum_withdrawal'); ?></label>
 			<input type="text" class="form-control text-muted" name="Bonus" v-model="withdraw_min_amount" placeholder="" disabled="">
 			<label id="Tag"><?php echo $this->lang->line('withdraw_amount'); ?></label>
-			<vue-numeric :disabled="pre_loader" :placeholder="'<?php echo $this->lang->line('type_amount'); ?>'" :class="'form-control'" id="withdraw_amount" :read-only="false"  v-bind:precision="0" v-model="amount_withdraw" separator=","></vue-numeric>
+			<div v-if="withdraw_all_status == 1">
+				<span>in true</span>
+				<vue-numeric :disabled="pre_loader" :class="'form-control'" id="withdraw_amount" :read-only="false"  v-bind:precision="0" v-model="amount" separator="," disabled></vue-numeric>
+			</div>
+			<div v-else>
+				<span>in else</span>
+				<vue-numeric :disabled="pre_loader" :placeholder="'<?php echo $this->lang->line('type_amount'); ?>'" :class="'form-control'" id="withdraw_amount" :read-only="false"  v-bind:precision="0" v-model="amount_withdraw" separator=","></vue-numeric>
+			</div>
 			<div class="text-left text-warning mb-2 mt-2">
 				<a href="<?php echo $web_setting['line_url']['value']; ?>" class="text-warning" target="_blank">
 				<span style="font-size:1em;"><?php echo $this->lang->line('issue_contact_admin'); ?><span class="text-success"><?php echo isset($web_setting['line_id']) ? $web_setting['line_id']['value'] : ''; ?></span>
@@ -155,6 +162,7 @@
 
 
 <script>
+	const withdraw_all_status = "<?php echo $web_setting['withdraw_all_status']['value']; ?>";
 	const withdraw_auto_status = '<?php echo $withdraw_auto_status['value'];?>';
 	const withdraw_min_amount = '<?php echo $withdraw_min_amount!="" && is_numeric($withdraw_min_amount['value']) ? (int)$withdraw_min_amount['value'] : 0 ?>';
 </script>
