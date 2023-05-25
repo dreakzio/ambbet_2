@@ -3,15 +3,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Withdraw extends CI_Controller
 {
-    public function __construct()
-    {
-        date_default_timezone_set('Asia/Bangkok');
-        parent::__construct();
+	public $menu_service;
+	public function __construct()
+	{
+		date_default_timezone_set('Asia/Bangkok');
+		parent::__construct();
 
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
-            redirect('../auth');
-        }
-    }
+		//if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
+		if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
+			redirect('../auth');
+		}
+		$this->load->library(['Menu_service']);
+		if(!$this->menu_service->validate_permission_menu($this->uri)){
+			redirect('../auth');
+		}
+	}
     public function index()
     {
 		$this->load->helper('url');
@@ -457,6 +463,12 @@ class Withdraw extends CI_Controller
 										$bank_can_withdraw_once = $bank_can_withdraw;
 										$chk_bank_can_withdraw = true;
 										break;
+									}else if(isset($post['bank_id_withdraw']) && !empty($post['bank_id_withdraw'])
+										&& $post['bank_id_withdraw'] == $bank_can_withdraw['id']
+										&& ($bank_can_withdraw['bank_code'] == "10" )){
+										$bank_can_withdraw_once = $bank_can_withdraw;
+										$chk_bank_can_withdraw = true;
+										break;
 									}else if(empty($post['bank_id_withdraw'])
 										&& (($bank_can_withdraw['bank_code'] == "02" || $bank_can_withdraw['bank_code'] == "2")
 											||  ($bank_can_withdraw['bank_code'] == "05" || $bank_can_withdraw['bank_code'] == "5")
@@ -526,8 +538,9 @@ class Withdraw extends CI_Controller
 											exit();
 										}
 										$this->cache->file->save('process_withdraw',date('Y-m-d H:i:s'), 50);
+										$annotation ="WD ID :{$log_deposit_withdraw_id} Amount :{$finance['amount']} by {$_SESSION['user']['id']}:{$_SESSION['user']['username']}";
 										if($bank_can_withdraw_once['bank_code'] == "05" || $bank_can_withdraw_once['bank_code'] == "5"){
-											$res_withdraw = $this->auto_withdraw_librarie->transfer($member['username'],$finance['bank_number'],$bank_code,$finance['amount'],decrypt(base64_decode($bank_can_withdraw_once['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank_can_withdraw_once['api_token_2']),$this->config->item('secret_key_salt')),$bank_can_withdraw_once['bank_number']);
+											$res_withdraw = $this->auto_withdraw_librarie->transfer($member['username'],$finance['bank_number'],$bank_code,$finance['amount'],decrypt(base64_decode($bank_can_withdraw_once['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank_can_withdraw_once['api_token_2']),$this->config->item('secret_key_salt')),$bank_can_withdraw_once['bank_number'],$annotation);
 										}else if($bank_can_withdraw_once['bank_code'] == "02" || $bank_can_withdraw_once['bank_code'] == "2"){
 											$bank_code = getBankCodeForKbank()[$bank_code];
 											$res_withdraw = $this->auto_withdraw_librarie->transfer_kplus($member['username'],$finance['bank_number'],$bank_code,$finance['amount'],decrypt(base64_decode($bank_can_withdraw_once['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank_can_withdraw_once['api_token_2']),$this->config->item('secret_key_salt')),$bank_can_withdraw_once['bank_number']);
@@ -536,6 +549,9 @@ class Withdraw extends CI_Controller
 											$res_withdraw = $this->auto_withdraw_librarie->transfer_kma($member['username'],$finance['bank_number'],$bank_code,$finance['amount'],decrypt(base64_decode($bank_can_withdraw_once['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank_can_withdraw_once['api_token_2']),$this->config->item('secret_key_salt')),$bank_can_withdraw_once['bank_number']);
 										}else if($bank_can_withdraw_once['bank_code'] == "11"){
 											$res_withdraw = $this->auto_withdraw_librarie->transfer_kkp($member['username'],$finance['bank_number'],$bank_code,$finance['amount'],decrypt(base64_decode($bank_can_withdraw_once['api_token_1']),$this->config->item('secret_key_salt')),decrypt(base64_decode($bank_can_withdraw_once['api_token_2']),$this->config->item('secret_key_salt')),$bank_can_withdraw_once['bank_number']);
+										}else if($bank_can_withdraw_once['bank_code'] == "10"){
+											$res_withdraw = $this->auto_withdraw_librarie->transfer_truewallet($member['username'],$finance['bank_number'],$bank_code,$finance['amount'],$bank_can_withdraw_once['api_token_1'],$bank_can_withdraw_once['api_token_2'],$bank_can_withdraw_once['bank_number'],$bank_can_withdraw_once['username'],$bank_can_withdraw_once['password'],$annotation);
+											//print_r($res_withdraw);
 										}
 										if($res_withdraw['status']){
 											$this->cache->file->delete('process_withdraw');
@@ -629,6 +645,62 @@ class Withdraw extends CI_Controller
 												'type' => 2,
 												'message' => "ยอดถอน ".number_format($finance['amount'],2)." บาท ยูส ".$member['username']." เวลา ".date('Y-m-d H:i:s')." ถอนโดย ".$account_admin['full_name'],
 											]);
+											$line_send_messages_status = $this->Setting_model->setting_find([
+												'name' => 'line_send_messages_status'
+											]);
+											$web_name = $this->Setting_model->setting_find([
+												'name' => 'web_name'
+											]);
+											$line_login_callback = $this->Setting_model->setting_find([
+												'name' => 'line_login_callback'
+											]);
+											$line_messages_token = $this->Setting_model->setting_find([
+												'name' => 'line_messages_token'
+											]);
+
+											if(trim($line_send_messages_status['value'])==1 ) {
+
+												$line_msg = array();
+												$bank_list = array(
+													'01' => 'bbl',
+													'02' => 'kbank',
+													'03' => 'ktb',
+													'04' => 'tmb',
+													'05' => 'scb',
+													'06' => 'bay',
+													'07' => 'gsb',
+													'08' => 'tbank',
+													'09' => 'baac',
+													'1' => 'bbl',
+													'2' => 'kbank',
+													'3' => 'ktb',
+													'4' => 'tmb',
+													'5' => 'scb',
+													'6' => 'bay',
+													'7' => 'gsb',
+													'8' => 'tbank',
+													'9' => 'baac',
+													'10' => 'True Wallet',
+												);
+												//print_r($user);
+												$current_time = date('Y-m-d H:i:s');
+
+												$line_msg['web_name'] = $web_name['value'];
+												$line_msg['bank_tf_name'] = $bank_list[$member['bank_code']];
+												$line_msg['bank_tf_number'] = $finance['bank_number'];
+												$line_msg['balance'] = $res_withdraw['msg']['transferAmount'];
+												$line_msg['bank_time'] = $current_time;
+												$line_msg['credit_after'] = $member['amount_deposit_auto'] - $res_withdraw['msg']['transferAmount'];
+												$line_msg['url_login'] = $line_login_callback['value'];
+												$line_msg['linebot_userid'] = $member['linebot_userid'];
+												$line_msg['type_tran'] = 2;
+												//print_r($line_msg);
+												//include_once ('/lib/send_line_message.php');
+												if ($member['linebot_userid'] != '') {
+													$this->auto_withdraw_librarie->send_line_message($line_msg, $line_messages_token['value']);
+												}
+											}
+
 			$this->cache->file->delete('process_withdraw_'.$id);
 											echo json_encode([
 												'message' => 'ทำรายการสำเร็จ',

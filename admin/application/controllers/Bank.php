@@ -3,24 +3,39 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Bank extends CI_Controller
 {
+	public $menu_service;
 	public function __construct()
 	{
 		date_default_timezone_set('Asia/Bangkok');
 		parent::__construct();
 	}
-	private function checkSuperAdmin(){
-		if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != roleSuperAdmin()) {
-			redirect('../admin');
+	private function checkCanAccessMenu(){
+		//if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != roleSuperAdmin()) {
+		if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
+			redirect('../auth');
+		}
+		$this->load->library(['Menu_service']);
+		if(!$this->menu_service->validate_permission_menu($this->uri)){
+			redirect('../auth');
 		}
 	}
-	private function checkSuperAdminOrAdmin(){
-		if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'],[roleSuperAdmin(),roleAdmin()])) {
-			redirect('../admin');
+	private function checkOtherPageCanAccess(){
+		//if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'],[roleSuperAdmin(),roleAdmin()])) {
+		if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
+			redirect('../auth');
+		}
+		$permission_menu_role_cnt = $this->Permission_menu_role_model->permission_menu_role_cnt([
+			'role_id' => $_SESSION['user']['role'],
+		]);
+		if($permission_menu_role_cnt >= 1){
+
+		}else{
+			redirect('../auth');
 		}
 	}
 	public function index()
 	{
-		$this->checkSuperAdmin();
+		$this->checkCanAccessMenu();
 		$this->load->helper('url');
 		$currentURL = current_url();
 		$log_page_id = $this->Log_page_model->log_page_create([
@@ -37,7 +52,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_form_create()
 	{
-		$this->checkSuperAdmin();
+		$this->checkCanAccessMenu();
 		$this->load->helper('url');
 		$currentURL = current_url();
 		$log_page_id = $this->Log_page_model->log_page_create([
@@ -54,7 +69,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_create()
 	{
-		$this->checkSuperAdmin();
+		$this->checkCanAccessMenu();
 
 		if($_POST['bank_code']=='11'){
 			$_POST['username']='xxxx';
@@ -211,6 +226,7 @@ class Bank extends CI_Controller
             'promptpay_number' => $post['promptpay_number'],
             'promptpay_status' => $post['promptpay_status'],
 			'status' => $post['status'],
+			'check_regis' => $post['check_regis'],
 			'message_can_not_deposit' => isset($post['message_can_not_deposit']) ? $post['message_can_not_deposit'] : null,
 			'status_withdraw' => isset($post['status_withdraw']) ? $post['status_withdraw'] : 0,
 			'start_time_can_not_deposit' => $start_time_can_not_deposit,
@@ -292,6 +308,34 @@ class Bank extends CI_Controller
 		}
 		//print_r($res);
 	}
+
+	public function bank_scb_get_otp(){
+		$cardId = trim($_POST["cardId"]);
+		$cardType = trim($_POST["cardType"]);
+		$dateOfBirth = trim($_POST["dateOfBirth"]);
+		$MobilePhoneNo = trim($_POST["MobilePhoneNo"]);
+
+		require_once FCPATH .'../lib/scb_getdevice.php';
+
+		$scb_getdevice = new scb_getdevice();
+		$res = $scb_getdevice->register_newdevice($cardId,$dateOfBirth,$MobilePhoneNo,$cardType);
+
+		echo json_encode($res);
+	}
+
+	public function bank_scb_confirm_otp(){
+		$cardId = trim($_POST["cardId"]);
+		$cardType = trim($_POST["cardType"]);
+		$dateOfBirth = trim($_POST["dateOfBirth"]);
+		$MobilePhoneNo = trim($_POST["MobilePhoneNo"]);
+
+		require_once FCPATH .'../lib/scb_getdevice.php';
+
+		$scb_getdevice = new scb_getdevice();
+		$res = $scb_getdevice->register_newdevice($cardId,$dateOfBirth,$MobilePhoneNo,$cardType);
+
+		echo json_encode($res);
+	}
 	public function bank_list()
 	{
 		$this->checkSuperAdminOrAdmin();
@@ -361,7 +405,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_status_update()
 	{
-		$this->checkSuperAdmin();
+		$this->checkCanAccessMenu();
 		check_parameter([
 			'id',
 			'status'
@@ -379,7 +423,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_status_withdraw_update()
 	{
-		$this->checkSuperAdmin();
+		$this->checkCanAccessMenu();
 		check_parameter([
 			'id',
 			'status_withdraw'
@@ -397,7 +441,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_form_update($id="")
 	{
-		$this->checkSuperAdmin();
+		$this->checkCanAccessMenu();
 		$this->load->helper('url');
 		$currentURL = current_url();
 		$log_page_id = $this->Log_page_model->log_page_create([
@@ -424,7 +468,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_update($id="")
 	{
-		$this->checkSuperAdmin();
+		$this->checkCanAccessMenu();
 		if($_POST['bank_code']=='11'){
 			$_POST['username']='xxxx';
 			$_POST['password']='xxxx';
@@ -541,6 +585,7 @@ class Bank extends CI_Controller
             'promptpay_status' => $post['promptpay_status'],
 			'id' => $id,
 			'status' => $post['status'],
+			'check_regis' => $post['check_regis'],
 			'status_withdraw' => isset($post['status_withdraw']) ? $post['status_withdraw'] : 0,
 			'message_can_not_deposit' => isset($post['message_can_not_deposit']) ? $post['message_can_not_deposit'] : null,
 			'start_time_can_not_deposit' => $start_time_can_not_deposit,
@@ -571,7 +616,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_delete($id = "")
 	{
-		$this->checkSuperAdmin();
+		$this->checkCanAccessMenu();
 		check_parameter([], 'POST');
 		$update = [
 			'id' => $id,

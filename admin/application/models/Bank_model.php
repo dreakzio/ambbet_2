@@ -126,6 +126,7 @@ class Bank_model extends CI_Model
 		  promptpay_number,
 		  promptpay_status,
 		  status,
+		  check_regis,
 		  deleted,
 		  balance,
 		  status_withdraw,

@@ -52,6 +52,7 @@ class Account_model extends CI_Model
         account.auto_accept_bonus,
         account.rank,
         account.is_auto_withdraw,
+        account.linebot_userid,
         account.phone
         ');
         if (isset($search['id'])) {
@@ -481,69 +482,5 @@ class Account_model extends CI_Model
 			}
 		}
 		return $data;
-	}
-	public function  account_role($account_id)
-	{
-		$this->db->select('
-    		*
-    	');
-		if(empty($account_id)){
-			return null;
-		}
-		$this->db->where('user_id =', $account_id);
-		$query = $this->db->get('user_role');
-		$account_role =  $query->row_array();
-		return $account_role;
-	}
-	public function  account_create_role($account_id,$role_id)
-	{
-		if($role_id !== "" && !empty($account_id)){
-			try{
-				$this->db->select('
-					*
-				');
-				$this->db->where('role_id =', $role_id);
-				$query = $this->db->get('role');
-				$role =  $query->row_array();
-				if($role != ""){
-					date_default_timezone_set("Asia/Bangkok"); //set เขตเวลา
-					$data = [
-						'user_id' =>$account_id,
-						'role_id' =>$role['role_id'],
-					];
-					$data['created_at'] = isset($data['created_at']) ? $data['created_at'] : date('Y-m-d H:i:s');
-					$data['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : date('Y-m-d H:i:s');
-					$this->db->insert('user_role', $data);
-					$id = $this->db->insert_id();
-					return $id;
-				}
-			}catch (Exception $ex){
-
-			}
-		}
-		return null;
-	}
-	public function  account_update_role($id,$role_id)
-	{
-		try{
-			$this->db->select('
-					*
-				');
-			$this->db->where('role_id =', $role_id);
-			$query = $this->db->get('role');
-			$role =  $query->row_array();
-			if($role != ""){
-				date_default_timezone_set("Asia/Bangkok"); //set เขตเวลา
-				$data = [
-					'role_id' =>$role['role_id'],
-				];
-				$data['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : date('Y-m-d H:i:s');
-				$this->db->where('id', $id);
-				$this->db->update('user_role', $data);
-			}
-		}catch (Exception $ex){
-
-		}
-		return true;
 	}
 }

@@ -150,18 +150,18 @@
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<span class="input-group-text">
-						  <img src="<?php echo base_url('/') ?>assets/images/register2/user.png" alt="" width="25">
+						  <img src="<?php echo base_url('/') ?>assets/images/register2/acccount_number.png" alt="" width="25">
 						</span>
 					</div>
-					<input type="text" class="form-control" id="full_name" maxlength="100" name="full_name" v-model="form.full_name" placeholder="<?php echo $this->lang->line('type_full_name'); ?>">
+					<input type="tel" @keypress="checkBankAcc" class="form-control" :readonly="form.bank == '10'" id="bank_number" maxlength="15" name="bank_number" v-model="form.bank_number" placeholder="<?php echo $this->lang->line('type_full_name'); ?>">
 				</div>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 					  <span class="input-group-text">
-						<img src="<?php echo base_url('/') ?>assets/images/register2/acccount_number.png" alt="" width="25">
+						<img src="<?php echo base_url('/') ?>assets/images/register2/user.png" alt="" width="25">
 					  </span>
 					</div>
-					<input type="tel" class="form-control" :readonly="form.bank == '10'" id="bank_number" maxlength="15" name="bank_number" v-model="form.bank_number" placeholder="<?php echo $this->lang->line('type_bank_number'); ?>">
+					<input type="text" class="form-control" id="full_name" maxlength="100" name="full_name" v-model="form.full_name" placeholder="<?php echo $this->lang->line('type_full_name'); ?>">
 				</div>
 				<div class="mb-3">
 					<div class="text-center">
@@ -186,7 +186,28 @@
 			 :height="60"
 			 :opacity="0.2"
 			 color="#fff"
-			 :is-full-page="true"></loading>
+			 :is-full-page="true">
+		<div class="wrapper">
+			<div class="loader">
+				<div class="dot"></div>
+			</div>
+			<div class="loader">
+				<div class="dot"></div>
+			</div>
+			<div class="loader">
+				<div class="dot"></div>
+			</div>
+			<div class="loader">
+				<div class="dot"></div>
+			</div>
+			<div class="loader">
+				<div class="dot"></div>
+			</div>
+			<div class="loader">
+				<div class="dot"></div>
+			</div>
+		</div>
+	</loading>
 </section>
 <script>
 	 const register_step = "<?php echo isset($_SESSION['register_step']) ? $_SESSION['register_step'] : 1; ?>";

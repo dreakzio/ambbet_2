@@ -197,18 +197,15 @@ function roleMember(){
 	return '2';
 }
 function canManageRole(){
-	return [
-		'0' => ['0','1','2'],
-		'1' => ['2'],
-		'2' => [],
-	];
+	$CI = & get_instance();
+	$CI->load->library(['Permission_role_service']);
+	return $CI->permission_role_service->can_manage_role();
 }
+
 function roleDisplay(){
-	return [
-		'0' => "ผู้ดูแลระบบสูงสุด",
-		'1' => "ผู้ดูแลระบบ",
-		'2' => "สมาชิก",
-	];
+	$CI = & get_instance();
+	$CI->load->library(['Permission_role_service']);
+	return $CI->permission_role_service->role_display();
 }
 function encrypt($data, $password){
 	$iv = substr(sha1(mt_rand()), 0, 16);
@@ -286,25 +283,5 @@ function get_data_report_all_day(){
 	];
 	$CI->cache->file->save(base64_encode('dashboard_report'),$data, 15);
 	return $data;
-}
-function init_role($account_id)
-{
-	$CI = &get_instance();
-	$account_role = $CI->Account_model->account_role($account_id);
-	if(!empty($account_role)){
-		if($account_role['role_id'] != $_SESSION['user']['role']){
-			$_SESSION['user']['role_current'] = $_SESSION['user']['role'];
-			$chk = $CI->Account_model->account_update_role($account_role['id'],$_SESSION['user']['role']);
-		}else{
-			$_SESSION['user']['role_current'] = $account_role['role_id'];
-		}
-	}else{
-		if(isset($_SESSION['user']) && isset($_SESSION['user']['role']) && in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])){
-			$chk = $CI->Account_model->account_create_role($_SESSION['user']['id'],$_SESSION['user']['role']);
-			if(!is_null($chk)){
-				$_SESSION['user']['role_current'] = $_SESSION['user']['role'];
-			}
-		}
-	}
 }
 

@@ -39,6 +39,15 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 		}
 	}
 
+	$sql_line_send_messages_status = "SELECT a.value as line_send_messages_status ,b.value as line_messages_token,c.value as web_name ,d.value as line_login_callback
+									FROM `web_setting` as a , `web_setting` as b , `web_setting` as c , `web_setting` as d
+									where a.name = 'line_send_messages_status'
+									  and b.name = 'line_messages_token' 
+									  and c.name = 'web_name'
+									  and d.name = 'line_login_callback'";
+	$ds_line_send_messages_status = $obj_con_cron->query($sql_line_send_messages_status);
+	$da_line_send_messages_status   = $ds_line_send_messages_status->fetch_assoc();
+
 	//Check bank active
 	$sql_bank_check = "SELECT * FROM `bank` where status = '1' and (bank_code = '02' or bank_code = '2') and deleted = '0' order by status_withdraw asc";
 	$con_bank_check = $obj_con_cron->query($sql_bank_check);
@@ -285,10 +294,10 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 																					}
 																				}
 																			}
-																			$sql_acc_check = "SELECT id,amount_deposit_auto,bank,bank_number,bank_name,username FROM `account` where bank IN ('".implode("','",['02','2'])."') and (".$bank_number_like.") and deleted = '0' ORDER BY active_deposit_date DESC";
+																			$sql_acc_check = "SELECT id,amount_deposit_auto,bank,bank_number,bank_name,username,linebot_userid FROM `account` where bank IN ('".implode("','",['02','2'])."') and (".$bank_number_like.") and deleted = '0' ORDER BY active_deposit_date DESC";
 																			//$sql_acc_check = "SELECT id,amount_deposit_auto,bank,bank_number,bank_name,username FROM `account` where bank IN ('".implode("','",['02','2'])."') and bank_number like '".$bank_number_like."' and deleted = '0' ORDER BY active_deposit_date DESC";
 																		}else{
-																			$sql_acc_check = "SELECT id,amount_deposit_auto,bank,bank_number,bank_name,username FROM `account` where bank NOT IN ('".implode("','",['02','2'])."') and bank_number like '%".$bank_number."%' and deleted = '0' ORDER BY active_deposit_date DESC";
+																			$sql_acc_check = "SELECT id,amount_deposit_auto,bank,bank_number,bank_name,username,linebot_userid FROM `account` where bank NOT IN ('".implode("','",['02','2'])."') and bank_number like '%".$bank_number."%' and deleted = '0' ORDER BY active_deposit_date DESC";
 																		}
 																		$con_acc_check = $obj_con_cron->query($sql_acc_check);
 																		$check_acc = $con_acc_check->num_rows;
@@ -322,6 +331,46 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 																											$sql_insert_line_notify ="INSERT INTO `log_line_notify` (`id`, `type`, `message`) VALUES (NULL, '1', '".$message."')";
 																											$obj_con_cron->query($sql_insert_line_notify);
 																										}
+
+																										if($da_line_send_messages_status['line_send_messages_status']==1){
+																											$bank_list = array(
+																												'01' => 'bbl',
+																												'02' => 'kbank',
+																												'03' => 'ktb',
+																												'04' => 'tmb',
+																												'05' => 'scb',
+																												'06' => 'bay',
+																												'07' => 'gsb',
+																												'08' => 'tbank',
+																												'09' => 'baac',
+																												'1' => 'bbl',
+																												'2' => 'kbank',
+																												'3' => 'ktb',
+																												'4' => 'tmb',
+																												'5' => 'scb',
+																												'6' => 'bay',
+																												'7' => 'gsb',
+																												'8' => 'tbank',
+																												'9' => 'baac',
+																											);
+																											$line_msg = array();
+																											$line_msg['web_name'] = $da_line_send_messages_status['web_name'];
+																											$line_msg['bank_tf_name'] = $bank_list[$rs_acc['bank']];
+																											$line_msg['bank_tf_number'] = $rs_acc['bank_number'];
+																											$line_msg['balance'] = number_format($balance,2);
+																											$line_msg['bank_time'] = $v['date']." ".$v['time'];
+																											$line_msg['credit_after'] = $credit_after;
+																											$line_msg['url_login'] = $da_line_send_messages_status['line_login_callback'];
+																											$line_msg['linebot_userid'] = $rs_acc['linebot_userid'];
+																											$line_msg['type_tran'] = 1;
+
+																											if($rs_acc['linebot_userid']!=''){
+																												$sendtoline = new send_line_message();
+																												$sendtoline->sendline_deposit($line_msg,$da_line_send_messages_status['line_messages_token']);
+																											}
+
+																										}
+
 																										if($obj_con_cron->commit()){
 																											//$content = base64_encode("SELECT * FROM `report_smses` where DATE_FORMAT(create_date,'%Y-%m-%d') = '".$v['date']."' and DATE_FORMAT(create_time,'%H:%i') = '".$time_explode[0].":".$time_explode[1]."' and type_deposit_withdraw = 'D' and amount <=> CAST('".$balance."' AS DECIMAL(15, 2)) and payment_gateway = '".$payment_gateway."' and is_bot_running = '1'");
 																											//file_put_contents($cache_filename, $content);
@@ -638,7 +687,7 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 																						$bank_number_like = "bank_number like '%".$bank_number."%'";
 																					}
 																				}
-																				$sql_acc_check = "SELECT id,amount_deposit_auto,bank,bank_number,bank_name,username FROM `account` where bank IN ('".implode("','",$v['bank_code_list'])."') and (".$bank_number_like.") and deleted = '0' ORDER BY active_deposit_date DESC";
+																				$sql_acc_check = "SELECT id,amount_deposit_auto,bank,bank_number,bank_name,username,linebot_userid FROM `account` where bank IN ('".implode("','",$v['bank_code_list'])."') and (".$bank_number_like.") and deleted = '0' ORDER BY active_deposit_date DESC";
 																				$con_acc_check = $obj_con_cron->query($sql_acc_check);
 																				$check_acc = $con_acc_check->num_rows;
 																				$chk_bank_acc_name_match_cnt = 0;
@@ -715,6 +764,45 @@ if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 																													$message = "ยอดฝาก ".number_format($balance,2)." บาท ยูส ".$rs_acc['username']." เวลา ".$v['date']." ".$v['time']." ปรับโดย AUTO";
 																													$sql_insert_line_notify ="INSERT INTO `log_line_notify` (`id`, `type`, `message`) VALUES (NULL, '1', '".$message."')";
 																													$obj_con_cron->query($sql_insert_line_notify);
+																												}
+
+																												if($da_line_send_messages_status['line_send_messages_status']==1){
+																													$bank_list = array(
+																														'01' => 'bbl',
+																														'02' => 'kbank',
+																														'03' => 'ktb',
+																														'04' => 'tmb',
+																														'05' => 'scb',
+																														'06' => 'bay',
+																														'07' => 'gsb',
+																														'08' => 'tbank',
+																														'09' => 'baac',
+																														'1' => 'bbl',
+																														'2' => 'kbank',
+																														'3' => 'ktb',
+																														'4' => 'tmb',
+																														'5' => 'scb',
+																														'6' => 'bay',
+																														'7' => 'gsb',
+																														'8' => 'tbank',
+																														'9' => 'baac',
+																													);
+																													$line_msg = array();
+																													$line_msg['web_name'] = $da_line_send_messages_status['web_name'];
+																													$line_msg['bank_tf_name'] = $bank_list[$rs_acc['bank']];
+																													$line_msg['bank_tf_number'] = $rs_acc['bank_number'];
+																													$line_msg['balance'] = number_format($balance,2);
+																													$line_msg['bank_time'] = $v['date']." ".$v['time'];
+																													$line_msg['credit_after'] = $credit_after;
+																													$line_msg['url_login'] = $da_line_send_messages_status['line_login_callback'];
+																													$line_msg['linebot_userid'] = $rs_acc['linebot_userid'];
+																													$line_msg['type_tran'] = 1;
+
+																													if($rs_acc['linebot_userid']!=''){
+																														$sendtoline = new send_line_message();
+																														$sendtoline->sendline_deposit($line_msg,$da_line_send_messages_status['line_messages_token']);
+																													}
+
 																												}
 																												if($obj_con_cron->commit()){
 																													//$content = base64_encode("SELECT * FROM `report_smses` where DATE_FORMAT(create_date,'%Y-%m-%d') = '".$v['date']."' and DATE_FORMAT(create_time,'%H:%i') = '".$time_explode[0].":".$time_explode[1]."' and type_deposit_withdraw = 'D' and amount <=> CAST('".$balance."' AS DECIMAL(15, 2)) and payment_gateway = '".$payment_gateway."' and is_bot_running = '1'");

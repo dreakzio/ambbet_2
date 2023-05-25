@@ -76,7 +76,7 @@ class Check_User extends CI_Controller{
 										'gg_2fa_secret' => isset($_SESSION['user']['gg_2fa_secret']) ? $_SESSION['user']['gg_2fa_secret'] : "",
 									];
 									//ตรวจสอบการผูก user_role
-									init_role($account['id']);
+									//init_role($account['id']);
 								}
 							}
 						}catch (Exception $ex){
@@ -112,7 +112,7 @@ class Check_User extends CI_Controller{
 							];
 
 							//ตรวจสอบการผูก user_role
-							init_role($account['id']);
+							//init_role($account['id']);
 
 							$login_status = $this->CI->Setting_model->setting_find([
 								'name' => "login_status"
@@ -185,7 +185,7 @@ class Check_User extends CI_Controller{
 								];
 
 								//ตรวจสอบการผูก user_role
-								init_role($account['id']);
+								//init_role($account['id']);
 
 								$this->CI->Account_model->account_update([
 									'id' => $_SESSION['user']['id'],
@@ -229,7 +229,7 @@ class Check_User extends CI_Controller{
 									}else if(($auto_create_member!="" && $auto_create_member['value'] == "1") || $auto_create_member==""){
 										$this->autoGenerateUsername();
 									}
-								}else if(in_array($account['role'],[roleAdmin(),roleSuperAdmin()]) && empty($account['account_agent_username']) && $this->CI->router->class != "deposit"){
+								}else if(!in_array($account['role'],[roleMember()]) && empty($account['account_agent_username']) && $this->CI->router->class != "deposit"){
 									if($isAjaxRequest === FALSE){
 										$this->autoGenerateUsername();
 									}

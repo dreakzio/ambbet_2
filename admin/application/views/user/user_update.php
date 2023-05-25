@@ -113,12 +113,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </div>
                   <div class="col-md-4">
                     <div class="form-group">
-                      <label class="control-label">สถานะ</label>
+                      <label class="control-label">สิทธิ์</label>
                       <select class="form-control" name="role" id="role">
 						<?php
 							$role_list_can_mange = canManageRole()[$_SESSION['user']['role']];
+							$roleDisplay = roleDisplay();
 						?>
-						  <?php foreach(roleDisplay() as $key => $role): ?>
+						  <?php foreach($roleDisplay as $key => $role): ?>
 						      <?php if(in_array($key,$role_list_can_mange)): ?>
 								  <option value="<?php echo $key; ?>" <?php echo $user['role'] == $key ? 'selected' : '' ?>><?php echo $role; ?></option>
 						      <?php endif; ?>

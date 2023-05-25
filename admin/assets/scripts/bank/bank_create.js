@@ -178,7 +178,7 @@ $(document).on('click', '#btn_create', function() {
 							allowOutsideClick: false,
 							allowEscapeKey: false,
 							preConfirm: (data) => {
-								console.log(data.result)
+								//console.log(data.result)
 								Swal.fire({
 									text: "กรุณารอสักครู่..",
 									showConfirmButton: false,
@@ -187,7 +187,7 @@ $(document).on('click', '#btn_create', function() {
 									confirmButtonText: '',
 								}),
 									Swal.showLoading();
-									$.ajax ({
+								$.ajax ({
 									type: "POST",
 									url: BaseURL +"bank/bank_kkp_confirm_otp",
 									dataType: "json",
@@ -313,6 +313,10 @@ $(document).on('change', '#bank_code', function(e) {
 		$("#api_token_3").hide();
 		$("#api_token_3_label").text("Other");
 		$("#api_token_3").attr("placeholder","Other");
+
+		if($('#bank_code').val() == "05" || $('#bank_code').val() == "5"){
+			$("#container_check_regis").show();
+		}
 		if(value == "02" || value == "2" || value == "06" || value == "6" || value == "05" || value == "5" || value == "11"){
 			if($('#api_type').val() == "1"){
 				$("#container_auto_transfer").show();
@@ -326,14 +330,25 @@ $(document).on('change', '#bank_code', function(e) {
 					$("#auto_transfer_bank_code").prop("disabled",false);
 					$("#auto_transfer_bank_number").prop("disabled",false);
 					$("#auto_transfer_bank_acc_name").prop("disabled",false);
-
 				}
 			}
 			$("#api_type").find("option").removeAttr("disabled");
 			$("#api_type").parents('.form-group').show();
+			if($('#bank_code').val() !== "05" && $('#bank_code').val() !== "5"){
+
+				$("#api_type").find("option:eq(2)").prop("disabled",true);
+				$("#api_type").val(1);
+			}
 			if(value == "05" || value == "5"){
 				$("#api_type").find("option:eq(1)").prop("disabled",true);
+				//$("#api_type").find("option:eq(2)").prop("enabled",false);
+				$('.header-form-api-scb').show();
+				$('.form-api-scb').show();
+				$('.header-form-api').show();
+				$('.form-api').show();
 			}
+
+
 			if(value=='11'){
 				$('#status_withdraw').val(1);
 				$("#status_withdraw").find("option:eq(0)").prop("disabled",true);
@@ -389,7 +404,129 @@ $(document).on('change', '#bank_code', function(e) {
 		$("#api_token_2").attr("placeholder","PIN");
 		$("#api_token_3_label").text("Other");
 		$("#api_token_3").attr("placeholder","Other");
+		$("#container_check_regis").hide();
 	}
+});
+$(document).on('click','.getDiviceID',function (e){
+	$('#modal_getDeviceId').modal('toggle');
+
+});
+$(document).on('click','#getOtpdata',function (e){
+	var cardId = $("#cardId").val();
+	var cardType = $("#cardType").val();
+	var dateOfBirth = $("#dateOfBirth").val();
+	var MobilePhoneNo = $("#MobilePhoneNo").val();
+	//var deviceId = localStorage.getItem("deviceId");
+	Swal.fire({
+		text: "กรุณารอสักครู่..",
+		showConfirmButton: false,
+		allowOutsideClick: false,
+		allowEscapeKey: false,
+		confirmButtonText: '',
+	}),
+		Swal.showLoading();
+
+	$.ajax({
+		url: BaseURL +"bank/bank_scb_get_otp",
+		method: "post",
+		data: {
+			cardId: cardId,
+			cardType: cardType,
+			dateOfBirth: dateOfBirth,
+			MobilePhoneNo: MobilePhoneNo
+		},
+		success: function(data) {
+			swal.close();
+			if (data == 'Auth error') {
+
+				Swal.fire({
+					icon: 'error',
+					title: 'แจ้งเตือน...',
+					text: 'ข้อมูลไม่ถูกต้อง'
+				})
+			}
+			if (data != "") {
+				var obj = JSON.parse(data);
+				var msg = obj.msg
+				var status = obj.status
+				var refphone = obj.refphone
+				var ref = obj.ref
+				var Auth = obj.Auth
+				if (status == 200) {
+					document.getElementById("refphone").value = refphone;
+					document.getElementById("Ref").value = ref;
+					document.getElementById("tokenUUID").value = msg;
+					document.getElementById("Auth").value = Auth;
+					document.getElementById("deviceId").value = deviceId;
+
+					$("#modal_getDeviceId").modal('hide');
+					$("#OtpModal").modal('toggle');
+
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'แจ้งเตือน...',
+						text: msg
+					})
+				}
+			}
+		}
+	});
+});
+$(document).on('click','#confirm_otp',function (e){
+	var Otp = $("#Otp").val();
+	var pin = $("#pin").val();
+	var tokenUUID = $("#tokenUUID").val();
+	var Auth = $("#Auth").val();
+	var deviceId = $("#deviceId").val();
+	var MobilePhoneNo = $("#MobilePhoneNo").val();
+	var TagID = $("#TagID").val();
+	var cardId = $("#cardId").val();
+	var dateOfBirth = $("#dateOfBirth").val();
+
+	Swal.fire({
+		text: "กรุณารอสักครู่..",
+		showConfirmButton: false,
+		allowOutsideClick: false,
+		allowEscapeKey: false,
+		confirmButtonText: '',
+	}),
+		Swal.showLoading();
+
+	$.ajax({
+		url: BaseURL +"bank/bank_scb_confirm_otp",
+		method: "post",
+		dataType: "json",
+		data: {
+			Otp: Otp,
+			pin: pin,
+			tokenUUID: tokenUUID,
+			Auth: Auth,
+			deviceId: deviceId,
+			MobilePhoneNo: MobilePhoneNo,
+			cardId: cardId,
+			dateOfBirth: dateOfBirth,
+			TagID: TagID
+		},
+		success: function(response) {
+			$("#OtpModal").modal('hide');
+			swal.close();
+
+			$.each(response.data, function(key, value) {
+				var lower = value.deviceId
+				var lowers = lower.toLowerCase();
+
+				$('#api_token_1').val(value.brand);
+				$('#api_token_2').val(pin);
+				$("#deviceIdData").append('<li class="list-group-item vs-checkbox-lg">' +
+					'<span class="pull-left "><input class="form-check-box" type="checkbox" id="getUseDeviceID"> ' + key + ' ) </span>' +
+					'<span class="pull-left "> ' + lowers + '</span>' +
+					'<span class="pull-right ">' + value.brand + '</span>' +
+					'</li>');
+				$("#deviceIdData").show();
+			});
+		}
+	});
 });
 $(document).ready(function() {
 	$("#api_type").parents('.form-group').hide();
@@ -431,8 +568,14 @@ $(document).ready(function() {
 			}
 			$("#api_type").find("option").removeAttr("disabled");
 			$("#api_type").parents('.form-group').show();
+
 			if($('#bank_code').val() == "05" || $('#bank_code').val() == "5"){
 				$("#api_type").find("option:eq(1)").prop("disabled",true);
+			}
+			//console.log($('#bank_code').val());
+			if($('#bank_code').val() != "05" || $('#bank_code').val() != "5"){
+
+				$("#api_type").find("option:eq(2)").prop("disabled",true);
 			}
 		}
 	}else{
@@ -458,6 +601,10 @@ $(document).on('change', '#auto_transfer', function(e) {
 		|| $('#bank_code').val() == "02" || $('#bank_code').val() == "2"  || $('#bank_code').val() == "3"
 		|| $('#bank_code').val() == "03"  || $('#bank_code').val() == "06" || $('#bank_code').val() == "6" || $('#bank_code').val() == "11")){
 		$("#container_auto_transfer").show();
+		if($('#bank_code').val() == "05" || $('#bank_code').val() == "5"){
+			$("#container_check_regis").show();
+		}
+
 		if(value == "0"){
 			$("#auto_min_amount_transfer").prop("disabled",true);
 			$("#auto_transfer_bank_code").prop("disabled",true);
@@ -490,6 +637,16 @@ $(document).on('change', '#api_type', function(e) {
 			$("#auto_transfer_bank_number").prop("disabled",false);
 			$("#auto_transfer_bank_acc_name").prop("disabled",false);
 		}
+	}else if (value == "3" && ($('#bank_code').val() == "05" || $('#bank_code').val() == "5")){
+		$("#container_auto_transfer").show();
+		$('#username_label').html('Email login Line Lift');
+		$('#password_label').html('password login Line Lift');
+		$('#status_withdraw').find("option:eq(1)").prop("disabled",true);
+
+		$("#start_time_can_not_deposit").prop("readonly",false);
+		$("#end_time_can_not_deposit").prop("readonly",false);
+		$("#message_can_not_deposit").prop("readonly",false);
+		$("#max_amount_withdraw_auto").prop("readonly",true);
 	}else{
 		$("#container_auto_transfer").hide();
 	}

@@ -5,6 +5,7 @@ class Log_account_model extends CI_Model
 {
 	public function log_account_list($search = [])
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
         	log_account.id,
         	log_account.manage_by_username,
@@ -21,7 +22,7 @@ class Log_account_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('log_account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('log_account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('log_account.role',$canManage);
 		}
 		if (isset($search['search']) && !empty(trim($search['search']))) {
 			$this->db->group_start();
@@ -49,6 +50,7 @@ class Log_account_model extends CI_Model
 	}
 	public function log_account_find($search = [])
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
         	log_account.id,
         	log_account.manage_by_username,
@@ -66,7 +68,7 @@ class Log_account_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('log_account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('log_account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('log_account.role', $canManage);
 		}
 		if (isset($search['search']) && !empty(trim($search['search']))) {
 			$this->db->group_start();
@@ -86,13 +88,14 @@ class Log_account_model extends CI_Model
 	}
 	public function log_account_count($search = [])
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
 			count(1) as cnt_row
 		');
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('log_account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('log_account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('log_account.role', $canManage);
 		}
 		if (isset($search['search']) && !empty(trim($search['search']))) {
 			$this->db->group_start();

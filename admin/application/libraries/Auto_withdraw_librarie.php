@@ -13,15 +13,20 @@ class Auto_withdraw_librarie
 	{
 
 	}
-    public function transfer($username = null,$accnum = null,$code = null,$money=null,$deviceid,$api_refresh,$bank_number)
+    public function transfer($username = null,$accnum = null,$code = null,$money=null,$deviceid,$api_refresh,$bank_number,$annotaion ='')
     {
 		//require_once FCPATH .'../config.php';
 		require_once FCPATH .'../lib/Scb.php';
 		if(!is_null($username) && !is_null($money) && !is_null($accnum) && !is_null($code)){
 			if (is_numeric($money)) {
 				try{
+					if($annotaion !=''){
+						$personal_msg =$annotaion;
+					}else{
+						$personal_msg ="";
+					}
 					$api = new scb($deviceid, $api_refresh, $bank_number); //$deviceId,$api_refresh,$accnum
-					$res = $api->Transfer($accnum, $code, $money);
+					$res = $api->Transfer($accnum, $code, $money,$personal_msg);
 					$json = json_decode($res, true);
 					if ($json['status']['code'] == 1000) {
 						return ['status' => true, 'msg' => $json];
@@ -137,5 +142,59 @@ class Auto_withdraw_librarie
 		}else{
 			return ['status' => false, 'msg' => 'ข้อมูลไม่ถูกต้อง#1'];
 		}
+	}
+	public function transfer_truewallet($username = null,$accnum = null,$code = null,$money=null,$api_token_1,$api_token_2,$bank_number,$tmn_key_id,$tmn_id,$annotaion="")
+	{
+		//require_once FCPATH .'../config.php';
+		require_once FCPATH .'../lib/TMNOoo.php';
+		if(!is_null($username) && !is_null($money) && !is_null($accnum)){
+			if (is_numeric($money)) {
+				try{
+					$_TMN = array();
+					$_TMN['tmn_key_id'] = $tmn_key_id; //Key ID จากระบบ TMNOne
+					$_TMN['mobile_number'] = $bank_number; //เบอร์ Wallet
+					$_TMN['login_token'] = $api_token_2; //login_token จากขั้นตอนการเพิ่มเบอร์ Wallet
+					$_TMN['pin'] = $api_token_1; //อย่าลืมใส่ PIN 6 หลักของ Wallet
+					$_TMN['tmn_id'] = $tmn_id; //tmn_id จากขั้นตอนการเพิ่มเบอร์ Wallet
+
+					if($annotaion !=''){
+						$personal_msg =$annotaion;
+					}else{
+						$personal_msg ="";
+					}
+
+					//print_r($_TMN);
+					$TMNOoo = new TMNOoo($_TMN);
+					$TMNOoo->setProxy('zproxy.lum-superproxy.io:22225', 'brd-customer-hl_ebdb3c0e-zone-data_center-country-th', '0pi1xakwwrg5'); //เปิดใช้งาน HTTP Proxy สำหรับเชื่อมต่อกับระบบของ Wallet
+					$TMNOoo->Login();
+					$res = $TMNOoo->ConfirmTransferP2P($accnum,$money,$personal_msg);
+					//print_r($res);
+					//die();
+					$res['transferAmount'] = $money;
+					$json = $res;
+					//print_r($json);
+					if ($json['code'] == 'TRC-200') {
+						return ['status' => true, 'msg' => $json];
+					}elseif ($json['status'] == 0){
+						return ['status' => false, 'msg' => $json['msg']];
+					} else {
+						return ['status' => false, 'msg' => $json['status']['description']];
+					}
+				}catch (Exception $ex){
+					return ['status'=>false,"msg"=>"เกิดข้อผิดพลาดจาก API Error : ".$ex->getMessage().", กรุณาตรวจสอบยอดถอนบน Internet Banking/Mobile App ว่าถูกถอนไปจริงหรือไม่"];
+				}
+			} else {
+				return ['status' => false, 'msg' => 'ข้อมูลไม่ถูกต้อง#2'];
+			}
+		}else{
+			return ['status' => false, 'msg' => 'ข้อมูลไม่ถูกต้อง#1'];
+		}
+	}
+
+	public function send_line_message($data,$token){
+		include_once FCPATH .'../lib/send_line_message.php';
+		//echo 'sendline_deposit';
+		$send_line = new send_line_message();
+		$send_line->sendline_deposit($data,$token);
 	}
 }

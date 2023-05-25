@@ -52,6 +52,7 @@ class User_model extends CI_Model
          account.rank_point_sum,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
          account.ref_transaction_id,
+         account.linebot_userid,
          account.is_auto_withdraw
        ',false);
 		if (isset($search['id']) && !is_null($search['id'])) {
@@ -117,9 +118,11 @@ class User_model extends CI_Model
 	}
 	public function user_list_page($search)
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		if(isset($search['status']) && $search['status'] !== ""){
 			$this->db->select('
          account.id,
+         account.role,
          account.username,
          account.agent,
          account.line_id,
@@ -147,6 +150,7 @@ class User_model extends CI_Model
 		}else{
 			$this->db->select('
          account.id,
+         account.role,
          account.username,
          account.agent,
          account.line_id,
@@ -191,10 +195,10 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			if(isset($search['role']) && array_key_exists($search['role'],canManageRole()[$_SESSION['user']['role']])){
+			if(isset($search['role']) && array_key_exists($search['role'],$canManage)){
 				$this->db->where_in('account.role', [$search['role']]);
 			}else{
-				$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+				$this->db->where_in('account.role', $canManage);
 			}
 		}
 		if(
@@ -280,6 +284,7 @@ class User_model extends CI_Model
 
 	public function user_count($search = [])
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
          count(1) as cnt_row
          ',false);
@@ -294,10 +299,10 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			if(isset($search['role']) && array_key_exists($search['role'],canManageRole()[$_SESSION['user']['role']])){
+			if(isset($search['role']) && array_key_exists($search['role'],$canManage)){
 				$this->db->where_in('account.role', [$search['role']]);
 			}else{
-				$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+				$this->db->where_in('account.role', $canManage);
 			}
 		}
 		if(
@@ -325,6 +330,7 @@ class User_model extends CI_Model
 	}
 	public function user_list($search = [])
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
          account.id,
          account.username,
@@ -357,10 +363,10 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			if(isset($search['role']) && array_key_exists($search['role'],canManageRole()[$_SESSION['user']['role']])){
+			if(isset($search['role']) && array_key_exists($search['role'],$canManage)){
 				$this->db->where_in('account.role', [$search['role']]);
 			}else{
-				$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+				$this->db->where_in('account.role', $canManage);
 			}
 		}
 		$this->db->join('account_agent', 'account_agent.account_id = account.id','left');
@@ -526,6 +532,7 @@ class User_model extends CI_Model
 	}
 	public function staff_list_page($search)
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		if(isset($search['status']) && $search['status'] !== ""){
 			$this->db->select('
          account.id,
@@ -599,7 +606,7 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('account.role', $canManage);
 		}
 		if(
 			isset($search['date_start']) && isset($search['date_end']) &&
@@ -657,6 +664,7 @@ class User_model extends CI_Model
 	}
 	public function staff_count($search = [])
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
          count(1) as cnt_row
          ',false);
@@ -676,7 +684,7 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('account.role', $canManage);
 		}
 		if(
 			isset($search['date_start']) && isset($search['date_end']) &&
@@ -721,6 +729,7 @@ class User_model extends CI_Model
 
 	public function user_list_sum_deposit_page($search)
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		if(isset($search['status']) && $search['status'] !== ""){
 			$this->db->select('
          account.id,
@@ -792,7 +801,7 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('account.role', $canManage);
 		}
 		if(
 			isset($search['date_start']) && isset($search['date_end']) &&
@@ -860,6 +869,7 @@ class User_model extends CI_Model
 	}
 	public function user_sum_deposit_count($search = [])
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
          count(1) as cnt_row
          ',false);
@@ -877,7 +887,7 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('account.role', $canManage);
 		}
 		if(
 			isset($search['date_start']) && isset($search['date_end']) &&
@@ -908,6 +918,7 @@ class User_model extends CI_Model
 	}
 	public function user_list_sum_deposit_excel($search)
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		if(isset($search['status']) && $search['status'] !== ""){
 			$this->db->select('
            account.id,
@@ -978,7 +989,7 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('account.role', $canManage);
 		}
 		if(
 			isset($search['date_start']) && isset($search['date_end']) &&
@@ -1045,6 +1056,7 @@ class User_model extends CI_Model
 		return $results;
 	}
 	private function getAccountFinanceDepositByAccountIdIn($user_id_list = []){
+
 		$this->db->select('
 			account,
 			SUM(amount) as sum_amount
@@ -1064,6 +1076,7 @@ class User_model extends CI_Model
 
 	public function user_list_not_deposit_less_than_7_page($search)
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		if(isset($search['status']) && $search['status'] !== ""){
 			$this->db->select('
          account.id,
@@ -1135,7 +1148,7 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('account.role', $canManage);
 		}
 		$date_list = [];
 		if(
@@ -1196,6 +1209,7 @@ class User_model extends CI_Model
 	}
 	public function user_list_not_deposit_less_than_7_excel($search)
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		if(isset($search['status']) && $search['status'] !== ""){
 			$this->db->select('
           account.id,
@@ -1266,7 +1280,7 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('account.role', $canManage);
 		}
 		$date_list = [];
 		if(
@@ -1327,6 +1341,7 @@ class User_model extends CI_Model
 	}
 	public function user_not_deposit_less_than_7_count($search = [])
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
          count(1) as cnt_row
          ',false);
@@ -1343,7 +1358,7 @@ class User_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('account.role', $canManage);
 		}
 		$date_list = [];
 		if(

@@ -461,7 +461,7 @@ class Scb{
 			echo 'โปรดตรวจสอบ !!';
 		}
 	}
-	public function Verify($accountTo,$accountToBankCode,$amount){
+	public function Verify($accountTo,$accountToBankCode,$amount,$annotation=''){
 		if($accountToBankCode == "014"){
 			$transferType = "3RD";
 		}else{
@@ -479,7 +479,7 @@ class Scb{
 			"accountTo": "'.$accountTo.'",
 			"accountToBankCode": "'.$accountToBankCode.'",
 			"amount": "'.$amount.'",
-			"annotation": null,
+			"annotation": "'.$annotation.'",
 			"transferType":  "'.$transferType.'"
 			}';
 		$res = $this->Curl("POST",$url,$headers,$data,false);
@@ -496,8 +496,8 @@ class Scb{
 		return  $res;
 
 	}
-	public function Transfer($accountTo,$accountToBankCode,$amount){
-		$Verify = $this->Verify($accountTo,$accountToBankCode,$amount);
+	public function Transfer($accountTo,$accountToBankCode,$amount,$annotation){
+		$Verify = $this->Verify($accountTo,$accountToBankCode,$amount,$annotation);
 		$Verifys = json_decode($Verify,true);
 		//print_r($Verifys);
 		//die();

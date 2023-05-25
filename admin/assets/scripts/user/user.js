@@ -256,6 +256,20 @@ function dataTable() {
 					}
 					return html;
 				}
+			},{
+				className: 'text-center',
+				render: function(data, type, full, meta) {
+					let html = "";
+					let {
+						role
+					} = full;
+					if (role !== "" && role !== null && role_display != null && typeof(role_display[role]) != "undefined") {
+						html = role_display[role];
+					}else{
+						html = "-"
+					}
+					return html;
+				}
 			},
 			{
 				className: 'text-center',

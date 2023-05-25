@@ -2,10 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 error_reporting(0);
 $user =  $this->Account_model->account_find([
-		'id' => $_SESSION['user']['id'],
+	'id' => $_SESSION['user']['id'],
 ]);
 $web_name = $this->Setting_model->setting_find([
-		'name' => 'web_name'
+	'name' => 'web_name'
 ]);
 
 $web_logo = $this->Setting_model->setting_find([
@@ -69,7 +69,7 @@ $report_all_day = get_data_report_all_day();
 					<ul class="nav navbar-nav">
 						<li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon feather icon-menu"></i></a></li>
 					</ul>
-					 <ul class="nav navbar-nav">
+					<ul hidden class="nav navbar-nav">
 						<li class="nav-item "><audio volumn="0" id="alert-sound"  preload="auto" autostart="false" autoplay="false" controls="controls"  style="height: 30px; width: 210px;margin-right: 10px ">
 								<source src="<?php echo base_url('assets/app-assets/sound/alert.mp3') ?>" type="audio/mp3">
 							</audio>
@@ -89,7 +89,7 @@ $report_all_day = get_data_report_all_day();
 				</div>
 				<ul class="nav navbar-nav float-right">
 					<li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-							<div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600"><?php echo $user['full_name']; ?></span><span class="user-status"><?php echo $user['username']; ?></span></div><span><i class="fa fa-user fa-2x text-primary"></i></span>
+							<div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600"><?php echo $user['full_name']; ?></span><span class="user-status"><?php echo roleDisplay()[$user['role']]; ?> | <?php echo $user['username']; ?></span></div><span><i class="fa fa-user fa-2x text-primary"></i></span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right">
 							<a class="dropdown-item" href="<?php echo base_url('../auth/logout') ?>"><i class="feather icon-power"></i> ออกจากระบบ</a>
@@ -115,116 +115,103 @@ $report_all_day = get_data_report_all_day();
 	<div class="main-menu-content">
 
 		<ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-			<li class=" nav-item"><a href="<?php echo site_url() ?>"><i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span></a>
-			</li>
-			<li class="<?php if ($this->uri->segment(1)=="gamestatus"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('gamestatus') ?>"><i class="feather icon-crosshair"></i><span class="menu-title" >สถานะเกมส์</span></a></li>
-			<li class=" navigation-header"><span>ระบบสมาชิก</span></li>
-			<li class="<?php if ($this->uri->segment(1)=="user"&&$this->uri->segment(2)==""): ?>
-									active
-			<?php endif; ?> nav-item"><a href="<?php echo site_url('user') ?>"  ><i class="feather icon-users"></i><span class="menu-title" >สมาชิก</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="user_suspend"&&$this->uri->segment(2)==""): ?>
-									active
-			<?php endif; ?> nav-item"><a href="<?php echo site_url('user_suspend') ?>"  ><i class="feather icon-user-x"></i><span class="menu-title" >สมาชิกที่ถูกระงับ</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="agent"): ?>
-                  active
-                <?php endif; ?> nav-item"><a href="<?php echo site_url('agent') ?>"  ><i class="feather icon-users"></i><span class="menu-title" >พันธมิตร</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="transfer_marketing"): ?>
-                  active
-                <?php endif; ?> nav-item"><a href="<?php echo site_url('transfer_marketing') ?>"  ><i class="feather icon-users info "></i><span class="menu-title" >โยกสมาชิกการตลาด</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="ref"&&$this->uri->segment(2)==""): ?>
-									active
-								<?php endif; ?> nav-item "><a href="<?php echo site_url('ref') ?>"><i class="feather icon-mail"></i><span class="menu-title" >แนะนำเพื่อน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="ref"&&$this->uri->segment(2)=="bonus"): ?>
-									active
-								<?php endif; ?> nav-item "><a href="<?php echo site_url('ref/bonus') ?>"><i class="feather icon-mail"></i><span class="menu-title" >โบนัสแนะนำเพื่อน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="bonus"&&$this->uri->segment(2)=="returnbalance"): ?>
-									active
-								<?php endif; ?> nav-item "><a href="<?php echo site_url('bonus/returnbalance') ?>"><i class="feather icon-mail"></i><span class="menu-title" >โบนัสคืนยอดเสีย</span></a></li>
-			<li class=" navigation-header"><span>รายงาน</span></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="business_profit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/business_profit') ?>"><i class="fa fa-bar-chart"></i><span class="menu-title" >ผลประกอบการ</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="member_register_sum_deposit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/member_register_sum_deposit') ?>"><i class="fa fa-bar-chart"></i><span class="menu-title" >ยอดฝากรวมรายวัน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="member_not_deposit_less_than_7"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/member_not_deposit_less_than_7') ?>"><i class="fa fa-bar-chart"></i><span class="menu-title" >ไม่ได้ฝากมากกว่า 7 วัน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="add_credit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/add_credit') ?>"><i class="fa fa-bar-chart"></i><span class="menu-title" >ยอดเติมเครดิต</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="add_bonus"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/add_bonus') ?>"><i class="fa fa-bar-chart"></i><span class="menu-title" >การรับโบนัส</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="add_promotion"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/add_promotion') ?>"><i class="fa fa-bar-chart"></i><span class="menu-title" >การรับโปรโมชั่น</span></a></li>
-			<li class=" navigation-header"><span>ระบบธุรกรรม</span></li>
-			<li class="<?php if ($this->uri->segment(1)=="statement"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('statement') ?>"><i class="fa fa-list-alt primary"></i><span class="menu-title" >รายการเดินบัญชี</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="deposit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('deposit') ?>"><i class="fa fa-usd"></i><span class="menu-title" >ฝากเงิน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="creditwait"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('creditwait') ?>"><i class="feather icon-plus"></i><span class="menu-title" >เครดิต (รอฝาก)</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="credit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('credit') ?>"><i class="feather icon-plus"></i><span class="menu-title" >เครดิต</span></a></li>
-			<!-- icon-minus-circle -->
-			<li class=" nav-item <?php if ($this->uri->segment(1)=="withdraw"): ?>
-									active
-								<?php endif; ?>"><a href="<?php echo site_url('withdraw') ?>"><i class="feather icon-minus"></i><span class="menu-title" >ถอนเงิน</span></a></li>
-			<?php if(isset($_SESSION['user']) && $_SESSION['user']['role'] == roleSuperAdmin()): ?>
-				<li class=" nav-item <?php if ($this->uri->segment(1)=="TransferOut"): ?>
-									active
-								<?php endif; ?>"><a href="<?php echo site_url('TransferOut') ?>"><i class="fa fa-money"></i><span class="menu-title" >โยกเงินออก</span></a></li>
-			<?php endif; ?>
-			<li class=" navigation-header"><span>ระบบ Logs</span></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogDepositWithdraw"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogDepositWithdraw') ?>"><i class="fa fa-history"></i><span class="menu-title" >ฝาก-ถอน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogAccount"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogAccount') ?>"><i class="fa fa-history"></i><span class="menu-title" >สมาชิก</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogReturnBalance"): ?>
-								active
-							<?php endif; ?> nav-item"><a href="<?php echo site_url('LogReturnBalance') ?>"><i class="fa fa-history"></i><span class="menu-title" >คืนยอดเสีย</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogSms"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogSms') ?>"><i class="fa fa-comment"></i><span class="menu-title" >SMS</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogPage"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogPage') ?>"><i class="fa fa-history"></i><span class="menu-title" >เปิดหน้าเว็ป</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogLineNotify"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogLineNotify') ?>"><i class="fa fa-history"></i><span class="menu-title" >Line notify</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogWheel"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogWheel') ?>"><i class="fa fa-history"></i><span class="menu-title" >วงล้อ</span></a></li>
-			<?php if(isset($_SESSION['user']) && $_SESSION['user']['role'] == roleSuperAdmin()): ?>
-				<li class="<?php if ($this->uri->segment(1)=="LogTransferOut"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogTransferOut') ?>"><i class="fa fa-money"></i><span class="menu-title" >โยกเงินออก</span></a></li>
-			<?php endif; ?>
-			<?php if(isset($_SESSION['user']) && $_SESSION['user']['role'] == roleSuperAdmin()): ?>
-				<li class=" navigation-header"><span>ตั้งค่าระบบ</span></li>
-				<li class="<?php if ($this->uri->segment(1)=="promotion"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('promotion') ?>"><i class="fa fa-clone"></i><span class="menu-title" >โปรโมชั่น</span></a></li>
-				<li class="<?php if ($this->uri->segment(1)=="news"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('news') ?>"><i class="fa fa-newspaper-o"></i><span class="menu-title" >ประกาศ</span></a></li>
-				<li class="<?php if ($this->uri->segment(1)=="setting"): ?>
-                  active
-                <?php endif; ?> nav-item"><a href="<?php echo site_url('setting/web_setting') ?>"><i class="fa fa-cog"></i><span class="menu-title" >ตั้งค่าเว็บ</span></a></li>
-				<li class="<?php if ($this->uri->segment(1)=="bank"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('bank') ?>"><i class="fa fa-clone"></i><span class="menu-title" >ตั้งค่าธนาคาร</span></a></li>
-			<?php endif; ?>
+			<?php
+			$CI =& get_instance();
+			$CI->load->library('Menu_service');
+			$group_menu_list = $CI->menu_service->get_menu_list(null,null,true);
+			?>
+			<?php foreach ($group_menu_list as $group_id => $group_menu): ?>
+				<?php if(isset($group_menu['menu_list']) && count($group_menu['menu_list']) > 0): ?>
+					<li class=" navigation-header"><span class="<?php echo $group_menu['icon_class']; ?>"><?php echo $group_menu['name']; ?></span></li>
+					<?php foreach ($group_menu['menu_list'] as $menu_index => $menu): ?>
+						<?php
+						$chk_active = false;
+						$chk_active_sub_id = null;
+						$chk_has_sub = false;
+						$chk_has_sub_open = false;
+						$uri_segment_cnt = count($this->uri->segment_array());
+						if(empty($menu['menu_url']) && $menu['menu_have_child'] == "1"){
+							$chk_has_sub = true;
+							if(isset($menu['node_menu_list']) && is_array($menu['node_menu_list']) && count($menu['node_menu_list']) > 0){
+								foreach ($menu['node_menu_list'] as $node_menu){
+
+									$node_menu_segment_url = explode('/',$node_menu['url']);
+									$node_menu_segment_url_cnt = count($node_menu_segment_url) ;
+									if(
+										!$chk_has_sub_open &&
+										$uri_segment_cnt >= 1 && $uri_segment_cnt == $node_menu_segment_url_cnt
+									){
+										$cnt_match_segment_all = 0;
+										for ($i=1;$i<=$uri_segment_cnt;$i++){
+											if(
+												!empty($this->uri->segment($i)) && (
+													strtolower($node_menu_segment_url[$i-1])  == strtolower($this->uri->segment($i))
+												)
+											){
+												$cnt_match_segment_all += 1;
+											}
+										}
+										if($cnt_match_segment_all == $uri_segment_cnt){
+											$chk_has_sub_open = true;
+											$chk_active_sub_id = $node_menu['id'];
+										}
+									}else if(
+										!$chk_has_sub_open &&
+										$uri_segment_cnt >= 2 &&
+										!empty($this->uri->segment(2)) &&
+										($uri_segment_cnt >= 2 && strtolower(explode("_", $this->uri->segment(2))[0]) == strtolower($node_menu_segment_url[1]))
+									){
+										$chk_has_sub_open = true;
+										$chk_active_sub_id = $node_menu['id'];
+									}
+								}
+							}
+						}else{
+							$menu_segment_url = explode('/',$menu['menu_url']);
+							$menu_segment_url_cnt = count($menu_segment_url) ;
+							if(
+								$uri_segment_cnt >= 1 && $uri_segment_cnt == $menu_segment_url_cnt
+							){
+								$cnt_match_segment_all = 0;
+								for ($i=1;$i<=$uri_segment_cnt;$i++){
+									if(!empty($this->uri->segment($i)) && strtolower($menu_segment_url[$i-1])  == strtolower($this->uri->segment($i))){
+										$cnt_match_segment_all += 1;
+									}
+								}
+								if($cnt_match_segment_all == $uri_segment_cnt){
+									$chk_active = true;
+								}
+							}else if($menu['menu_url'] == 'home' && empty($this->uri->segment(1))){
+								$chk_active = true;
+							}else if(
+								$uri_segment_cnt >= 2 &&
+								!empty($this->uri->segment(2)) &&
+								(
+									strtolower(explode("_", $this->uri->segment(2))[0]) == strtolower($menu_segment_url[1]) ||
+									strpos(strtolower($menu_segment_url[0]),strtolower(explode("_", $this->uri->segment(2))[0])) !== FALSE
+								)
+							){
+								$chk_active = true;
+							}
+						}
+
+						?>
+						<li class="nav-item <?php echo $chk_has_sub ? 'has-sub'.($chk_has_sub_open ? ' open' : '') : ($chk_active ? 'active' : '') ?>">
+							<a href="<?php echo site_url($menu['menu_url']) ?>"><i class="<?php echo $menu['menu_icon_class']; ?>"></i><span class="menu-title" ><?php echo $menu['menu_name']; ?></span></a>
+							<?php if(isset($menu['node_menu_list']) && is_array($menu['node_menu_list']) && count($menu['node_menu_list']) > 0): ?>
+								<ul class="menu-content" style="">
+									<?php foreach ($menu['node_menu_list'] as $node_menu): ?>
+										<li class="nav-item <?php echo $chk_active_sub_id == $node_menu['id'] ? 'active' : ''; ?>"><a href="<?php echo site_url($node_menu['url']) ?>">
+												<i class="<?php echo empty($node_menu['icon_class']) ? 'feather icon-circle' : $node_menu['icon_class']; ?>"></i>
+												<span class="menu-item"><?php echo $node_menu['name']; ?></span></a>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+							<?php endif; ?>
+						</li>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
 		</ul>
 	</div>
 </div>

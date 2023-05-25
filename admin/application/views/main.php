@@ -2,11 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 error_reporting(0);
 $user =  $this->Account_model->account_find([
-		'id' => $_SESSION['user']['id'],
+	'id' => $_SESSION['user']['id'],
 ]);
 
 $web_name = $this->Setting_model->setting_find([
-		'name' => 'web_name'
+	'name' => 'web_name'
 ]);
 
 $web_logo = $this->Setting_model->setting_find([
@@ -16,7 +16,6 @@ $web_logo = $this->Setting_model->setting_find([
 $web_sound_alert = $this->Setting_model->setting_find([
 	'name' => 'web_sound_alert'
 ]);
-
 
 $report_all_day = get_data_report_all_day();
 $total_online = $report_all_day['online_member_total'];
@@ -76,7 +75,7 @@ $total_online = $report_all_day['online_member_total'];
 					<ul class="nav navbar-nav">
 						<li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon feather icon-menu"></i></a></li>
 					</ul>
-					 <ul class="nav navbar-nav">
+					<ul hidden class="nav navbar-nav">
 						<li class="nav-item "><audio volumn="0" id="alert-sound"  preload="auto" autostart="false" autoplay="false" controls="controls"  style="height: 30px; width: 210px;margin-right: 10px ">
 								<source src="<?php echo $web_sound_alert['value'] == "0" ? base_url('assets/app-assets/sound/alert.mp3') :  $web_sound_alert['value'] ?>" type="audio/mp3">
 							</audio>
@@ -196,8 +195,22 @@ $total_online = $report_all_day['online_member_total'];
 					</script>
 				</div>
 				<ul class="nav navbar-nav float-right">
+					<li class="dropdown dropdown-user nav-item credit-ag" style="vertical-align: middle;
+					    font-weight: 600;
+					    padding-top: 13px;
+					    padding-right: 20px;">
+						<span class="ag-balance"> <?php
+							$ag_balance = $this->game_api_librarie_new->balanceCredit(array(
+								'username' => ''
+							));
+							setlocale(LC_MONETARY,"th_TH");
+							echo 'Credit AG : '.number_format($ag_balance,"2",".",',');
+							if($ag_balance < 100000)
+								echo "<a href='https://lin.ee/262N5Hd'><br/><span style='font-weight:400;font-size:11px'>กรุณาเติมเครดิตเพื่อใช้งานอย่างต่อเนื่อง</span></a>";  ?>
+						</span>
+					</li>
 					<li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-							<div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600"><?php echo $user['full_name']; ?></span><span class="user-status"><?php echo $user['username']; ?></span></div><span><i class="fa fa-user fa-2x text-primary"></i></span>
+							<div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600"><?php echo $user['full_name']; ?></span><span class="user-status"><?php echo roleDisplay()[$user['role']]; ?> | <?php echo $user['username']; ?></span></div><span><i class="fa fa-user fa-2x text-primary"></i></span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right">
 							<a class="dropdown-item" href="<?php echo base_url('../auth/logout') ?>"><i class="feather icon-power"></i> ออกจากระบบ</a>
@@ -223,129 +236,103 @@ $total_online = $report_all_day['online_member_total'];
 	<div class="main-menu-content">
 
 		<ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-			<li class=" nav-item"><a href="<?php echo site_url() ?>"><i class="feather icon-home primary"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span></a>
-			</li>
-			<li class="<?php if ($this->uri->segment(1)=="gamestatus"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('gamestatus') ?>"><i class="feather icon-crosshair danger"></i><span class="menu-title" >สถานะเกมส์</span></a></li>
-			<li class=" navigation-header"><span style="color:blue;font-weight:bold">ระบบสมาชิก</span></li>
-			<li class="<?php if ($this->uri->segment(1)=="user"&&$this->uri->segment(2)==""): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('user') ?>"  ><i class="feather icon-users success"></i><span class="menu-title" >สมาชิก</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="user_suspend"&&$this->uri->segment(2)==""): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('user_suspend') ?>"  ><i class="feather icon-user-x danger"></i><span class="menu-title" >สมาชิกที่ถูกระงับ</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="agent"): ?>
-                  active
-                <?php endif; ?> nav-item"><a href="<?php echo site_url('agent') ?>"  ><i class="feather icon-users info "></i><span class="menu-title" >พันธมิตร</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="transfer_marketing"): ?>
-                  active
-                <?php endif; ?> nav-item"><a href="<?php echo site_url('transfer_marketing') ?>"  ><i class="feather icon-users info "></i><span class="menu-title" >โยกสมาชิกการตลาด</span></a></li>
+			<?php
+			$CI =& get_instance();
+			$CI->load->library('Menu_service');
+			$group_menu_list = $CI->menu_service->get_menu_list(null,null,true);
+			?>
+			<?php foreach ($group_menu_list as $group_id => $group_menu): ?>
+				<?php if(isset($group_menu['menu_list']) && count($group_menu['menu_list']) > 0): ?>
+					<li class=" navigation-header"><span class="<?php echo $group_menu['icon_class']; ?>"><?php echo $group_menu['name']; ?></span></li>
+					<?php foreach ($group_menu['menu_list'] as $menu_index => $menu): ?>
+						<?php
+						$chk_active = false;
+						$chk_active_sub_id = null;
+						$chk_has_sub = false;
+						$chk_has_sub_open = false;
+						$uri_segment_cnt = count($this->uri->segment_array());
+						if(empty($menu['menu_url']) && $menu['menu_have_child'] == "1"){
+							$chk_has_sub = true;
+							if(isset($menu['node_menu_list']) && is_array($menu['node_menu_list']) && count($menu['node_menu_list']) > 0){
+								foreach ($menu['node_menu_list'] as $node_menu){
 
-			<li class="<?php if ($this->uri->segment(1)=="ref"&&$this->uri->segment(2)==""): ?>
-									active
-								<?php endif; ?> nav-item "><a href="<?php echo site_url('ref') ?>"><i class="feather icon-user-plus warning"></i><span class="menu-title" >แนะนำเพื่อน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="ref"&&$this->uri->segment(2)=="bonus"): ?>
-									active
-								<?php endif; ?> nav-item "><a href="<?php echo site_url('ref/bonus') ?>"><i class="feather icon-dollar-sign warning"></i><span class="menu-title" >โบนัสแนะนำเพื่อน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="bonus"&&$this->uri->segment(2)=="returnbalance"): ?>
-									active
-								<?php endif; ?> nav-item "><a href="<?php echo site_url('bonus/returnbalance') ?>"><i class="feather icon-dollar-sign warning"></i><span class="menu-title" >โบนัสคืนยอดเสีย</span></a></li>
-			<li class=" navigation-header"><span style="color:blue;font-weight:bold">รายงาน</span></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="business_profit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/business_profit') ?>"><i class="fa fa-bar-chart success"></i><span class="menu-title" >ผลประกอบการ</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="member_register_sum_deposit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/member_register_sum_deposit') ?>"><i class="fa fa-bar-chart success"></i><span class="menu-title" >ยอดฝากรวมรายวัน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="member_not_deposit_less_than_7"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/member_not_deposit_less_than_7') ?>"><i class="fa fa-bar-chart danger"></i><span class="menu-title" >ไม่ได้ฝากมากกว่า 7 วัน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="add_credit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/add_credit') ?>"><i class="fa fa-bar-chart info"></i><span class="menu-title" >ยอดเติมเครดิต</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="add_bonus"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/add_bonus') ?>"><i class="fa fa-bar-chart warning"></i><span class="menu-title" >การรับโบนัส</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="report"&&$this->uri->segment(2)=="add_promotion"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('report/add_promotion') ?>"><i class="fa fa-bar-chart primary"></i><span class="menu-title" >การรับโปรโมชั่น</span></a></li>
-			<li class=" navigation-header"><span style="color:blue;font-weight:bold">ระบบธุรกรรม</span></li>
-			<li class="<?php if ($this->uri->segment(1)=="statement"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('statement') ?>"><i class="fa fa-list-alt primary"></i><span class="menu-title" >รายการเดินบัญชี</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="deposit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('deposit') ?>"><i class="fa fa-usd warning"></i><span class="menu-title" >เครดิต</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="creditwait"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('creditwait') ?>"><i class="feather icon-plus warning"></i><span class="menu-title" >เครดิต (รอฝาก)</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="credit"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('credit') ?>"><i class="feather icon-plus primary"></i><span class="menu-title" >ฝากเงิน</span></a></li>
-			<!-- icon-minus-circle -->
-			<li class=" nav-item <?php if ($this->uri->segment(1)=="withdraw"): ?>
-									active
-								<?php endif; ?>"><a href="<?php echo site_url('withdraw') ?>"><i class="feather icon-minus danger"></i><span class="menu-title" >ถอนเงิน</span></a></li>
-			<?php if(isset($_SESSION['user']) && $_SESSION['user']['role'] == roleSuperAdmin()): ?>
-				<li class=" nav-item <?php if ($this->uri->segment(1)=="TransferOut"): ?>
-									active
-								<?php endif; ?>"><a href="<?php echo site_url('TransferOut') ?>"><i class="fa fa-money warning"></i><span class="menu-title" >โยกเงินออก</span></a></li>
-			<?php endif; ?>
-			<li class=" navigation-header"><span style="color:blue;font-weight:bold">ระบบ Logs</span></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogDepositWithdraw"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogDepositWithdraw') ?>"><i class="fa fa-history success"></i><span class="menu-title" >ฝาก-ถอน</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogAccount"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogAccount') ?>"><i class="fa fa-history primary"></i><span class="menu-title" >สมาชิก</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogReturnBalance"): ?>
-								active
-							<?php endif; ?> nav-item"><a href="<?php echo site_url('LogReturnBalance') ?>"><i class="fa fa-history danger"></i><span class="menu-title" >คืนยอดเสีย</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogSms"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogSms') ?>"><i class="fa fa-comment primary"></i><span class="menu-title" >SMS</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogPage"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogPage') ?>"><i class="fa fa-history info"></i><span class="menu-title" >เปิดหน้าเว็ป</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogLineNotify"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogLineNotify') ?>"><i class="fa fa-bell success"></i><span class="menu-title" >Line notify</span></a></li>
-			<li class="<?php if ($this->uri->segment(1)=="LogWheel"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogWheel') ?>"><i class="fa fa-history warning"></i><span class="menu-title" >วงล้อ</span></a></li>
-			<?php if(isset($_SESSION['user']) && $_SESSION['user']['role'] == roleSuperAdmin()): ?>
-				<li class="<?php if ($this->uri->segment(1)=="LogTransferOut"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('LogTransferOut') ?>"><i class="fa fa-money danger"></i><span class="menu-title" >โยกเงินออก</span></a></li>
-			<?php endif; ?>
-			<?php if(isset($_SESSION['user']) && $_SESSION['user']['role'] == roleSuperAdmin()): ?>
-				<li class=" navigation-header"><span style="color:blue;font-weight:bold">ตั้งค่าระบบ</span></li>
-				<li class="<?php if ($this->uri->segment(1)=="promotion"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('promotion') ?>"><i class="fa fa-clone info"></i><span class="menu-title" >โปรโมชั่น</span></a></li>
-				<li class="<?php if ($this->uri->segment(1)=="news"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('news') ?>"><i class="fa fa-newspaper-o info"></i><span class="menu-title" >ประกาศ</span></a></li>
-				<li class="<?php if ($this->uri->segment(1)=="setting"): ?>
-                  active
-                <?php endif; ?> nav-item"><a href="<?php echo site_url('setting/web_setting') ?>"><i class="fa fa-cog primary"></i><span class="menu-title" >ตั้งค่าเว็บ</span></a></li>
-				<li class="<?php if ($this->uri->segment(1)=="bank"): ?>
-									active
-								<?php endif; ?> nav-item"><a href="<?php echo site_url('bank') ?>"><i class="fa fa-clone info"></i><span class="menu-title" >ตั้งค่าธนาคาร</span></a></li>
-			<?php endif; ?>
-			<!-- <li class=" nav-item"><a href="#"><i class="feather icon-zap"></i><span class="menu-title" data-i18n="Starter kit">Starter kit</span></a>
-				<ul class="menu-content">
-					<li><a href="sk-layout-2-columns.html"><i></i><span class="menu-item" data-i18n="2 columns">2 columns</span></a>
-					</li>
-					<li><a href="sk-layout-fixed-navbar.html"><i></i><span class="menu-item" data-i18n="Fixed navbar">Fixed navbar</span></a>
-					</li>
-					<li><a href="sk-layout-floating-navbar.html"><i></i><span class="menu-item" data-i18n="Floating navbar">Floating navbar</span></a>
-					</li>
-					<li class="active"><a href="sk-layout-fixed.html"><i></i><span class="menu-item" data-i18n="Fixed layout">Fixed layout</span></a>
-					</li>
-				</ul>
-			</li> -->
+									$node_menu_segment_url = explode('/',$node_menu['url']);
+									$node_menu_segment_url_cnt = count($node_menu_segment_url) ;
+									if(
+										!$chk_has_sub_open &&
+										$uri_segment_cnt >= 1 && $uri_segment_cnt == $node_menu_segment_url_cnt
+									){
+										$cnt_match_segment_all = 0;
+										for ($i=1;$i<=$uri_segment_cnt;$i++){
+											if(
+												!empty($this->uri->segment($i)) && (
+													strtolower($node_menu_segment_url[$i-1])  == strtolower($this->uri->segment($i))
+												)
+											){
+												$cnt_match_segment_all += 1;
+											}
+										}
+										if($cnt_match_segment_all == $uri_segment_cnt){
+											$chk_has_sub_open = true;
+											$chk_active_sub_id = $node_menu['id'];
+										}
+									}else if(
+										!$chk_has_sub_open &&
+										$uri_segment_cnt >= 2 &&
+										!empty($this->uri->segment(2)) &&
+										($uri_segment_cnt >= 2 && strtolower(explode("_", $this->uri->segment(2))[0]) == strtolower($node_menu_segment_url[1]))
+									){
+										$chk_has_sub_open = true;
+										$chk_active_sub_id = $node_menu['id'];
+									}
+								}
+							}
+						}else{
+							$menu_segment_url = explode('/',$menu['menu_url']);
+							$menu_segment_url_cnt = count($menu_segment_url) ;
+							if(
+								$uri_segment_cnt >= 1 && $uri_segment_cnt == $menu_segment_url_cnt
+							){
+								$cnt_match_segment_all = 0;
+								for ($i=1;$i<=$uri_segment_cnt;$i++){
+									if(!empty($this->uri->segment($i)) && strtolower($menu_segment_url[$i-1])  == strtolower($this->uri->segment($i))){
+										$cnt_match_segment_all += 1;
+									}
+								}
+								if($cnt_match_segment_all == $uri_segment_cnt){
+									$chk_active = true;
+								}
+							}else if($menu['menu_url'] == 'home' && empty($this->uri->segment(1))){
+								$chk_active = true;
+							}else if(
+								$uri_segment_cnt >= 2 &&
+								!empty($this->uri->segment(2)) &&
+								(
+									strtolower(explode("_", $this->uri->segment(2))[0]) == strtolower($menu_segment_url[1]) ||
+									strpos(strtolower($menu_segment_url[0]),strtolower(explode("_", $this->uri->segment(2))[0])) !== FALSE
+								)
+							){
+								$chk_active = true;
+							}
+						}
+
+						?>
+						<li class="nav-item <?php echo $chk_has_sub ? 'has-sub'.($chk_has_sub_open ? ' open' : '') : ($chk_active ? 'active' : '') ?>">
+							<a href="<?php echo site_url($menu['menu_url']) ?>"><i class="<?php echo $menu['menu_icon_class']; ?>"></i><span class="menu-title" ><?php echo $menu['menu_name']; ?></span></a>
+							<?php if(isset($menu['node_menu_list']) && is_array($menu['node_menu_list']) && count($menu['node_menu_list']) > 0): ?>
+								<ul class="menu-content" style="">
+									<?php foreach ($menu['node_menu_list'] as $node_menu): ?>
+										<li class="nav-item <?php echo $chk_active_sub_id == $node_menu['id'] ? 'active' : ''; ?>"><a href="<?php echo site_url($node_menu['url']) ?>">
+												<i class="<?php echo empty($node_menu['icon_class']) ? 'feather icon-circle' : $node_menu['icon_class']; ?>"></i>
+												<span class="menu-item"><?php echo $node_menu['name']; ?></span></a>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+							<?php endif; ?>
+						</li>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
 		</ul>
 	</div>
 </div>
@@ -422,10 +409,10 @@ $total_online = $report_all_day['online_member_total'];
 					</div>
 					<div class="col-xl-6 col-md-4 col-sm-12">
 						<div class="card text-center">
-								<div class="card-header d-flex justify-content-between align-items-end">
-									<h4 class="mb-0 danger">สมาชิกทั้งหมด</h4>
-								</div>
-								<hr>
+							<div class="card-header d-flex justify-content-between align-items-end">
+								<h4 class="mb-0 danger">สมาชิกทั้งหมด</h4>
+							</div>
+							<hr>
 							<div class="card-content">
 								<div class="card-body row text-center mx-0">
 									<div class="col-xl-6 col-md-4 col-sm-12 align-items-between flex-column">
@@ -522,7 +509,7 @@ $total_online = $report_all_day['online_member_total'];
 																	url_img_bank =  base_url+"/bank/baac.png";
 																}
 																else if (value.bank_code ==10 || value.bank_code =='10') {
-																		url_img_bank =  base_url+"/bank/10.png";
+																	url_img_bank =  base_url+"/bank/10.png";
 																}else if (value.bank_code ==11 || value.bank_code =='11') {
 																	url_img_bank =  base_url+"/bank/kkp.png";
 																}
@@ -531,24 +518,24 @@ $total_online = $report_all_day['online_member_total'];
 																}
 																var type_bank = '';
 																if (value.status == '1') {
-																	 type_bank = 'AUTO';
+																	type_bank = 'AUTO';
 																} else if(value.status == '2') {
 																	type_bank = 'SLIP';
 																}
 																var parts = parseFloat(value.balance).toFixed(2).split(".");
 																var num = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-																		(parts[1] ? "." + parts[1] : "");
+																	(parts[1] ? "." + parts[1] : "");
 																url_img_bank = '<ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
-																		'<li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="'+(typeof(bank_list[value.bank_code]) != "undefined" ? bank_list[value.bank_code] : "-")+'" class="avatar pull-up m-0">' +
-																		'<img class="media-object rounded" src="'+url_img_bank+'" alt="Avatar" height="30" width="30"></li></ul>';
+																	'<li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="'+(typeof(bank_list[value.bank_code]) != "undefined" ? bank_list[value.bank_code] : "-")+'" class="avatar pull-up m-0">' +
+																	'<img class="media-object rounded" src="'+url_img_bank+'" alt="Avatar" height="30" width="30"></li></ul>';
 																$("#tableBank > tbody").append("<tr>" +
-																		"<td>"+url_img_bank+"</td>" +
-																		"<td>"+value.account_name+"</td>" +
-																		"<td>"+value.bank_number+"</td>" +
-																		"<td>"+type_bank+"</td>" +
-																		"<td>"+num+"</td>" +
-																		"</tr>" +
-																		"");
+																	"<td>"+url_img_bank+"</td>" +
+																	"<td>"+value.account_name+"</td>" +
+																	"<td>"+value.bank_number+"</td>" +
+																	"<td>"+type_bank+"</td>" +
+																	"<td>"+num+"</td>" +
+																	"</tr>" +
+																	"");
 															}
 														})
 													},
@@ -583,19 +570,19 @@ $total_online = $report_all_day['online_member_total'];
 									if(data.deposit){
 										var parts = parseFloat(data.deposit).toFixed(2).split(".");
 										var num = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-												(parts[1] ? "." + parts[1] : "");
+											(parts[1] ? "." + parts[1] : "");
 										$("#txt_report_all_day_deposit").text(num+" ฿");
 									}
 									if(data.withdraw){
 										var parts = parseFloat(data.withdraw).toFixed(2).split(".");
 										var num = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-												(parts[1] ? "." + parts[1] : "");
+											(parts[1] ? "." + parts[1] : "");
 										$("#txt_report_all_day_withdraw").text(num+" ฿");
 									}
 									if(data.total){
 										var parts = parseFloat(data.total).toFixed(2).split(".");
 										var num = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-												(parts[1] ? "." + parts[1] : "");
+											(parts[1] ? "." + parts[1] : "");
 										$("#txt_report_all_day_total").text(num+" ฿");
 									}
 									if(data.member){
@@ -702,40 +689,40 @@ $total_online = $report_all_day['online_member_total'];
 																	}
 																	if(value.status == 0){
 																		status = "<div class='spinner-grow text-warning' role='status'>\n" +
-																				"      <span class='sr-only'>Loading...</span>\n" +
-																				"</div>รออนุมัติ";
+																			"      <span class='sr-only'>Loading...</span>\n" +
+																			"</div>รออนุมัติ";
 																	}else if(value.status == 1){
 																		status = "<div class='spinner-grow text-success' role='status'>\n" +
-																				"      <span class='sr-only'>Loading...</span>\n" +
-																				"</div>อนุมัติ (ถอนออโต้)";
+																			"      <span class='sr-only'>Loading...</span>\n" +
+																			"</div>อนุมัติ (ถอนออโต้)";
 																	}else if(value.status == 2){
 																		status = "<div class='spinner-grow text-danger' role='status'>\n" +
-																				"      <span class='sr-only'>Loading...</span>\n" +
-																				"</div>ไม่อนุมัติ";
+																			"      <span class='sr-only'>Loading...</span>\n" +
+																			"</div>ไม่อนุมัติ";
 																	}else if(value.status == 3){
 																		status = "<div class='spinner-grow text-success' role='status'>\n" +
-																				"      <span class='sr-only'>Loading...</span>\n" +
-																				"</div>อนุมัติ (ถอนมือ)";
+																			"      <span class='sr-only'>Loading...</span>\n" +
+																			"</div>อนุมัติ (ถอนมือ)";
 																	}else if(value.status == 4){
 																		status = "<div class='spinner-grow text-warning' role='status'>\n" +
-																				"      <span class='sr-only'>Loading...</span>\n" +
-																				"</div>ดำเนินการถอนออโต้";
+																			"      <span class='sr-only'>Loading...</span>\n" +
+																			"</div>ดำเนินการถอนออโต้";
 																	}
 																	var parts = parseFloat(value.amount).toFixed(2).split(".");
 																	var num = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-																			(parts[1] ? "." + parts[1] : "");
+																		(parts[1] ? "." + parts[1] : "");
 																	url_img_bank = '<ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
-																			'<li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="'+(typeof(bank_list[value.bank]) != "undefined" ? bank_list[value.bank] : "-")+'" class="avatar pull-up m-0">' +
-																			'<img class="media-object rounded" src="'+url_img_bank+'" alt="Avatar" height="30" width="30"></li></ul>';
+																		'<li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="'+(typeof(bank_list[value.bank]) != "undefined" ? bank_list[value.bank] : "-")+'" class="avatar pull-up m-0">' +
+																		'<img class="media-object rounded" src="'+url_img_bank+'" alt="Avatar" height="30" width="30"></li></ul>';
 																	$("#table-history-withdraw > tbody").append("<tr>" +
-																			"<td>"+value.full_name+"</td>" +
-																			"<td>"+status+"</td>" +
-																			"<td>"+url_img_bank+"</td>" +
-																			"<td>"+value.bank_number+"</td>" +
-																			"<td>"+value.created_at+"</td>" +
-																			"<td class='text-right'>"+num+"</td>" +
-																			"</tr>" +
-																			"");
+																		"<td>"+value.full_name+"</td>" +
+																		"<td>"+status+"</td>" +
+																		"<td>"+url_img_bank+"</td>" +
+																		"<td>"+value.bank_number+"</td>" +
+																		"<td>"+value.created_at+"</td>" +
+																		"<td class='text-right'>"+num+"</td>" +
+																		"</tr>" +
+																		"");
 
 																})
 																$("body").tooltip({
@@ -838,18 +825,18 @@ $total_online = $report_all_day['online_member_total'];
 																	}
 																	var parts = parseFloat(value.amount).toFixed(2).split(".");
 																	var num = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-																			(parts[1] ? "." + parts[1] : "");
+																		(parts[1] ? "." + parts[1] : "");
 																	url_img_bank = '<ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
-																			'<li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="'+(typeof(bank_list[value.bank]) != "undefined" ? bank_list[value.bank] : "-")+'" class="avatar pull-up m-0">' +
-																			'<img class="media-object rounded" src="'+url_img_bank+'" alt="Avatar" height="30" width="30"></li></ul>';
+																		'<li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="'+(typeof(bank_list[value.bank]) != "undefined" ? bank_list[value.bank] : "-")+'" class="avatar pull-up m-0">' +
+																		'<img class="media-object rounded" src="'+url_img_bank+'" alt="Avatar" height="30" width="30"></li></ul>';
 																	$("#table-history-deposit > tbody").append("<tr>" +
-																			"<td>"+value.full_name+"</td>" +
-																			"<td>"+url_img_bank+"</td>" +
-																			"<td>"+value.bank_number+"</td>" +
-																			"<td>"+value.created_at+"</td>" +
-																			"<td class='text-right'>"+num+"</td>" +
-																			"</tr>" +
-																			"");
+																		"<td>"+value.full_name+"</td>" +
+																		"<td>"+url_img_bank+"</td>" +
+																		"<td>"+value.bank_number+"</td>" +
+																		"<td>"+value.created_at+"</td>" +
+																		"<td class='text-right'>"+num+"</td>" +
+																		"</tr>" +
+																		"");
 
 																})
 																$("body").tooltip({
@@ -919,20 +906,20 @@ $total_online = $report_all_day['online_member_total'];
 																$.each(response.result,function(i,value){
 																	var parts_deposit = parseFloat(value.deposit).toFixed(2).split(".");
 																	var deposit = parts_deposit[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-																			(parts_deposit[1] ? "." + parts_deposit[1] : "");
+																		(parts_deposit[1] ? "." + parts_deposit[1] : "");
 																	var parts_withdraw = parseFloat(value.withdraw).toFixed(2).split(".");
 																	var withdraw = parts_withdraw[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-																			(parts_withdraw[1] ? "." + parts_withdraw[1] : "");
+																		(parts_withdraw[1] ? "." + parts_withdraw[1] : "");
 																	var parts_total = parseFloat(value.total).toFixed(2).split(".");
 																	var total = parts_total[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-																			(parts_total[1] ? "." + parts_total[1] : "");
+																		(parts_total[1] ? "." + parts_total[1] : "");
 																	$("#table-summary-per-day > tbody").append("<tr>" +
-																			"<td>"+value.day+"</td>" +
-																			"<td class='text-right'>"+deposit+"</td>" +
-																			"<td  class='text-right'>"+withdraw+"</td>" +
-																			"<td  class='text-right'>"+total+"</td>" +
-																			"</tr>" +
-																			"");
+																		"<td>"+value.day+"</td>" +
+																		"<td class='text-right'>"+deposit+"</td>" +
+																		"<td  class='text-right'>"+withdraw+"</td>" +
+																		"<td  class='text-right'>"+total+"</td>" +
+																		"</tr>" +
+																		"");
 
 																})
 															},
@@ -992,20 +979,20 @@ $total_online = $report_all_day['online_member_total'];
 																$.each(response.result,function(i,value){
 																	var parts_deposit = parseFloat(value.deposit).toFixed(2).split(".");
 																	var deposit = parts_deposit[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-																			(parts_deposit[1] ? "." + parts_deposit[1] : "");
+																		(parts_deposit[1] ? "." + parts_deposit[1] : "");
 																	var parts_withdraw = parseFloat(value.withdraw).toFixed(2).split(".");
 																	var withdraw = parts_withdraw[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-																			(parts_withdraw[1] ? "." + parts_withdraw[1] : "");
+																		(parts_withdraw[1] ? "." + parts_withdraw[1] : "");
 																	var parts_total = parseFloat(value.total).toFixed(2).split(".");
 																	var total = parts_total[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-																			(parts_total[1] ? "." + parts_total[1] : "");
+																		(parts_total[1] ? "." + parts_total[1] : "");
 																	$("#table-summary-per-month > tbody").append("<tr>" +
-																			"<td>"+value.month+"</td>" +
-																			"<td class='text-right'>"+deposit+"</td>" +
-																			"<td  class='text-right'>"+withdraw+"</td>" +
-																			"<td  class='text-right'>"+total+"</td>" +
-																			"</tr>" +
-																			"");
+																		"<td>"+value.month+"</td>" +
+																		"<td class='text-right'>"+deposit+"</td>" +
+																		"<td  class='text-right'>"+withdraw+"</td>" +
+																		"<td  class='text-right'>"+total+"</td>" +
+																		"</tr>" +
+																		"");
 
 																})
 															},

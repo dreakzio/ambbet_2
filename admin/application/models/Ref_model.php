@@ -219,6 +219,7 @@ class Ref_model extends CI_Model
 
 	public function ref_agent_sum_member_by_from_account_list($search = [])
 	{
+
 		$this->db->select('
             count(from_account) as sum_member,
             from_account
@@ -237,6 +238,7 @@ class Ref_model extends CI_Model
 
 	public function ref_agent_member_register_list($search)
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
          to_account.id,
          to_account.username,
@@ -253,7 +255,7 @@ class Ref_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('to_account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('to_account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('to_account.role', $canManage);
 		}
 		if(isset($search['date_start']) && isset($search['date_end']) && $search['date_start'] != "" && $search['date_end'] != ""){
 			$this->db->where('ref.created_at >=', date("{$search['date_start']} 00:00:00"));

@@ -61,13 +61,21 @@ $(document).on('click', '#btn_update', function() {
 		sweetAlert2('warning', 'กรุณากรอก Line Login Client ID, Line Login Client Secret, Line Login Callback URL');
 		return false;
 	}
+
+	let line_send_messages_status = $('#line_send_messages_status').val();
+	let line_messages_token = $('#line_messages_token').val();
+	if (line_send_messages_status == "1" && (line_messages_token == "" || line_messages_token == null) ) {
+		$('#line_messages_token').focus();
+		sweetAlert2('warning', 'กรุณากรอก Line Masseges API Token');
+		return false;
+	}
 	Swal.fire({
-			text: "กรุณารอสักครู่..",
-			showConfirmButton: false,
-			allowOutsideClick: false,
-			allowEscapeKey: false,
-			confirmButtonText: '',
-		}),
+		text: "กรุณารอสักครู่..",
+		showConfirmButton: false,
+		allowOutsideClick: false,
+		allowEscapeKey: false,
+		confirmButtonText: '',
+	}),
 		Swal.showLoading();
 });
 var validateInputNumber = function(e) {
@@ -139,6 +147,17 @@ $(document).on('change','#line_notify_status',function(){
 		$("#line_notify_token").parents('.form-group').addClass('d-none');
 	}
 });
+$(document).on('change','#line_send_messages_status',function(){
+	if($(this).val() == "1"){
+		$("#line_messages_webhook").parents('.form-group').removeClass('d-none');
+		$("#line_messages_token").parents('.form-group').removeClass('d-none');
+
+	}else{
+		$("#line_messages_webhook").parents('.form-group').addClass('d-none');
+		$("#line_messages_token").parents('.form-group').addClass('d-none');
+	}
+});
+
 $(document).on('change','#line_login_status',function(){
 	if($(this).val() == "1"){
 		$("#line_login_client_id").parents('.form-group').removeClass('d-none');
@@ -150,6 +169,7 @@ $(document).on('change','#line_login_status',function(){
 		$("#line_login_callback").parents('.form-group').addClass('d-none');
 	}
 });
+
 $(document).on('change','#gg_2fa_status',function(){
 	if($(this).val() == "1"){
 		$("#gg_2fa_secret").parents('.form-group').removeClass('d-none');

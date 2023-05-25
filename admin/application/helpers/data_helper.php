@@ -50,6 +50,7 @@ function getBankListUniqueTextCode(){
 		'065' => 'ทีเอ็มบีธนชาต',
 		'034' => 'ธ.ก.ส.',
 		'069' => 'เกียรตินาคิน',
+		'999' => 'True Wallet',
 	);
 }
 function getKeyBankList(){

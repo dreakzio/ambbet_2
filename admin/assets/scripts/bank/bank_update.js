@@ -285,6 +285,9 @@ $(document).on('change', '#bank_code', function(e) {
 		$("#api_token_3").hide();
 		$("#api_token_3_label").text("Other");
 		$("#api_token_3").attr("placeholder","Other");
+		if($('#bank_code').val() == "05" || $('#bank_code').val() == "5"){
+			$("#container_check_regis").show();
+		}
 		if(value == "02" || value == "2" || value == "06" || value == "6" || value == "05" || value == "5" || value == "11"){
 			if($('#api_type').val() == "1"){
 				$("#container_auto_transfer").show();
@@ -359,6 +362,7 @@ $(document).on('change', '#bank_code', function(e) {
 		$("#api_token_2").attr("placeholder","PIN");
 		$("#api_token_3_label").text("Other");
 		$("#api_token_3").attr("placeholder","Other");
+		$("#container_check_regis").hide();
 	}
 });
 $(document).ready(function() {
@@ -394,20 +398,29 @@ $(document).ready(function() {
 			}
 			$("#api_type").find("option").removeAttr("disabled");
 			$("#api_type").parents('.form-group').show();
+
 			if($('#bank_code').val() == "05" || $('#bank_code').val() == "5"){
 				$("#api_type").find("option:eq(1)").prop("disabled",true);
+
+				$("#container_check_regis").show();
+
+				/*if($('#status_withdraw').val()=='1'){
+					$("#api_type").find("option:eq(2)").prop("disabled",true);
+				}else{
+					$("#api_type").find("option:eq(2)").prop("disabled",false);
+				}*/
 			}
 		}else if($('#bank_code').val() == "11"){
-				$('#status_withdraw').val(1);
-				$("#status_withdraw").find("option:eq(0)").prop("disabled",true);
-				$('#api_token_1_label').html('รหัสบัตรประชาชน');
-				$('#api_token_1').attr("placeholder", "รหัสบัตรประชาชน");
-				$('#username').prop("disabled",true);
-				$('#password').prop("disabled",true);
-				$("#api_type").find("option:eq(1)").prop("disabled",true);
-				$("#promptpay_number").prop("disabled",true);
-				$("#promptpay_status").prop("disabled",true);
-				$("#message_can_not_deposit").prop("readonly",true);
+			$('#status_withdraw').val(1);
+			$("#status_withdraw").find("option:eq(0)").prop("disabled",true);
+			$('#api_token_1_label').html('รหัสบัตรประชาชน');
+			$('#api_token_1').attr("placeholder", "รหัสบัตรประชาชน");
+			$('#username').prop("disabled",true);
+			$('#password').prop("disabled",true);
+			$("#api_type").find("option:eq(1)").prop("disabled",true);
+			$("#promptpay_number").prop("disabled",true);
+			$("#promptpay_status").prop("disabled",true);
+			$("#message_can_not_deposit").prop("readonly",true);
 		}
 	}else{
 		$(".form-api").hide();
@@ -491,7 +504,11 @@ $(document).on('change', '#auto_transfer', function(e) {
 });
 $(document).on('change', '#api_type', function(e) {
 	let value =$(this).val()
-	if(value == "1" && ($('#bank_code').val() == "05" || $('#bank_code').val() == "5"  || $('#bank_code').val() == "02" || $('#bank_code').val() == "2"  || $('#bank_code').val() == "3" || $('#bank_code').val() == "03"  || $('#bank_code').val() == "06" || $('#bank_code').val() == "6" || $('#bank_code').val() == "11")){
+	if(value == "1" && ($('#bank_code').val() == "05" || $('#bank_code').val() == "5"
+		|| $('#bank_code').val() == "02" || $('#bank_code').val() == "2"
+		|| $('#bank_code').val() == "3" || $('#bank_code').val() == "03"
+		|| $('#bank_code').val() == "06" || $('#bank_code').val() == "6"
+		|| $('#bank_code').val() == "11")){
 		$("#container_auto_transfer").show();
 		if($("#auto_transfer") == "0"){
 			$("#auto_min_amount_transfer").prop("disabled",true);
@@ -504,6 +521,17 @@ $(document).on('change', '#api_type', function(e) {
 			$("#auto_transfer_bank_number").prop("disabled",false);
 			$("#auto_transfer_bank_acc_name").prop("disabled",false);
 		}
+	}else if (value == "3" && ($('#bank_code').val() == "05" || $('#bank_code').val() == "5")){
+		$("#container_auto_transfer").show();
+		$('#username_label').html('Email login Line Lift');
+		$('#password_label').html('password login Line Lift');
+		$('#status_withdraw').val(0);
+		$('#status_withdraw').find("option:eq(1)").prop("disabled",true);
+
+		$("#start_time_can_not_deposit").prop("readonly",false);
+		$("#end_time_can_not_deposit").prop("readonly",false);
+		$("#message_can_not_deposit").prop("readonly",false);
+		$("#max_amount_withdraw_auto").prop("readonly",true);
 	}else{
 		$("#container_auto_transfer").hide();
 	}

@@ -42,6 +42,7 @@ class Bank_model extends CI_Model
 		  message_can_not_deposit,
 		  max_amount_withdraw_auto,
 		  updated_at,
+		  check_regis,
 		  error_message
         ');
         $this->db->order_by('id', 'DESC');

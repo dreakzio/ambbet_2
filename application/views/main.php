@@ -115,6 +115,9 @@ $web_setting['minimum_com'] = $this->Setting_model->setting_find([
 $web_setting['withdraw_all_status'] = $this->Setting_model->setting_find([
 	'name' => 'withdraw_all_status'
 ]);
+$web_setting['line_send_messages_status'] = $this->Setting_model->setting_find([
+	'name' => 'line_send_messages_status'
+]);
 error_reporting(0);
 ?>
 <html lang="en">

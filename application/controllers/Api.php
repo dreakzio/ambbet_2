@@ -1427,4 +1427,103 @@ class Api extends CI_Controller
 		]);
 		exit();
 	}
+	public  function linewebhook(){
+		$line_send_messages_status = $this->Setting_model->setting_find([
+			'name' => 'line_send_messages_status'
+		]);
+		if(trim($line_send_messages_status['value'])==0){
+			return;
+		}
+
+		$line_messages_token = $this->Setting_model->setting_find([
+			'name' => 'line_messages_token'
+		]);
+
+		//web_name
+		$web_name = $this->Setting_model->setting_find([
+			'name' => 'web_name'
+		]);
+
+		$strAccessToken = trim($line_messages_token['value']);
+
+		$content = file_get_contents('php://input');
+		$arrJson = json_decode($content, true);
+
+		$strUrl = "https://api.line.me/v2/bot/message/reply";
+
+		$arrHeader = array();
+		$arrHeader[] = "Content-Type: application/json";
+		$arrHeader[] = "Authorization: Bearer {$strAccessToken}";
+
+		$sms = $arrJson['events'][0]['message']['text'];
+		if($sms == "สวัสดี"){
+			$arrPostData = array();
+			$dataUser = $this->getLineProfile($arrJson['events'][0]['source']['userId']);
+
+			$arrPostData['replyToken'] = $arrJson['events'][0]['replyToken'];
+			$arrPostData['messages'][0]['type'] = "text";
+			$arrPostData['messages'][0]['text'] = "สวัสดี คุณ ".$dataUser['displayName'];
+		}else if($sms == "ขอไอดีหน่อย"){
+			$arrPostData = array();
+			$arrPostData['replyToken'] = $arrJson['events'][0]['replyToken'];
+			$arrPostData['messages'][0]['type'] = "text";
+			if($arrJson['events'][0]['source']['groupId']!=''){
+				$arrPostData['messages'][0]['text'] = "\r\nไอดีของคุณคือ ".$arrJson['events'][0]['source']['userId']."\r\nไอดีกลุ่มของคุณคือ {$arrJson['events'][0]['source']['groupId']}";
+			}else{
+				$arrPostData['messages'][0]['text'] = "ไอดีของคุณคือ ".$arrJson['events'][0]['source']['userId'];
+			}
+
+		}else if($sms == "ชื่ออะไร"){
+			$arrPostData = array();
+			$arrPostData['replyToken'] = $arrJson['events'][0]['replyToken'];
+			$arrPostData['messages'][0]['type'] = "text";
+			$arrPostData['messages'][0]['text'] = "ฉันคือ {$web_name['value']} Bot";
+		}else if($sms == "ทำอะไรได้บ้าง"){
+			$arrPostData = array();
+			$arrPostData['replyToken'] = $arrJson['events'][0]['replyToken'];
+			$arrPostData['messages'][0]['type'] = "text";
+			$arrPostData['messages'][0]['text'] = "ยังทำอะไรไม่ได้ เพราะยังไม่ได้สอน";
+		}else if($sms == "Hello"){
+			$arrPostData = array();
+			$arrPostData['replyToken'] = $arrJson['events'][0]['replyToken'];
+			$arrPostData['messages'][0]['type'] = "text";
+			$arrPostData['messages'][0]['text'] = "ยินดีที่ได้รู้จักครับผม";
+		}
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$strUrl);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $arrHeader);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arrPostData));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		$result = curl_exec($ch);
+		curl_close ($ch);
+	}
+	private function getLineProfile($userId){
+		$curl = curl_init();
+
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "https://api.line.me/v2/bot/profile/{$userId}",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "GET",
+			CURLOPT_HTTPHEADER => array(
+				"authorization: Bearer dG9h8f2e9VqQamD3K5lpMy0R1bfQib/OWIDHNLWMav3qF1mEo8ZMePEK9ezQ7xLFZ7xY48aTXrfrfVOfJCv3UMU3H8GbQn9bXaWYklVTe+nVbRNHjMJ97WeR/OKSZIe8NEuezyB/rSpSBa8iV6Ws7AdB04t89/1O/w1cDnyilFU=",
+				"cache-control: no-cache"
+			),
+		));
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+		//print_r($response);
+		$data = json_decode($response,true);
+		curl_close($curl);
+		//print_r($data);
+		return $data;
+	}
 }

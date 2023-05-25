@@ -50,20 +50,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <option value="1">ได้รับยูสเซอร์แล้ว</option>
                                         <option value="0">ยังไม่ได้รับยูสเซอร์</option>
                                     </select>
-                                    <?php if($_SESSION['user']['role'] == roleSuperAdmin()): ?>
+
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon1">สิทธิ์</span>
                                     </div>
-                                    <select name="role" id="role" class="form-control">
-                                        <option value="" selected>ทั้งหมด</option>
-                                        <?php foreach (canManageRole()[$_SESSION['user']['role']] as $canManage): ?>
-                                        <?php if(array_key_exists($canManage,roleDisplay())): ?>
-                                        <option value="<?php echo $canManage; ?>">
-                                            <?php echo roleDisplay()[$canManage]; ?></option>
-                                        <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <?php endif; ?>
+									<?php
+									$canManageRole = canManageRole()[$_SESSION['user']['role']];
+									$roleDisplay = roleDisplay();
+									?>
+									<select name="role" id="role" class="form-control">
+										<option value="" selected>ทั้งหมด</option>
+										<?php foreach ($canManageRole as $canManage): ?>
+											<?php if(array_key_exists($canManage,$roleDisplay)): ?>
+												<option value="<?php echo $canManage; ?>">
+													<?php echo $roleDisplay[$canManage]; ?></option>
+											<?php endif; ?>
+										<?php endforeach; ?>
+									</select>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +167,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <script src="<?php echo base_url('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
 <script>
 const bank_list = JSON.parse('<?php echo json_encode(getBankList()); ?>');
+const role_display = JSON.parse('<?php echo json_encode($roleDisplay); ?>');
 const game_code_list = JSON.parse('<?php echo json_encode(game_code_list()) ?>');
 const game_code_text_list = JSON.parse('<?php echo json_encode(game_code_text_list()) ?>');
 </script>
+
 <script src="<?php echo base_url('assets/scripts/user/user.js?').time() ?>"></script>

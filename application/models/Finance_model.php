@@ -219,6 +219,7 @@ class Finance_model extends CI_Model
 
 	public function report_member_year_month_day($search)
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		date_default_timezone_set('Asia/Bangkok');
 		$this->db->select('
          to_account.id,
@@ -231,8 +232,8 @@ class Finance_model extends CI_Model
 		}
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('to_account.role', $search['role_list']);
-		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role']) && count(canManageRole()[$_SESSION['user']['role']]) > 0){
-			$this->db->where_in('to_account.role', canManageRole()[$_SESSION['user']['role']]);
+		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role']) && count($canManage) > 0){
+			$this->db->where_in('to_account.role', $canManage);
 		}
 		$this->db->limit($search['per_page'], $search['page']);
 		$this->db->join('account as to_account','ref.to_account = to_account.id');

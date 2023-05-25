@@ -118,7 +118,9 @@ class Google_authenticator_librarie
 			$urlencoded .= urlencode('&issuer='.urlencode($title));
 		}
 
-		return "https://api.qrserver.com/v1/create-qr-code/?data=$urlencoded&size=${width}x${height}&ecc=$level";
+		//return "https://api.qrserver.com/v1/create-qr-code/?data=$urlencoded&size=${width}x${height}&ecc=$level";
+		return "https://chart.googleapis.com/chart?chs=${width}x${height}&cht=qr&chl=".$urlencoded."&choe=UTF-8&chld=${level}|0&date=".date('Y-m-d');
+
 	}
 
 	/**

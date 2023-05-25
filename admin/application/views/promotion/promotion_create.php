@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/dropify/dist/css/dropify.min.css'); ?>">
+
   <div class="content-wrapper">
     <div class="content-header row">
       <div class="content-header-left col-md-9 col-12 mb-2">
@@ -136,6 +137,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						</div>
 					</div>
                 </div>
+				  <div class="col-md-12">
+					  <div class="form-group">
+						  <label class="control-label">รายละเอียดโปรโมชั่น</label>
+						  <div id="container-description">
+							  <textarea type="text" id="description" name="description" class="form-control"  placeholder="ข้อมูลรายละเอียดโปรโมชั่น"></textarea>
+						  </div>
+					  </div>
+				  </div>
+			  </div>
                 <hr />
                 <div class="row">
                   <div class="col-md-12">

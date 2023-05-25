@@ -74,6 +74,7 @@ class Home extends CI_Controller
 		parent::__construct();
 		$language = $this->session->userdata('language');
 		$this->lang->load('text', $language);
+		$this->load->library(['Menu_service']);
 	}
 	public function index()
 	{
@@ -83,6 +84,7 @@ class Home extends CI_Controller
 		$data['middle_bar'] = 'middle_bar';
 		$data['back_btn'] = false;
 		$data['page'] = 'dashboard';
+		$data['menu_service'] = $this->menu_service;
 		$data['user'] = [
 			'amount_deposit_auto' => 0.00,
 			'username' => $_SESSION['user']['username'],

@@ -110,6 +110,17 @@ function dataTable() {
 				}
 			},
 			{
+				className: 'text-center',
+				render: function(data, type, full, meta) {
+					let html = "" ;
+					let {
+						turn
+					} = full;
+					html = "<button type='button' data-all='" + JSON.stringify(full) + "' class='btn_description btn bg-gradient-warning waves-effect waves-light' >รายละเอียด</button>";
+					return html;
+				}
+			},
+			{
 				className: 'text-right',
 				render: function(data, type, full, meta) {
 					let html = "";

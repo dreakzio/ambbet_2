@@ -1,3 +1,8 @@
+<?php
+$line_login_status = $this->Setting_model->setting_find([
+	'name' => 'line_login_status'
+]);
+?>
 <section class="bonus text-left">
 	<a style="
     padding-top: 6px;
@@ -435,6 +440,44 @@
 		</div>
 	</div>
 </section>
+<?php
+if($web_setting['line_send_messages_status']['value']==1 && $line_login_status['value']==1 and $user['linebot_userid']!=''):?>
+	<div class="modal" id="linelogin" tabindex="-1" aria-labelledby="exampleModalLabelass" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-body" style="">
+					<div class="row">
+						<div class="col-12">
+							<h5>&nbsp;&nbsp;<i class="fa fa-bullhorn" style="font-size: 16px !important;"></i>&nbsp;เพื่อง่่ายต่อการใช้งานเชื่อมแอคเคาของท่านเข้ากับไลน์เพียงกดสมัครด้านล่างนี้
+							</h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="bd-example" style="text-align: center">
+								<div >
+									<a href="<?php echo base_url('/auth/line_link') ?>" class="btn btn-line btn-submit">
+										<i class="fa fa-line mr-1"></i>
+										<span class="text-silver"> <?php echo $this->lang->line('login_by_line'); ?> </span>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 mt-3 text-right">
+							<a href="#" data-dismiss="modal" data-target="#linelogin" class="btn btn-success"><?php echo $this->lang->line('close'); ?></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+
+			$("#linelogin").modal('show')
+		});
+	</script>
+<?php endif;?>
 <loading :active.sync="pre_loader"
 		 :can-cancel="false"
 		 :width="80"

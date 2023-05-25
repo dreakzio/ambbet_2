@@ -883,4 +883,66 @@ class Account extends CI_Controller
 		]);
 
 	}
+	function checkbankacc(){
+		$post = $this->input->post();
+		//print_r($post);
+
+		require_once FCPATH .'/lib/Scb.php';
+		//echo $data;
+		$bank_list = array(
+			'01' => 'bbl',
+			'02' => 'kbank',
+			'03' => 'ktb',
+			'04' => 'tmb',
+			'05' => 'scb',
+			'06' => 'bay',
+			'07' => 'gsb',
+			'08' => 'tbank',
+			'09' => 'baac',
+			'1' => 'bbl',
+			'2' => 'kbank',
+			'3' => 'ktb',
+			'4' => 'tmb',
+			'5' => 'scb',
+			'6' => 'bay',
+			'7' => 'gsb',
+			'8' => 'tbank',
+			'9' => 'baac',
+			'10' => 'tmn',
+		);
+
+		$bank_data_list = $this->Bank_model->bank_data_list();
+		$bank_code = "";
+		for($i =0;$i<count($bank_data_list);$i++){
+			if(strtoupper($bank_list[$post['bank']]) == strtoupper($bank_data_list[$i]['code_en'])){
+				$bank_code = $bank_data_list[$i]['bank_code'];
+				$chk_match_bank = true;
+				break;
+			}
+		}
+
+		$sqlBank="SELECT * FROM `bank` where status = '1' and check_regis=1  and (bank_code = '05' or bank_code = '5') ";
+		$ds = $this->db->query($sqlBank);
+		$scb = $ds->result_array();
+		//echo decrypt(base64_decode($scb[0]['api_token_1']), $this->config->item('secret_key_salt'));
+
+		$scb['api_token_1'] = decrypt(base64_decode($scb[0]['api_token_1']), $this->config->item('secret_key_salt'));
+		$scb['api_token_2'] = decrypt(base64_decode($scb[0]['api_token_2']), $this->config->item('secret_key_salt'));
+		$scb['bank_number'] = $scb[0]['bank_number'];
+		try{
+			$api = new scb($scb['api_token_1'], $scb['api_token_2'], $scb['bank_number']);
+			$result = $api->Verify($post['bank_number'],$bank_code,1);
+			$json = json_decode($result, true);
+			//var_dump($json);
+			if ($json['status']['code'] == 1000) {
+				echo json_encode(['status' => true, 'msg' => $json['data']['accountToName']]);
+			}elseif ($json['status'] == 0){
+				echo json_encode(['status' => false, 'msg' => $json['msg']]);
+			} else {
+				echo json_encode(['status' => false, 'msg' => $json['status']['description']]);
+			}
+		}catch (Exception $ex){
+			echo json_encode(['status'=>false,"msg"=>"เกิดข้อผิดพลาดจาก API Error : ".$ex->getMessage().", กรุณาตรวจสอบยอดถอนบน Internet Banking/Mobile App ว่าถูกถอนไปจริงหรือไม่"]);
+		}
+	}
 }

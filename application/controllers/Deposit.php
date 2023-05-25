@@ -1371,6 +1371,52 @@ class Deposit extends CI_Controller
 
 			}
 
+			$line_send_messages_status = $this->Setting_model->setting_find([
+				'name' => 'line_send_messages_status'
+			]);
+			$web_name = $this->Setting_model->setting_find([
+				'name' => 'web_name'
+			]);
+			$line_login_callback = $this->Setting_model->setting_find([
+				'name' => 'line_login_callback'
+			]);
+			$line_messages_token = $this->Feature_status_model->setting_find([
+				'name' => 'line_messages_token'
+			]);
+
+			if($line_send_messages_status==1){
+				include_once ('/lib/send_line_message.php');
+				$line_msg = array();
+				$bank_list = array(
+					'01' => 'bbl',
+					'02' => 'kbank',
+					'03' => 'ktb',
+					'04' => 'tmb',
+					'05' => 'scb',
+					'06' => 'bay',
+					'07' => 'gsb',
+					'08' => 'tbank',
+					'09' => 'baac',
+					'1' => 'bbl',
+					'2' => 'kbank',
+					'3' => 'ktb',
+					'4' => 'tmb',
+					'5' => 'scb',
+					'6' => 'bay',
+					'7' => 'gsb',
+					'8' => 'tbank',
+					'9' => 'baac',
+				);
+				$line_msg['web_name'] = $web_name;
+				$line_msg['bank_tf_name'] = $bank_list[$user['bank']];
+				$line_msg['bank_tf_number'] = $user['bank_number'];
+				$line_msg['balance'] = number_format($balance,2);
+				$line_msg['bank_time'] = $current_time = date('Y-m-d H:i:s');;
+				$line_msg['credit_after'] = $form_data["amount"];
+				$line_msg['url_login'] = $line_login_callback;
+				sendline_deposit($line_msg,$line_messages_token['value']);
+			}
+
 
             //$this->ref_bonus($user, $finance_id);
             echo json_encode([

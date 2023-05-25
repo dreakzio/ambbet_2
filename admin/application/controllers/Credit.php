@@ -3,14 +3,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Credit extends CI_Controller
 {
+	public $menu_service;
     public function __construct()
     {
-        date_default_timezone_set('Asia/Bangkok');
-        parent::__construct();
+		date_default_timezone_set('Asia/Bangkok');
+		parent::__construct();
 		$this->load->helper('form','url');
-        if (!isset($_SESSION['user'])  || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
-            redirect('../auth');
-        }
+		//if (!isset($_SESSION['user'])  || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
+		if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
+			redirect('../auth');
+		}
+		$this->load->library(['Menu_service']);
+		if(!$this->menu_service->validate_permission_menu($this->uri)){
+			redirect('../auth');
+		}
     }
     public function index()
     {
@@ -327,6 +333,59 @@ class Credit extends CI_Controller
 				'type' => 1,
 				'message' => "ยอดฝาก ".number_format($process,2)." บาท ยูส ".$user['username']." เวลา ".(isset($post['date']) && isset($post['time']) ? $post['date']." ".$post['time'].":".date('s') : date('Y-m-d H:i'))." ปรับโดย ".$account['full_name'],
 			]);
+		}
+		$line_send_messages_status = $this->Setting_model->setting_find([
+			'name' => 'line_send_messages_status'
+		]);
+		$web_name = $this->Setting_model->setting_find([
+			'name' => 'web_name'
+		]);
+		$line_login_callback = $this->Setting_model->setting_find([
+			'name' => 'line_login_callback'
+		]);
+		$line_messages_token = $this->Feature_status_model->setting_find([
+			'name' => 'line_messages_token'
+		]);
+
+		if(trim($line_send_messages_status['value'])==1){
+			//ini_set('display_errors',1);
+			//error_reporting('E_ALL');
+
+			$line_msg = array();
+			$bank_list = array(
+				'01' => 'bbl',
+				'02' => 'kbank',
+				'03' => 'ktb',
+				'04' => 'tmb',
+				'05' => 'scb',
+				'06' => 'bay',
+				'07' => 'gsb',
+				'08' => 'tbank',
+				'09' => 'baac',
+				'1' => 'bbl',
+				'2' => 'kbank',
+				'3' => 'ktb',
+				'4' => 'tmb',
+				'5' => 'scb',
+				'6' => 'bay',
+				'7' => 'gsb',
+				'8' => 'tbank',
+				'9' => 'baac',
+				'10' => 'True Wallet',
+			);
+			//print_r($user);
+			$current_time = date('Y-m-d H:i:s');
+
+			$line_msg['web_name'] = $web_name['value'];
+			$line_msg['bank_tf_name'] = $bank_list[$user['bank']];
+			$line_msg['bank_tf_number'] = $user['bank_number'];
+			$line_msg['balance'] = number_format($process,2);
+			$line_msg['bank_time'] = $current_time;
+			$line_msg['credit_after'] = $credit_after;
+			$line_msg['url_login'] = $line_login_callback['value'];
+			//print_r($line_msg);
+			//include_once ('/lib/send_line_message.php');
+			$this->AUTO_WITHDRAW_LIBRARIE->send_line_message($line_msg,$line_messages_token['value']);
 		}
         $this->session->set_flashdata('toast', 'บันทึกข้อมูลเรียบร้อยแล้ว');
         echo json_encode([

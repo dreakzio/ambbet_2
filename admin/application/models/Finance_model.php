@@ -381,6 +381,11 @@ class Finance_model extends CI_Model
 	}
 
 	private function getAccountByAccountIdIn($account_id_list = []){
+		$role_display = roleDisplay();
+		$role_list=[];
+		foreach ($role_display as $role => $name){
+			$role_list[] = $role;
+		}
 		$data=[];
 		$account_id_new_list = [];
 		foreach ($account_id_list as $user_id){
@@ -394,7 +399,7 @@ class Finance_model extends CI_Model
 		if(count($account_id_new_list) > 0){
 			$user_list = $this->User_model->user_list_page([
 				'deleted_ignore' => true,
-				'role_list' => [roleSuperAdmin(),roleAdmin(),roleMember()],
+				'role_list' => $role_list,
 				'id_list' => $account_id_new_list,
 				'page' => 0,
 				'per_page' => count($account_id_new_list),
@@ -407,6 +412,11 @@ class Finance_model extends CI_Model
 	}
 
 	private function getAccountAgentByAccountIdIn($account_id_list = []){
+		$role_display = roleDisplay();
+		$role_list=[];
+		foreach ($role_display as $role => $name){
+			$role_list[] = $role;
+		}
 		$data=[];
 		$account_id_new_list = [];
 		foreach ($account_id_list as $user_id){
@@ -420,7 +430,7 @@ class Finance_model extends CI_Model
 		if(count($account_id_new_list) > 0){
 			$user_list = $this->User_model->user_list_page([
 				'deleted_ignore' => true,
-				'role_list' => [roleSuperAdmin(),roleAdmin(),roleMember()],
+				'role_list' => $role_list,
 				'id_list' => $account_id_new_list,
 				'page' => 0,
 				'per_page' => count($account_id_new_list),
@@ -667,6 +677,7 @@ class Finance_model extends CI_Model
     }
 	public function report_member_year_month_day($search)
 	{
+		$canManage = canManageRole()[$_SESSION['user']['role']];
 		$this->db->select('
          to_account.id,
          to_account.username,
@@ -683,7 +694,7 @@ class Finance_model extends CI_Model
 		if(isset($search['role_list']) && is_array($search['role_list']) && count($search['role_list']) > 0){
 			$this->db->where_in('to_account.role', $search['role_list']);
 		}else if(isset($_SESSION['user']) && isset($_SESSION['user']['role'])){
-			$this->db->where_in('to_account.role', canManageRole()[$_SESSION['user']['role']]);
+			$this->db->where_in('to_account.role', $canManage);
 		}
 		if(isset($search['date_start_member']) && isset($search['date_end_member']) && $search['date_start_member'] != "" && $search['date_end_member'] != ""){
 			$this->db->where('ref.created_at >=', date("{$search['date_start_member']} 00:00:00"));

@@ -4,11 +4,17 @@ require_once APPPATH.'../vendor/autoload.php';
 
 class Report extends CI_Controller
 {
+	public $menu_service;
 	public function __construct()
 	{
 		date_default_timezone_set('Asia/Bangkok');
 		parent::__construct();
-		if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
+		//if (!isset($_SESSION['user'])  || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
+		if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
+			redirect('../auth');
+		}
+		$this->load->library(['Menu_service']);
+		if(!$this->menu_service->validate_permission_menu($this->uri)){
 			redirect('../auth');
 		}
 	}

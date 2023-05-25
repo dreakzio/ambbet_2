@@ -49,7 +49,6 @@ class Check_User extends CI_Controller{
 				}
 			}
 			if(!$isAjaxRequest){
-
 				$account = $this->CI->Account_model->account_find([
 					'id' => $_SESSION['user']['id']
 				]);
@@ -59,11 +58,23 @@ class Check_User extends CI_Controller{
 						redirect('../auth');
 						exit();
 					}else{
-						if(!in_array($account['role'],[roleAdmin(),roleSuperAdmin()])){
+						//if(!in_array($account['role'],[roleAdmin(),roleSuperAdmin()])){
+						if(false){
 							session_destroy();
 							redirect('../auth');
 							exit();
 						}else{
+							if($account['role'] != $_SESSION['user']['role']){
+								$group_menu_list = [];
+								$group_menu_cached = null;
+								$permission_menu_ajax_list = [];
+								$permission_menu_ajax_cached = null;
+							}else{
+								$group_menu_list = isset($_SESSION['user']['group_menu_list']) ? $_SESSION['user']['group_menu_list'] : [];
+								$group_menu_cached = isset($_SESSION['user']['group_menu_cached'])  && strtotime($_SESSION['user']['group_menu_cached']) !== false ? $_SESSION['user']['group_menu_cached'] : null;
+								$permission_menu_ajax_list = isset($_SESSION['user']['permission_menu_ajax_list']) ? $_SESSION['user']['permission_menu_ajax_list'] : [];
+								$permission_menu_ajax_cached = isset($_SESSION['user']['permission_menu_ajax_cached']) && strtotime($_SESSION['user']['permission_menu_ajax_cached']) !== false ? $_SESSION['user']['permission_menu_ajax_cached'] : null;
+							}
 							$_SESSION['user'] = [
 								'role' => $account['role'],
 								'id' => $account['id'],
@@ -74,10 +85,11 @@ class Check_User extends CI_Controller{
 								'account_agent_id' => $_SESSION['user']['account_agent_id'],
 								'gg_2fa_chk' => isset($_SESSION['user']['gg_2fa_chk']) ? $_SESSION['user']['gg_2fa_chk'] : false,
 								'gg_2fa_secret' => isset($_SESSION['user']['gg_2fa_secret']) ? $_SESSION['user']['gg_2fa_secret'] : "",
+								'group_menu_list' => $group_menu_list,
+								'group_menu_cached' => $group_menu_cached,
+								'permission_menu_ajax_list' => $permission_menu_ajax_list,
+								'permission_menu_ajax_cached' => $permission_menu_ajax_cached,
 							];
-
-							//ตรวจสอบการผูก user_role
-							init_role($account['id']);
 						}
 					}
 				}else{

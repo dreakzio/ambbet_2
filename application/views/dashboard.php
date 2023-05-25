@@ -56,7 +56,7 @@
     <div class="nav-play-button">
         <a href="<?php echo base_url('game') ?>"
             class="btn-block play-button text-center hvr-buzz-out d-none d-sm-block"
-            style="text-decoration: none;padding: <?php echo $_SESSION['user']['role'] == roleAdmin() || $_SESSION['user']['role'] == roleSuperAdmin() ? '100px' : '53px' ?>;"><i
+            style="text-decoration: none;padding: <?php $menu_service->cnt_menu_list() >= 1  ? '100px' : '53px' ?>;"><i
                 class="fa fa-play mb-2" style="font-size: 85px !important;"></i>
             <p><?php echo $this->lang->line('playgame'); ?></p>
         </a>
@@ -97,7 +97,7 @@
                 href="<?php echo base_url('history') ?>"><i class="fa fa-list-alt mb-2"></i>
                 <p><?php echo $this->lang->line('finance_log'); ?></p>
             </a></div>
-        <?php if($_SESSION['user']['role'] == roleAdmin() || $_SESSION['user']['role'] == roleSuperAdmin()): ?>
+        <?php if($menu_service->cnt_menu_list() >= 1 ): ?>
         <div class="other-list other-list-2"><a class="btn-dark-tri hvr-buzz-out"
                 href="<?php echo base_url('admin') ?>"><i class="fa fa-list-alt mb-2"></i>
                 <p><?php echo $this->lang->line('admin'); ?></p>

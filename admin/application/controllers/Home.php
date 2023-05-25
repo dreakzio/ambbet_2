@@ -3,14 +3,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Home extends CI_Controller
 {
-    public function __construct()
-    {
-        date_default_timezone_set('Asia/Bangkok');
-        parent::__construct();
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
-            redirect('../auth');
-        }
-    }
+	public $menu_service;
+	public function __construct()
+	{
+		date_default_timezone_set('Asia/Bangkok');
+		parent::__construct();
+		if(empty($this->uri->segment(1))){
+			redirect('home');
+			exit();
+		}
+		//if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'],[roleAdmin(),roleSuperAdmin()])) {
+		if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
+			redirect('../auth');
+		}
+		$this->load->library(['Menu_service']);
+		if(!$this->menu_service->validate_permission_menu($this->uri)){
+			redirect('../auth');
+		}
+	}
     public function index()
     {
 		$this->load->helper('url');

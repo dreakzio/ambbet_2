@@ -176,6 +176,12 @@ $autoload['model'] = array(
   'Log_return_balance_model',
   'Bank_register_ignore_model',
   'Report_business_benefit_model',
+	'Group_menu_model',
+	'Menu_model',
+	'Node_menu_model',
+	'Permission_menu_role_model',
+	'Permission_role_model',
+	'Role_model',
 );
 
 $autoload['time_zone'] = date_default_timezone_set('Asia/Bangkok');

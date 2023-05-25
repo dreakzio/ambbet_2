@@ -4,6 +4,7 @@ new Vue({
 		return {
 			pre_loader : true,
 			step : register_step,
+			checkbankAuto : 0,
 			register_verify_otp_status : register_verify_otp_status,
 			form : {
 				phone : register_data != null ? register_data.phone : '',
@@ -81,6 +82,7 @@ new Vue({
 			let app = this
 			if(app.form.bank=="10"){
 				app.form.bank_number = app.form.phone
+				this.checkbankAuto =1
 			}
 		},
 		doRegister(){
@@ -153,10 +155,40 @@ new Vue({
 				});
 			}
 		},
+		checkBankAcc(){
+			let app = this
+			let bank_code = app.form.bank;
+			let bank_number = app.form.bank;
+			if(app.form.bank=='10'){
+				this.checkbankAuto =1
+				return
+			}
+			if(app.form.bank_number.trim().length >= 10){
+				//console.log(app.form.bank_number)
+				app.pre_loader = true
+				this.checkbankAuto =1
+				axios.post(BaseURL + "account/checkbankacc",
+					Qs.stringify(app.form)
+					,{
+						'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+					})
+					.then(function (response) {
+						app.pre_loader = false
+						//console.log(response);
+						if (response.data.status===true) {
+							app.form.full_name = response.data.msg
+						}
+					}).catch(err=>{
+					app.pre_loader = false
+					sweetAlert2('warning', 'ทำรายการไม่สำเร็จ');
+				});
+			}
+		},
 	}
 });
 $(document).on('keypress', '#bank_number,#phone', function(e) {
 	let key = e.keyCode;
+	let app = this
 	if (key >= 48 && key <= 57 && key != 32) {
 		return true;
 	} else {
