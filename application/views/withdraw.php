@@ -82,7 +82,7 @@
 			<label id="Tag"><?php echo $this->lang->line('withdraw_amount'); ?></label>
 			<div v-if="withdraw_all_status == 1">
 				<span>in true</span>
-				<vue-numeric :disabled="pre_loader" :class="'form-control'" id="withdraw_amount" :read-only="false"  v-bind:precision="0" v-model="amount" separator="," disabled></vue-numeric>
+				<vue-numeric :disabled="pre_loader" :class="'form-control'" id="withdraw_amount" :read-only="false"  v-bind:precision="0" v-model="amount_withdraw = amount" separator="," disabled></vue-numeric>
 			</div>
 			<div v-else>
 				<span>in else</span>
