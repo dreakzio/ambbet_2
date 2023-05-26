@@ -153,7 +153,7 @@
 						  <img src="<?php echo base_url('/') ?>assets/images/register2/acccount_number.png" alt="" width="25">
 						</span>
 					</div>
-					<input type="tel" @keypress="checkBankAcc" class="form-control" :readonly="form.bank == '10'" id="bank_number" maxlength="15" name="bank_number" v-model="form.bank_number" placeholder="<?php echo $this->lang->line('type_full_name'); ?>">
+					<input type="tel" @input="checkBankAcc" class="form-control" :readonly="form.bank == '10'" id="bank_number" maxlength="15" name="bank_number" v-model="form.bank_number" placeholder="<?php echo $this->lang->line('type_bank_number'); ?>">
 				</div>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
