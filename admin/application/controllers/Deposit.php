@@ -163,7 +163,7 @@ class Deposit extends CI_Controller
 	{
 		header('Content-Type: application/json');
 		try {
-			$balance_credit = $this->game_api_librarie_new->balanceCredit($user);
+			$balance_credit = $this->game_api_librarie->balanceCredit($user);
 			return $balance_credit;
 		} catch (\Exception $e) {
 			echo json_encode([
@@ -391,7 +391,7 @@ class Deposit extends CI_Controller
 			$form_data_deposit["account_agent_username"] = $user['account_agent_username'];
 			$form_data_deposit["amount"] = $create["process"];
 			$form_data_deposit = member_credit_data($form_data_deposit);
-			$response_deposit = $this->game_api_librarie_new->deposit($form_data_deposit);
+			$response_deposit = $this->game_api_librarie->deposit($form_data_deposit);
 			if (isset($response_deposit['ref'])) {
 				$log_deposit_withdraw = $this->Log_deposit_withdraw_model->log_deposit_withdraw_find([
 					'id' => $log_deposit_withdraw_id

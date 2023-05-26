@@ -200,7 +200,7 @@ $total_online = $report_all_day['online_member_total'];
 					    padding-top: 13px;
 					    padding-right: 20px;">
 						<span class="ag-balance"> <?php
-							$ag_balance = $this->game_api_librarie_new->balanceCredit(array(
+							$ag_balance = $this->game_api_librarie->balanceCredit(array(
 								'username' => ''
 							));
 							setlocale(LC_MONETARY,"th_TH");
