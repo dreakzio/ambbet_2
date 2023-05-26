@@ -13,10 +13,11 @@ class Auto_withdraw_librarie
 	{
 
 	}
-    public function transfer($username = null,$accnum = null,$code = null,$money=null,$deviceid,$api_refresh,$bank_number,$annotaion ='')
-    {
+	public function transfer($username = null,$accnum = null,$code = null,$money=null,$deviceid,$api_refresh,$bank_number,$annotaion ='')
+	{
 		//require_once FCPATH .'../config.php';
 		require_once FCPATH .'../lib/Scb.php';
+
 		if(!is_null($username) && !is_null($money) && !is_null($accnum) && !is_null($code)){
 			if (is_numeric($money)) {
 				try{
@@ -26,7 +27,7 @@ class Auto_withdraw_librarie
 						$personal_msg ="";
 					}
 					$api = new scb($deviceid, $api_refresh, $bank_number); //$deviceId,$api_refresh,$accnum
-					$res = $api->Transfer($accnum, $code, $money,$personal_msg);
+					$res = $api->Transfer($accnum, $code, $money,$annotaion);
 					$json = json_decode($res, true);
 					if ($json['status']['code'] == 1000) {
 						return ['status' => true, 'msg' => $json];
@@ -44,7 +45,7 @@ class Auto_withdraw_librarie
 		}else{
 			return ['status' => false, 'msg' => 'ข้อมูลไม่ถูกต้อง#1'];
 		}
-    }
+	}
 	public function transfer_kplus($username = null,$accnum = null,$code = null,$money=null,$token,$pin,$bank_number)
 	{
 		require_once FCPATH .'../lib/Kplus.php';

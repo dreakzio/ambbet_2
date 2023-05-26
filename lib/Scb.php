@@ -10,15 +10,13 @@ class Scb{
 	private $cnt_re_login = 0;
 	private $api_auth = "";
 
-	private $encrypt =  array('https://scbencrypt-o6kgfv7ymq-et.a.run.app');
+	private $encrypt =  array(
+		'https://scbencrypt-o6kgfv7ymq-et.a.run.app');
 	private $ip_encrypt = '';
-
-	private $proxy_url  = 'proxyprivates.com';
-	private $proxy_port = '3128';
 	private $count_login = 0;
-	private $proxy_userpasswd='proxydata:f6Hj2DBefuNd7xNs';
 	public function Curl($method, $url, $header, $data, $cookie)
 	{
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_USERAGENT, $this->useragent);
@@ -27,10 +25,10 @@ class Scb{
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		if($url != "https://fasteasy.scbeasy.com:8443/v3/transfer/confirmation"){
-			curl_setopt($ch, CURLOPT_TIMEOUT, 45);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 20);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 		}else{
-			curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 20);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 		}
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
@@ -186,6 +184,7 @@ class Scb{
 			return $json;
 		}
 
+
 		$curl1 = curl_init();
 
 		curl_setopt_array($curl1, array(
@@ -335,9 +334,7 @@ class Scb{
 
 			$this->count_login ++;
 		}
-
 		return $res;
-
 	}
 	public function getTransaction(){
 		date_default_timezone_set("Asia/Bangkok");
@@ -414,7 +411,6 @@ class Scb{
 			echo 'โปรดตรวจสอบ !!';
 
 		}
-
 	}
 	public function getTransactionWithdraw(){
 		date_default_timezone_set("Asia/Bangkok");
@@ -462,17 +458,20 @@ class Scb{
 		}
 	}
 	public function Verify($accountTo,$accountToBankCode,$amount,$annotation=''){
+
 		if($accountToBankCode == "014"){
 			$transferType = "3RD";
 		}else{
 			$transferType = "ORFT";
 		}
+
 		$url = "https://fasteasy.scbeasy.com/v2/transfer/verification";
 		$headers =  array(
 			"Api-Auth: ".$this->Access_token(),
 			"content-type: application/json",
 			"Accept-Language: th"
 		);
+		//$annotation = utf8_decode($annotation);
 		$data = '{
 			"accountFrom": "'.$this->accnum.'",
 			"accountFromType": "2",
@@ -489,7 +488,7 @@ class Scb{
 		//die();
 		if($d['status']['code'] === "1002"){
 			$this->new_Login();
-			return $this->cnt_re_login > 1 ? '{"status":{"code":"4000","description":"Verify failed Please check token..."}}' : $this->Verify($accountTo,$accountToBankCode,$amount,$annotation);
+			return $this->cnt_re_login > 1 ? '{"status":{"code":"4000","description":"Verify failed Please check token..."}}' : $this->Verify($accountTo,$accountToBankCode,$amount);
 		}
 
 		$this->cnt_re_login += 1;
@@ -542,7 +541,6 @@ class Scb{
 		$this->cnt_re_login += 1;
 		return $res;
 	}
-
 	//ตรวจสอบสลิปด้วย QRcode (ต้องหาทาง Decypt Qr ให้ได้ก่อน)
 	public function qr_scan($barcode){
 		$curl = curl_init();
@@ -744,6 +742,6 @@ class Scb{
 		$this->cnt_re_login += 1;
 		$this->api_auth = $access_token;
 	}
-	//======================================================
+
 }
 ?>
