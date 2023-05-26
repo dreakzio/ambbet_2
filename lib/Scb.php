@@ -478,7 +478,7 @@ class Scb{
 			"accountTo": "'.$accountTo.'",
 			"accountToBankCode": "'.$accountToBankCode.'",
 			"amount": "'.$amount.'",
-			"annotation": "'.$annotation.'",
+			"annotation": "",
 			"transferType":  "'.$transferType.'"
 			}';
 		$res = $this->Curl("POST",$url,$headers,$data,false);
@@ -496,7 +496,7 @@ class Scb{
 
 	}
 	public function Transfer($accountTo,$accountToBankCode,$amount,$annotation){
-		$Verify = $this->Verify($accountTo,$accountToBankCode,$amount,$annotation);
+		$Verify = $this->Verify($accountTo,$accountToBankCode,$amount,'');
 		$Verifys = json_decode($Verify,true);
 		//print_r($Verifys);
 		//die();
