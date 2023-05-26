@@ -338,7 +338,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_list()
 	{
-		$this->checkSuperAdminOrAdmin();
+		$this->checkOtherPageCanAccess();
 		$data = $this->Bank_model->bank_list($_GET);
 		if(isset($_GET['security']) && $_GET['security'] && !empty($data)){
 			foreach($data as $index => $bank){
@@ -377,7 +377,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_list_for_withdraw()
 	{
-		$this->checkSuperAdminOrAdmin();
+		$this->checkOtherPageCanAccess();
 		$data = $this->Bank_model->bank_list(['status'=>1,'status_withdraw' => 1,'api_type' => 1]);
 		foreach($data as $index => $bank){
 			unset($bank['api_token_1']);
