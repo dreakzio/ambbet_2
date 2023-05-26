@@ -1,6 +1,6 @@
 <?php
 error_reporting(0);
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 class Scb{
 	private $tilesVersion='60';
 	private $useragent = 'Android/10;FastEasy/3.64.1/6739';
@@ -467,7 +467,7 @@ class Scb{
 		}else{
 			$transferType = "ORFT";
 		}
-		$url = "https://fasteasy.scbeasy.com:8443/v2/transfer/verification";
+		$url = "https://fasteasy.scbeasy.com/v2/transfer/verification";
 		$headers =  array(
 			"Api-Auth: ".$this->Access_token(),
 			"content-type: application/json",
@@ -489,7 +489,7 @@ class Scb{
 		//die();
 		if($d['status']['code'] === "1002"){
 			$this->new_Login();
-			return $this->cnt_re_login > 1 ? '{"status":{"code":"4000","description":"Verify failed Please check token..."}}' : $this->Verify($accountTo,$accountToBankCode,$amount);
+			return $this->cnt_re_login > 1 ? '{"status":{"code":"4000","description":"Verify failed Please check token..."}}' : $this->Verify($accountTo,$accountToBankCode,$amount,$annotation);
 		}
 
 		$this->cnt_re_login += 1;
@@ -506,7 +506,7 @@ class Scb{
 			return $Verify;
 		}
 		$Verify = $Verifys['data'];
-		$url = "https://fasteasy.scbeasy.com:8443/v3/transfer/confirmation";
+		$url = "https://fasteasy.scbeasy.com/v3/transfer/confirmation";
 		$headers =  array(
 			"Api-Auth: ".$this->Access_token(),
 			"content-type: application/json",

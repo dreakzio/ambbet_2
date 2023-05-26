@@ -97,7 +97,7 @@
                 href="<?php echo base_url('history') ?>"><i class="fa fa-list-alt mb-2"></i>
                 <p><?php echo $this->lang->line('finance_log'); ?></p>
             </a></div>
-        <?php if($menu_service->cnt_menu_list() >= 1 ): ?>
+        <?php if($menu_service->cnt_menu_list() >= 1): ?>
         <div class="other-list other-list-2"><a class="btn-dark-tri hvr-buzz-out"
                 href="<?php echo base_url('admin') ?>"><i class="fa fa-list-alt mb-2"></i>
                 <p><?php echo $this->lang->line('admin'); ?></p>
