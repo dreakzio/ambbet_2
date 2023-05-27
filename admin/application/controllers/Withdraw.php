@@ -419,6 +419,7 @@ class Withdraw extends CI_Controller
 						'7' => 'gsb',
 						'8' => 'tbank',
 						'9' => 'baac',
+						'10' => 'tmn',
 					);
 					if(array_key_exists($finance['bank'],$bank_list)){
 						$bank_data_list = $this->Bank_model->bank_data_list();
