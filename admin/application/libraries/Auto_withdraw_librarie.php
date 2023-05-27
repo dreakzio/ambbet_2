@@ -147,7 +147,7 @@ class Auto_withdraw_librarie
 	public function transfer_truewallet($username = null,$accnum = null,$code = null,$money=null,$api_token_1,$api_token_2,$bank_number,$tmn_key_id,$tmn_id,$annotaion="")
 	{
 		//require_once FCPATH .'../config.php';
-		require_once FCPATH .'../lib/TMNOoo.php';
+		require_once FCPATH . '../lib/TMNOoo_bk.php';
 		if(!is_null($username) && !is_null($money) && !is_null($accnum)){
 			if (is_numeric($money)) {
 				try{
@@ -167,7 +167,8 @@ class Auto_withdraw_librarie
 					//print_r($_TMN);
 					$TMNOoo = new TMNOoo($_TMN);
 					$TMNOoo->setProxy('zproxy.lum-superproxy.io:22225', 'brd-customer-hl_ebdb3c0e-zone-data_center-country-th', '0pi1xakwwrg5'); //เปิดใช้งาน HTTP Proxy สำหรับเชื่อมต่อกับระบบของ Wallet
-					$TMNOoo->Login();
+					//$TMNOoo->Login();
+					$TMNOoo->loginWithPin6($_TMN['pin']);
 					$res = $TMNOoo->ConfirmTransferP2P($accnum,$money,$personal_msg);
 					//print_r($res);
 					//die();

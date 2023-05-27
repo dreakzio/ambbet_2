@@ -9,7 +9,7 @@ $before_date = date('d/m/Y',(strtotime ( '-1 day' , strtotime ( date("Y-m-d")) )
 $before_date_chk = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( date("Y-m-d")) ) ));
 ob_start('ob_gzhandler');
 require('conn_cron.php');
-require('lib/TMNOoo.php');
+require('lib/TMNOoo_bk.php');
 require ('lib/send_line_message.php');
 
 //Check line notify active
@@ -139,7 +139,8 @@ while($rs =$con_bank_check->fetch_assoc() ){
 				$TMNOoo = new TMNOoo($_TMN);
 				$TMNOoo->setProxy('zproxy.lum-superproxy.io:22225', 'brd-customer-hl_ebdb3c0e-zone-data_center-country-th', '0pi1xakwwrg5'); //เปิดใช้งาน HTTP Proxy สำหรับเชื่อมต่อกับระบบของ Wallet
 				$random_limit = 20;
-				$TMNOoo->Login();
+				//$TMNOoo->Login();
+				$TMNOoo->loginWithPin6($_TMN['pin']);
 				$balance =  $TMNOoo->GetBalance();
 				$obj_con_cron->autocommit(true);
 				if(!empty($balance) && isset($balance['data']) && isset($balance['data']['current_balance'])){
