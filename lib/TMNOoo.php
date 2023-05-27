@@ -83,7 +83,7 @@ class TMNOoo
 		$uri = 'user-profile-composite/v1/users/';
 		$signature = $this->calculate_sign256('/tmn-mobile-gateway/' . $uri);
 		$wallet_response_body = $this->wallet_connect($uri, array('Content-Type: application/json', 'Authorization: ' . $this->wallet_access_token), '');
-		return isset($wallet_response_body['data']['current_balance']) ? $wallet_response_body['data']['current_balance'] : '';
+		return isset($wallet_response_body['data']['current_balance']) ? $wallet_response_body : '';
 	}
 
     public function redeemVouchers($code, $number) {
