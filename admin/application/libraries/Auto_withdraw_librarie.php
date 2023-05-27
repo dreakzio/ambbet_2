@@ -170,7 +170,7 @@ class Auto_withdraw_librarie
 					//$TMNOoo->Login();
 					$TMNOoo->setData($_TMN['tmn_key_id'], $_TMN['mobile_number'], $_TMN['login_token'], $_TMN['tmn_id']);
 					$TMNOoo->loginWithPin6($_TMN['pin']);
-					$res = $TMNOoo->ConfirmTransferP2P($accnum,$money,$personal_msg);
+					$res = $TMNOoo->transferP2P($accnum,$money,$personal_msg);
 					//print_r($res);
 					//die();
 					$res['transferAmount'] = $money;

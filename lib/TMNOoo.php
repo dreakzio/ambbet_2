@@ -111,7 +111,8 @@ class TMNOoo
 		$uri = 'history-composite/v1/users/transactions/history/?start_date=' . $start_date . '&end_date=' . $end_date . '&limit=' . $limit . '&page=' . $page . '&type=&action=';
 		$signature = $this->calculate_sign256('/tmn-mobile-gateway/' . $uri);
 		$wallet_response_body = $this->wallet_connect($uri, array('Content-Type: application/json', 'Authorization: ' . $this->wallet_access_token , 'signature: ' . $signature , 'X-Device: ' . $this->wallet_device_id, 'X-Geo-Location: city=; country=; country_code=', 'X-Geo-Position: lat=; lng='), '');
-		return isset($wallet_response_body['data']['activities']) ? $wallet_response_body['data']['activities'] : array();
+
+		return isset($wallet_response_body['data']['activities']) ? $wallet_response_body : array();
 	}
 
 	public function fetchTransactionInfo($report_id)
