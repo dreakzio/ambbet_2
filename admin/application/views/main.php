@@ -195,20 +195,20 @@ $total_online = $report_all_day['online_member_total'];
 					</script>
 				</div>
 				<ul class="nav navbar-nav float-right">
-					<li class="dropdown dropdown-user nav-item credit-ag" style="vertical-align: middle;
+					<!--<li class="dropdown dropdown-user nav-item credit-ag" style="vertical-align: middle;
 					    font-weight: 600;
 					    padding-top: 13px;
 					    padding-right: 20px;">
 						<span class="ag-balance"> <?php
-							$ag_balance = $this->game_api_librarie->balanceCredit(array(
+/*							$ag_balance = $this->game_api_librarie->balanceCredit(array(
 								'username' => ''
 							));
 							setlocale(LC_MONETARY,"th_TH");
 							echo 'Credit AG : '.number_format($ag_balance,"2",".",',');
 							if($ag_balance < 100000)
-								echo "<a href='https://lin.ee/262N5Hd'><br/><span style='font-weight:400;font-size:11px'>กรุณาเติมเครดิตเพื่อใช้งานอย่างต่อเนื่อง</span></a>";  ?>
+								echo "<a href='https://lin.ee/262N5Hd'><br/><span style='font-weight:400;font-size:11px'>กรุณาเติมเครดิตเพื่อใช้งานอย่างต่อเนื่อง</span></a>";  */?>
 						</span>
-					</li>
+					</li>-->
 					<li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
 							<div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600"><?php echo $user['full_name']; ?></span><span class="user-status"><?php echo roleDisplay()[$user['role']]; ?> | <?php echo $user['username']; ?></span></div><span><i class="fa fa-user fa-2x text-primary"></i></span>
 						</a>
