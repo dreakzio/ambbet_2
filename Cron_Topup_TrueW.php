@@ -9,7 +9,7 @@ $before_date = date('d/m/Y',(strtotime ( '-1 day' , strtotime ( date("Y-m-d")) )
 $before_date_chk = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( date("Y-m-d")) ) ));
 ob_start('ob_gzhandler');
 require('conn_cron.php');
-require('lib/TMNOoo_bk.php');
+require('lib/TMNOoo.php');
 require ('lib/send_line_message.php');
 
 //Check line notify active
@@ -153,7 +153,7 @@ while($rs =$con_bank_check->fetch_assoc() ){
 				}else{
 					echo json_encode(['status'=>true,"message" => "Bank truewallet for deposit available : ".$truewallet['bank_number']]);
 					//$trans = $TMNOne->fetchTransactionHistory(date('Y-m-d',time()-86400), date('Y-m-d',time()+86400),$random_limit);
-					$trans = $TMNOoo->GetTransaction(date('Y-m-d',time()-86400), date('Y-m-d',time()+86400),$random_limit,1);
+					$trans = $TMNOoo->fetchTransactionHistory(date('Y-m-d',time()-86400), date('Y-m-d',time()+86400),$random_limit,1);
 					/*echo json_encode($trans);
 					exit();*/
 
