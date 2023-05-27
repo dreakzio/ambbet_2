@@ -165,9 +165,10 @@ class Auto_withdraw_librarie
 					}
 
 					//print_r($_TMN);
-					$TMNOoo = new TMNOoo($_TMN);
+					$TMNOoo = new TMNOoo();
 					//$TMNOoo->setProxy('zproxy.lum-superproxy.io:22225', 'brd-customer-hl_ebdb3c0e-zone-data_center-country-th', '0pi1xakwwrg5'); //เปิดใช้งาน HTTP Proxy สำหรับเชื่อมต่อกับระบบของ Wallet
 					//$TMNOoo->Login();
+					$TMNOoo->setData($_TMN['tmn_key_id'], $_TMN['mobile_number'], $_TMN['login_token'], $_TMN['tmn_id']);
 					$TMNOoo->loginWithPin6($_TMN['pin']);
 					$res = $TMNOoo->ConfirmTransferP2P($accnum,$money,$personal_msg);
 					//print_r($res);
