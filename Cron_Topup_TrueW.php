@@ -155,7 +155,7 @@ while($rs =$con_bank_check->fetch_assoc() ){
 					echo json_encode(['status'=>true,"message" => "Bank truewallet for deposit available : ".$truewallet['bank_number']]);
 					//$trans = $TMNOne->fetchTransactionHistory(date('Y-m-d',time()-86400), date('Y-m-d',time()+86400),$random_limit);
 					$trans = $TMNOoo->fetchTransactionHistory(date('Y-m-d',time()-86400), date('Y-m-d',time()+86400),$random_limit,1);
-					print_r($trans);
+
 					/*echo json_encode($trans);
 					exit();*/
 
