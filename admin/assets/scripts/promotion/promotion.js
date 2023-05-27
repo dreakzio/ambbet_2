@@ -110,17 +110,6 @@ function dataTable() {
 				}
 			},
 			{
-				className: 'text-center',
-				render: function(data, type, full, meta) {
-					let html = "" ;
-					let {
-						turn
-					} = full;
-					html = "<button type='button' data-all='" + JSON.stringify(full) + "' class='btn_description btn bg-gradient-warning waves-effect waves-light' >รายละเอียด</button>";
-					return html;
-				}
-			},
-			{
 				className: 'text-right',
 				render: function(data, type, full, meta) {
 					let html = "";
@@ -244,23 +233,23 @@ $(document).on('click', '.btn_description', function() {
 $(document).on('click', '.btn_delete', function() {
 	let data = $(this).data();
 	Swal.fire({
-			type: 'warning',
-			title: 'แจ้งเตือน',
-			text: 'ยืนยันการลบข้อมูล ' + data.name,
-			confirmButtonText: 'ตกลง',
-			confirmButtonColor: 'red',
-			showCancelButton: true,
-			cancelButtonText: 'ยกเลิก',
-			reverseButtons: true,
-		})
+		type: 'warning',
+		title: 'แจ้งเตือน',
+		text: 'ยืนยันการลบข้อมูล ' + data.name,
+		confirmButtonText: 'ตกลง',
+		confirmButtonColor: 'red',
+		showCancelButton: true,
+		cancelButtonText: 'ยกเลิก',
+		reverseButtons: true,
+	})
 		.then((result) => {
 			if (result.value) {
 				Swal.fire({
-						text: "กรุณารอสักครู่..",
-						showConfirmButton: false,
-						allowOutsideClick: false,
-						allowEscapeKey: false,
-					}),
+					text: "กรุณารอสักครู่..",
+					showConfirmButton: false,
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+				}),
 					Swal.showLoading();
 				$.ajax({
 					url: BaseURL + "promotion/promotion_delete/" + data.id,
