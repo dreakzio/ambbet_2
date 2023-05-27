@@ -172,7 +172,7 @@ while($rs =$con_bank_check->fetch_assoc() ){
 								$check_report_sms = $con_check_report_sms->num_rows;
 								if($check_report_sms == 0){
 									//$data = $TMNOne->fetchTransactionInfo($report["report_id"]);
-									$data = $TMNOoo->GetTransactionReport($report["report_id"]);
+									$data = $TMNOoo->fetchTransactionInfo($report["report_id"]);
 									if((isset($data['code']) && $data['code'] == "HTC-200") || isset($data['transaction_id']) || (isset($data['cached']) && $data['cached'])){
 										if(isset($data['transaction_id']) || (isset($data['cached']) && $data['cached'])){
 											$data = [
