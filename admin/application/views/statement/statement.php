@@ -29,6 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 										  <th class="text-left">ชื่อบัญชี</th>
 										  <th class="text-left">เลขบัญชี</th>
 										  <th class="text-right">ยอดคงเหลือ</th>
+										  <th class="text-right">อัพเดตล่าสุด</th>
 									  </tr>
 									  </thead>
 									  <tbody>
@@ -102,6 +103,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 																  "<td class='text-left'>"+value.account_name+"</td>" +
 																  "<td class='text-left'>"+value.bank_number+"</td>" +
 																  "<td class='text-right'>"+num+"</td>" +
+																  "<td class='text-right'>"+value.updated_at+"</td>" +
 																  "</tr>" +
 																  "");
 														  }
