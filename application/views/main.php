@@ -182,6 +182,15 @@ error_reporting(0);
 	<style>
 
 	</style>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-32V9SKMZC3"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-32V9SKMZC3');
+	</script>
 </head>
 <body>
 <input type="hidden" id="base_url" value="<?php echo site_url(); ?>"/>
