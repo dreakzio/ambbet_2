@@ -2,8 +2,8 @@
 error_reporting(0);
 header('Content-Type: application/json; charset=utf-8');
 class Scb{
-	private $tilesVersion='60';
-	private $useragent = 'Android/10;FastEasy/3.64.1/6739';
+	private $tilesVersion='68';
+	private $useragent = 'Android/10;FastEasy/3.66.2/6960';
 	private $deviceId = '';
 	private $api_refresh = '';
 	private $accnum = '';
