@@ -277,7 +277,7 @@ class Api extends CI_Controller
 	public function process_commission_ref(){
 		//Max execute 50
 		set_time_limit(60*50);
-		if(isset($_GET['api_token']) && trim($_GET['api_token']) == $this->config->item('web_api_token')){
+		//if(isset($_GET['api_token']) && trim($_GET['api_token']) == $this->config->item('web_api_token')){
 
 			//ให้บอททำงานตั้งแต่ 11:30 - 18:00
 			date_default_timezone_set('Asia/Bangkok');
@@ -692,12 +692,12 @@ class Api extends CI_Controller
 				"message" => "Running..."
 			]);
 			exit();
-		}
+		/*}
 		echo json_encode([
 			"success" => false,
 			"message" => "Invalid Params"
 		]);
-		exit();
+		exit();*/
 	}
 
 	private function checkWinLoseReturnTransfer($winlose_amount = 0,$from_account,$to_account){
@@ -1213,7 +1213,7 @@ class Api extends CI_Controller
 	}
 
 	public function process_line_notify(){
-		if(isset($_GET['api_token']) && trim($_GET['api_token']) == $this->config->item('web_api_token')){
+		//if(isset($_GET['api_token']) && trim($_GET['api_token']) == $this->config->item('web_api_token')){
 
 			date_default_timezone_set('Asia/Bangkok');
 			$date_before = date('Y-m-d', strtotime('-1 days'));
@@ -1420,12 +1420,12 @@ class Api extends CI_Controller
 				"message" => "Running..."
 			]);
 			exit();
-		}
+		/*}
 		echo json_encode([
 			"success" => false,
 			"message" => "Invalid Params"
 		]);
-		exit();
+		exit();*/
 	}
 	public  function linewebhook(){
 		$line_send_messages_status = $this->Setting_model->setting_find([
