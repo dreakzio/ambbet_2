@@ -9,7 +9,10 @@ class TMNOoo
 	private $wallet_endpoint = 'https://tmn-mobile-gateway.public-a-cloud1p.ascendmoney.io/tmn-mobile-gateway/';
 	private $wallet_user_agent = 'okhttp/4.4.0'; 
 	private $tmnone_keyid = 0;
-	private $wallet_msisdn, $wallet_login_token, $wallet_tmn_id, $wallet_device_id, $wallet_access_token, $proxy_ip = '', $proxy_username = '', $proxy_password = '';
+	private $wallet_msisdn, $wallet_login_token, $wallet_tmn_id, $wallet_device_id, $wallet_access_token,
+		$proxy_ip = 'http://brd.superproxy.io:22225',
+		$proxy_username = 'brd-customer-hl_3cd787e4-zone-data_center',
+		$proxy_password = 'al7ayuwfn8tf';
 	public function __construct($mode = false)
 	{
 		$this->sslmode = $mode;
