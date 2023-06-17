@@ -11,8 +11,8 @@ class TMNOoo
 	private $tmnone_keyid = 0;
 	private $wallet_msisdn, $wallet_login_token, $wallet_tmn_id, $wallet_device_id, $wallet_access_token,
 		$proxy_ip = 'http://brd.superproxy.io:22225',
-		$proxy_username = 'brd-customer-hl_3cd787e4-zone-data_center',
-		$proxy_password = 'al7ayuwfn8tf';
+		$proxy_username = 'brd-customer-hl_ebdb3c0e-zone-data_center',
+		$proxy_password = '0pi1xakwwrg5';
 	public function __construct($mode = false)
 	{
 		$this->sslmode = $mode;
