@@ -13,9 +13,11 @@ class TMNOoo
 		$proxy_ip = 'http://brd.superproxy.io:22225',
 		$proxy_username = 'brd-customer-hl_ebdb3c0e-zone-data_center',
 		$proxy_password = '0pi1xakwwrg5';
+	private  $proxy_session = '';
 	public function __construct($mode = false)
 	{
 		$this->sslmode = $mode;
+		$this->proxy_session = mt_rand();
 	}
 
 	public function setData($tmnone_keyid, $wallet_msisdn, $wallet_login_token, $wallet_tmn_id) {
@@ -26,11 +28,11 @@ class TMNOoo
 		$this->wallet_device_id = substr(md5($wallet_msisdn . $wallet_tmn_id), 0, 16);
 	}
 
-	public function setProxy($proxy_ip, $proxy_username, $proxy_password) {
+	/*public function setProxy($proxy_ip, $proxy_username, $proxy_password) {
 		$this->proxy_ip = $proxy_ip;
 		$this->proxy_username = $proxy_username;
 		$this->proxy_password = $proxy_password;
-	}
+	}*/
 
 	public function setDataWithAccessToken($tmnone_keyid, $wallet_access_token, $wallet_login_token, $wallet_device_id) {
 		$this->tmnone_keyid = $tmnone_keyid;
@@ -503,7 +505,7 @@ class TMNOoo
 			curl_setopt($curl, CURLOPT_PROXY, $this->proxy_ip);
 			if(!empty($this->proxy_username))
 			{
-				curl_setopt($curl, CURLOPT_PROXYUSERPWD, $this->proxy_username . ':' . $this->proxy_password);
+				curl_setopt($curl, CURLOPT_PROXYUSERPWD, $this->proxy_username . '-country-th-session-'.$this->proxy_session.':' . $this->proxy_password);
 			}
 		}
 		if(!empty($request_body))
