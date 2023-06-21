@@ -374,8 +374,9 @@ class Scb{
 		);
 		$data_scb = '{ "accountNo": "'.$this->accnum.'", "endDate": "'.$endDate.'", "pageNumber": "1", "pageSize": 35, "productType": "2", "startDate": "'.$startDate.'" }';
 		$res = $this->Curl("POST",$url,$headers,$data_scb,false);
-		$this->save_log('SCB : getTransaction',$res);
+
 		$d = json_decode($res,true);
+		$this->save_log('SCB : getTransaction',$d);
 		//print_r($res);
 		if($d['status']['code'] === "1002"){
 			if($this->count_login <=2){
