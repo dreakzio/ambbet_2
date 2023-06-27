@@ -3,8 +3,8 @@ require('config.php');
 
 if(isset($_GET['api_token']) && trim($_GET['api_token']) == API_TOKEN_KEY){
 
-	/*$sec_rand = rand(5,8);
-	sleep($sec_rand);*/
+	$sec_rand = rand(5,8);
+	sleep($sec_rand);
 
 	ini_set('display_errors', 1);
 	error_reporting(E_ALL);
