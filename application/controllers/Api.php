@@ -1526,4 +1526,10 @@ class Api extends CI_Controller
 		//print_r($data);
 		return $data;
 	}
+	public function checkOnline(){
+				$domain = $this->config->item('domain_name');
+				$ip = $_SERVER['SERVER_ADDR'];
+				$array = array('domain'=>$domain,'ip'=>$ip);
+				echo  json_encode($array);
+	}
 }
