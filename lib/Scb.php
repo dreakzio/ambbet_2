@@ -277,6 +277,7 @@ class Scb{
 			$json = array();
 			$json['status'] = '0';
 			$json['msg'] = 'SCB error Login please get DeviceID';
+			$this->telegram_push_message("SCB ".'SCB error Login please get DeviceID');
 			return $json;
 		}
 		$access_token = trim($Auth1);
@@ -284,6 +285,7 @@ class Scb{
 			$json = array();
 			$json['status'] = '0';
 			$json['msg'] = 'SCB error Login please get DeviceID';
+			$this->telegram_push_message("SCB ".'SCB error Login please get DeviceID');
 			return $json;
 		}
 		/*$strFileName = "token_".$this->accnum.".txt";
@@ -304,6 +306,7 @@ class Scb{
 			$json = array();
 			$json['status'] = '0';
 			$json['msg'] = 'SCB error Login please get DeviceID';
+			$this->telegram_push_message("SCB ".'SCB error Login please get DeviceID');
 			return $json;
 		}
 
@@ -318,6 +321,7 @@ class Scb{
 		$res = $this->Curl("POST",$url,$headers,$data,false);
 
 		$d = json_decode($res,true);
+		$this->savelog($d, 'FETCH_BAL');
 		if($d['status']['code'] === "1002"){
 
 			if($this->count_login <=2){
@@ -328,6 +332,7 @@ class Scb{
 				$json = array();
 				$json['status'] = '0';
 				$json['msg'] = 'SCB error Login please get DeviceID';
+				$this->telegram_push_message("SCB ".'SCB error Login please get DeviceID');
 				return $json;
 			}
 			//$this->count_login;
@@ -350,6 +355,7 @@ class Scb{
 		$res = $this->Curl("POST",$url,$headers,$data_scb,false);
 		$d = json_decode($res,true);
 		//print_r($res);
+		$this->savelog($d, 'FETCH_STM');
 		if($d['status']['code'] === "1002"){
 			if($this->count_login <=2){
 				$this->new_Login();
@@ -358,6 +364,9 @@ class Scb{
 				$json = array();
 				$json['status'] = '0';
 				$json['msg'] = 'SCB error Login please get DeviceID';
+
+				$this->telegram_push_message("SCB ".'SCB error Login please get DeviceID');
+
 				return $json;
 
 			}
@@ -373,8 +382,13 @@ class Scb{
 					'withdraw' => [],
 				];
 				//return $json['data']['txnList'];
+				$i=0;
 				foreach($json['data']['txnList']  as $v ){
 					if($v['txnCode']['code'] == 'X1'){
+						if($i==0){
+							$this->telegram_push_message("SCB ".'รายการล่าสุดที่ดึงได้ '.$v['txnRemark'].' '.$v['txnDateTime']);
+						}
+						$i++;
 						$description_full = $v['txnRemark'];
 						preg_match_all ("/SCB x(.*) /U", $v['txnRemark'], $scbbank);
 						preg_match_all ("/ ((.*)) \/X([0-9]+)([0-9]+)([0-9]+)([0-9]+)([0-9]+)([0-9]+)/U", $v['txnRemark'], $otherbank);
@@ -404,8 +418,10 @@ class Scb{
 						$data['withdraw'][] = ["date" => $Date, "time" => $Time, "withdraws" => $v['txnAmount'], "description" => trim($bankno), "description_full" => trim($description_full) ];
 					}
 				}
-				//print_r($data);
+				print_r($data);
 				return $data;
+			}else{
+				$this->telegram_push_message("SCB ".'รายการเดินบัญชีไม่อัพเดต');
 			}
 		}else{
 			echo 'โปรดตรวจสอบ !!';
@@ -482,12 +498,14 @@ class Scb{
 			"transferType":  "'.$transferType.'"
 			}';
 		$res = $this->Curl("POST",$url,$headers,$data,false);
-
 		$d = json_decode($res,true);
 		//print_r($d);
 		//die();
 		if($d['status']['code'] === "1002"){
 			$this->new_Login();
+			if($this->cnt_re_login > 1){
+				$this->telegram_push_message("SCB ".'"status":{"code":"4002","description":"Verify failed Please check token..."}');
+			}
 			return $this->cnt_re_login > 1 ? '{"status":{"code":"4000","description":"Verify failed Please check token..."}}' : $this->Verify($accountTo,$accountToBankCode,$amount);
 		}
 
@@ -533,9 +551,14 @@ class Scb{
 		$res = $this->Curl("POST",$url,$headers,$data,false);
 
 		$d = json_decode($res,true);
+		$this->savelog($d, 'FETCH_TRA');
 
 		if($d['status']['code'] === "1002"){
 			$this->new_Login();
+			if($this->cnt_re_login > 1){
+				$this->telegram_push_message("SCB ".'"status":{"code":"4002","description":"Transfer failed Please check token..."}');
+			}
+
 			return $this->cnt_re_login > 1 ? '{"status":{"code":"4002","description":"Transfer failed Please check token..."}}' : $this->Transfer($accountTo,$accountToBankCode,$amount);
 		}
 		$this->cnt_re_login += 1;
@@ -690,6 +713,7 @@ class Scb{
 		$response = curl_exec($curl);
 		curl_close($curl);
 		//print_r($response);
+		$this->savelog($response, 'FETCH_LOGIN');
 		$headers = array();
 		$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
 		//print_r($header_text);
@@ -726,6 +750,7 @@ class Scb{
 			$json = array();
 			$json['status'] = '0';
 			$json['msg'] = 'SCB error Login please get DeviceID';
+			$this->telegram_push_message("SCB error Login please get DeviceID");
 			return $json;
 		}
 		$access_token = trim($Auth1["Api-Auth"]);
@@ -733,6 +758,7 @@ class Scb{
 			$json = array();
 			$json['status'] = '0';
 			$json['msg'] = 'SCB error Login please get DeviceID';
+			$this->telegram_push_message("SCB error Login please get DeviceID");
 			return $json;
 		}
 		//print_r($access_token);
@@ -743,5 +769,52 @@ class Scb{
 		$this->api_auth = $access_token;
 	}
 
+	function telegram_push_message($message){
+
+		// $chOne = curl_init();
+		$access_token ='6166097230:AAF6rPPTRRvUmQ2EATxar9QnZgyGFeZ09S8';
+		$group_id ='-994381529';
+
+		$website="https://api.telegram.org/bot".$access_token;
+		//$chatId=1234567;  //Receiver Chat Id
+		$params=[
+			'chat_id'=>$group_id,
+			'text'=>$_SERVER['SERVER_NAME']." : ".$message,
+		];
+		$ch = curl_init($website . '/sendMessage');
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		$result = curl_exec($ch);
+		curl_close($ch);
+	}
+
+	function savelog($res, $log_type){
+		$data = array();
+		$data["clientName"] = $_SERVER['SERVER_NAME'];
+		$data["logType"] = $log_type;
+		$data["message"] = json_encode($res,JSON_UNESCAPED_UNICODE);
+		$url = "https://status.nextgendev.space/banklog.php";
+
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => $url,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_CONNECTTIMEOUT => 30,
+			CURLOPT_HEADER => 1,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_POSTFIELDS =>$data,
+		));
+		$response = curl_exec($curl);
+		curl_close($curl);
+	}
 }
 ?>
