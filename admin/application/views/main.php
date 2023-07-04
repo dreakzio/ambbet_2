@@ -454,12 +454,37 @@ $total_online = $report_all_day['online_member_total'];
 											<th>เลขบัญชี</th>
 											<th>ประเภท</th>
 											<th>ยอดคงเหลือ</th>
+											<th></th>
 										</tr>
 										</thead>
 										<tbody>
 										</tbody>
 									</table>
 									<script>
+										$(document).ready(function() {
+											$(".refresher").click(function() {
+												var link = $(this);
+												link.hide();
+												link.off("click");
+												var timeoutID = setTimeout(function() {
+												location.reload();
+												}, 90000);
+												localStorage.setItem("myTimeout", timeoutID.toString());
+												});
+													var storedTimeoutID = localStorage.getItem("myTimeout");
+														if (storedTimeoutID) {
+															var timeoutID = parseInt(storedTimeoutID, 10);
+															var remainingTime = timeoutID - Date.now();
+																if (remainingTime > 0) {
+																	setTimeout(function() {
+																	location.reload();
+																	}, remainingTime);
+																} else {
+																	localStorage.removeItem("myTimeout");
+																	}
+																}
+															});
+
 										var loading_bank = false;
 										function getTableBank(){
 											if(!loading_bank){
@@ -471,6 +496,7 @@ $total_online = $report_all_day['online_member_total'];
 													success: function(response) {
 														loading_bank = false;
 														var base_url = '<?php echo base_url('assets/images') ?>';
+														var main_baes_url = window.location.origin;
 														if(response.result.length > 0){
 															$("#tableBank > tbody").empty();
 														}else{
@@ -478,6 +504,8 @@ $total_online = $report_all_day['online_member_total'];
 															$("#tableBank > tbody").append("<tr colspan='4'>ไม่มีข้อมูล</tr>");
 														}
 														var bank_list = JSON.parse('<?php echo json_encode(getBankList()); ?>');
+														var refresher = "";
+														var tk_key = response.tk_key;
 														$.each(response.result,function(i,value){
 
 															if(value.status == '1' || value.status == '2'){
@@ -485,42 +513,60 @@ $total_online = $report_all_day['online_member_total'];
 																var url_img_bank = "";
 																if (value.bank_code ==1 || value.bank_code =='01') {
 																	url_img_bank =  base_url+"/bank/1.png";
+																	refresher = null
 																}
 																else if (value.bank_code ==2 || value.bank_code =='02') {
 																	url_img_bank =  base_url+"/bank/2.png";
+																	refresher = main_baes_url+"/"+"Cron_Topup_Kbank.php?api_token="+tk_key;
 																}
 																else if (value.bank_code ==3 || value.bank_code =='03') {
 																	url_img_bank =  base_url+"/bank/3.png";
+																	refresher = null
 																}
 																else if (value.bank_code ==4 || value.bank_code =='04') {
 																	url_img_bank =  base_url+"/bank/5.png";
+																	refresher = null
 																}
 																else if (value.bank_code ==5 || value.bank_code =='05') {
 																	url_img_bank =  base_url+"/bank/6.png";
+																	refresher = main_baes_url+"/"+"Cron_Topup.php?api_token="+tk_key;
 																}
 																else if (value.bank_code ==6 || value.bank_code =='06') {
 																	url_img_bank =  base_url+"/bank/4.png";
+																	refresher = main_baes_url+"/"+"Cron_Topup_Krungsri.php?api_token="+tk_key;
 																}
 																else if (value.bank_code ==7 || value.bank_code =='07') {
 																	url_img_bank =  base_url+"/bank/7.png";
+																	refresher = null
 																}else if (value.bank_code ==8 || value.bank_code =='08') {
 																	url_img_bank =  base_url+"/bank/9.png";
+																	refresher = null
 																}else if (value.bank_code ==9 || value.bank_code =='09') {
 																	url_img_bank =  base_url+"/bank/baac.png";
+																	refresher = null
 																}
 																else if (value.bank_code ==10 || value.bank_code =='10') {
 																	url_img_bank =  base_url+"/bank/10.png";
+																	refresher = main_baes_url+"/"+"Cron_Topup_TrueW.php?api_token="+tk_key;
 																}else if (value.bank_code ==11 || value.bank_code =='11') {
 																	url_img_bank =  base_url+"/bank/kkp.png";
+																	refresher = null
 																}
 																else {
 																	url_img_bank = base_url+"/bank/not-found.png";
+																	refresher = null
 																}
 																var type_bank = '';
+																var refresher_icon = '';
 																if (value.status == '1') {
 																	type_bank = 'AUTO';
 																} else if(value.status == '2') {
 																	type_bank = 'SLIP';
+																}
+																if (refresher !== null) {
+																	refresher_icon = '<a href="'+refresher+'" target="_blank" id="refresher" class="refresher"><i class="fa fa-refresh"></i></a>';
+																} else {
+																	refresher_icon = '<a href="javascript:void(0)" ><i class="fa fa-times-circle" style="color : red"></i></a>';
 																}
 																var parts = parseFloat(value.balance).toFixed(2).split(".");
 																var num = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
@@ -534,8 +580,10 @@ $total_online = $report_all_day['online_member_total'];
 																	"<td>"+value.bank_number+"</td>" +
 																	"<td>"+type_bank+"</td>" +
 																	"<td>"+num+"</td>" +
+																	"<td>"+refresher_icon +
 																	"</tr>" +
 																	"");
+																	
 															}
 														})
 													},
@@ -548,7 +596,7 @@ $total_online = $report_all_day['online_member_total'];
 										getTableBank();
 										setInterval(function(){
 											getTableBank();
-										},15000);
+										},90000);
 									</script>
 								</div>
 							</div>

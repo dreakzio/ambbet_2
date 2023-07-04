@@ -338,6 +338,7 @@ class Bank extends CI_Controller
 	}
 	public function bank_list()
 	{
+		require_once FCPATH .'../config.php';
 		$this->checkOtherPageCanAccess();
 		$data = $this->Bank_model->bank_list($_GET);
 		if(isset($_GET['security']) && $_GET['security'] && !empty($data)){
@@ -372,7 +373,8 @@ class Bank extends CI_Controller
 		}
 		echo json_encode([
 			'message' => 'success',
-			'result' => $data_new
+			'result' => $data_new,
+			'tk_key' => API_TOKEN_KEY
 		]);
 	}
 	public function bank_list_for_withdraw()
