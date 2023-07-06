@@ -128,6 +128,9 @@ class Kbank{
 			$ownerId = substr($response,strpos($response,'"userProfiles":[{"ibId":"')+25);
 			$ownerId = !empty($ownerId) ? explode('","roleList":',$ownerId) : null;
 			$ownerId2 = !is_null($ownerId) && count($ownerId) >= 2 ? trim($ownerId[0]) : null;
+			$ownerId2 = explode('","',$ownerId2);
+			$ownerId2 = $ownerId2[0];
+			// print_r($ownerId2);exit;
 			$checkCompany	= substr($response,strpos($response,'"companyId":'));
 			$checkCompany1	= explode(',',$checkCompany);
 			$checkCompany2	= explode('"',$checkCompany1[0]);
@@ -137,7 +140,7 @@ class Kbank{
 			} else {
 				$ownerId = !is_null($ownerId) && count($ownerId) >= 2 ? trim($ownerId[0]) : null;
 			}
-			// print_r($ownerId);exit;
+			// print_r($ownerId2);exit;
 			if(is_null($ownerId) || empty($ownerId)){
 				echo "Can't find ownerID";
 				exit();
@@ -174,7 +177,7 @@ class Kbank{
 					'Authorization: '.trim($output_array_2[0][0]),
 					'Content-Type:  application/json',
 					'X-RE-FRESH:  N',
-					'X-REQUEST-ID:  '.date('Ymd').'125809248859',
+					'X-REQUEST-ID:  '.date('Ymd').''.rand(111111111111,999999999999).'',
 				),
 			));
 
@@ -183,7 +186,9 @@ class Kbank{
 
 			preg_match_all('/(?<=x\-session\-token\:).+/', $response, $output_array_3);
 
+			// print_r(trim($output_array_3[0][0]));exit;
 			// print_r($output_array_3);exit;
+			// print_r('{"custType":"'.$custType.'","ownerId":"'.$ownerId.'","ownerType":"'.$ownerType.'","nicknameType":"OWNAC","pageAmount":6,"lang":"th","isReload":"N"}');exit;
 
 			if(!empty($output_array_3[0]) && !empty($output_array_3[0][0])){
 				$curl = curl_init();
@@ -203,11 +208,27 @@ class Kbank{
 					CURLOPT_CUSTOMREQUEST => 'POST',
 					CURLOPT_POSTFIELDS =>'{"custType":"'.$custType.'","ownerId":"'.$ownerId.'","ownerType":"'.$ownerType.'","nicknameType":"OWNAC","pageAmount":6,"lang":"th","isReload":"N"}',
 					CURLOPT_HTTPHEADER => array(
-						'X-IB-ID: '.$ownerId2,
+						'Accept: application/json, text/plain, */*',
+						'Accept-Encoding: gzip, deflate, br',
+						'Accept-Language: en-US,en;q=0.9,th;q=0.8',
 						'Authorization: '.trim($output_array_3[0][0]),
-						'Content-Type:  application/json',
-						'X-RE-FRESH:  N',
-						'X-REQUEST-ID:  '.date('Ymd').'125809248859',
+						'Content-Type: application/json',
+						'Host: kbiz.kasikornbankgroup.com',
+						'Origin: https://kbiz.kasikornbankgroup.com',
+						'Referer: https://kbiz.kasikornbankgroup.com/menu/account/account-summary',
+						'Sec-Fetch-Dest: empty',
+						'Sec-Fetch-Mode: cors',
+						'Sec-Fetch-Site: same-origin',
+						'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+						'X-IB-ID: '.$ownerId2,
+						'X-RE-FRESH: N',
+						'X-REQUEST-ID: '.date('Ymd').''.rand(111111111111,999999999999).'',
+						'X-SESSION-IBID: '.$ownerId2,
+						'X-URL: https://kbiz.kasikornbankgroup.com/menu/account/account-summary',
+						'X-VERIFY: Y',
+						'sec-ch-ua: "Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
+						'sec-ch-ua-mobile: ?0',
+						'sec-ch-ua-platform: "Windows"',
 					),
 				));
 
@@ -253,7 +274,7 @@ class Kbank{
 					CURLOPT_FOLLOWLOCATION => true,
 					CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 					CURLOPT_CUSTOMREQUEST => 'POST',
-					CURLOPT_POSTFIELDS =>'{"acctNo":"'.$this->acctNo.'","acctType":"SA","custType":"'.$custType.'","ownerType":"'.$ownerType.'","ownerId":"'.$ownerId.'","pageNo":"1","rowPerPage":"35","refKey":"","startDate":"'.$start_date.'","endDate":"'.$end_date.'"}',
+					CURLOPT_POSTFIELDS =>'{"acctNo":"'.$this->acctNo.'","acctType":"SA","custType":"'.$custType.'","ownerType":"'.$ownerType.'","ownerId":"'.$ownerId.'","pageNo":"1","rowPerPage":"10","refKey":"","startDate":"'.$start_date.'","endDate":"'.$end_date.'"}',
 					CURLOPT_HTTPHEADER => array(
 						'Accept:  application/json, text/plain, */*',
 						'X-IB-ID: '.$ownerId2,
@@ -262,7 +283,7 @@ class Kbank{
 						'Content-Type:  application/json',
 						'X-RE-FRESH:  N',
 						'X-URL: https://kbiz.kasikornbankgroup.com/menu/account/account/recent-transaction',
-						'X-REQUEST-ID:  '.date('Ymd').'125809248859',
+						'X-REQUEST-ID:  '.date('Ymd').''.rand(111111111111,999999999999).'',
 					),
 				));
 
@@ -323,7 +344,7 @@ class Kbank{
 								'Content-Type:  application/json',
 								'X-RE-FRESH:  N',
 								'X-URL: https://kbiz.kasikornbankgroup.com/menu/account/account/recent-transaction',
-								'X-REQUEST-ID:  '.date('Ymd').'125809248859',
+								'X-REQUEST-ID:  '.date('Ymd').''.rand(111111111111,999999999999).'',
 							),
 						));
 						$response1 = curl_exec($curl);
@@ -339,11 +360,9 @@ class Kbank{
 							$set3 = substr($toAccountNo,4,5);
 							$set4 = substr($toAccountNo,9,5);
 							$toAccountNo = $set1.'-'.$set2.'-'.$set3.'-'.$set4;
-							//$payment_gateway_ext = $toAccountNo;
-							$payment_gateway_ext = $toAccountNo." ".$transaction['detail']['data']['toAccountNameTh']." ".$transaction['detail']['data']['bankNameEn'];
+							$payment_gateway_ext = $toAccountNo;
 						}else{
-							//$payment_gateway_ext = $transaction['toAccountNumber'];
-							$payment_gateway_ext = $transaction['toAccountNumber']." ".(!empty($transaction['benefitAccountNameTh']) ? $transaction['benefitAccountNameTh'] : $transaction['benefitAccountNameEn']);
+							$payment_gateway_ext = $transaction['toAccountNumber'];
 						}
 						// print_r($transaction['detail']['data']);
 						if($transaction['fromAccountNameEn'] == '')
@@ -360,7 +379,7 @@ class Kbank{
 							'type' => trim($transaction['channelTh']),
 							'type_deposit_withdraw' => !is_null($transaction['depositAmount']) ? 'D' : 'W',
 							'amount' => !is_null($transaction['depositAmount']) ? $transaction['depositAmount'] : $transaction['withdrawAmount'],
-							'payment_gateway' => trim($transaction['channelTh'].' | '.trim($payment_gateway_ext)),
+							'payment_gateway' => trim($payment_gateway_ext),
 							'toAccountNameTh' => trim($transNameTh),
 							'toAccountNameEn' => trim($transNameEn),
 							'bankNameTh' => trim($transaction['detail']['data']['bankNameTh']),
