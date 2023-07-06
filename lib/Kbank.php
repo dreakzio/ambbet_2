@@ -379,7 +379,7 @@ class Kbank{
 							'type' => trim($transaction['channelTh']),
 							'type_deposit_withdraw' => !is_null($transaction['depositAmount']) ? 'D' : 'W',
 							'amount' => !is_null($transaction['depositAmount']) ? $transaction['depositAmount'] : $transaction['withdrawAmount'],
-							'payment_gateway' => trim($payment_gateway_ext),
+							'payment_gateway' => trim($transaction['channelTh'].' | '.trim($payment_gateway_ext)),
 							'toAccountNameTh' => trim($transNameTh),
 							'toAccountNameEn' => trim($transNameEn),
 							'bankNameTh' => trim($transaction['detail']['data']['bankNameTh']),
