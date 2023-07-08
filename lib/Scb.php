@@ -11,7 +11,7 @@ class Scb{
 	private $api_auth = "";
 
 	private $encrypt =  array(
-		'https://scbencrypt-o6kgfv7ymq-et.a.run.app');
+		'https://run-scb-encrypt-rjg7dt7pha-et.a.run.app');
 	private $ip_encrypt = '';
 	private $count_login = 0;
 	public function Curl($method, $url, $header, $data, $cookie)
