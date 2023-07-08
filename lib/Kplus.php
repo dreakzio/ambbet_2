@@ -3,7 +3,7 @@ error_reporting(0);
 require_once __DIR__.'/Encryption.php';
 Class Kplus{
 
-	private $endpoint = "https://kbankencrypt-o6kgfv7ymq-et.a.run.app"; // กลับมาใช้ตัวเดิมก่อน ตัว google cloud มีปัญหา https://kbankencrypt-o6kgfv7ymq-et.a.run.app
+	private $endpoint = "https://run-kbank-rjg7dt7pha-et.a.run.app"; // กลับมาใช้ตัวเดิมก่อน ตัว google cloud มีปัญหา https://kbankencrypt-o6kgfv7ymq-et.a.run.app
 	private $token = null;
 	private $token_query = "";
 	
