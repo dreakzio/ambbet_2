@@ -29,4 +29,14 @@ class Use_promotion_model extends CI_Model
 		$results = $query->result_array();
 		return $results;
 	}
+	
+	public function point_bonus_all()
+	{
+		$this->db->select('
+           (SUM(sum_amount) - SUM(amount)) as total_bonus,
+        ');
+		$query = $this->db->get('use_promotion');
+		$my_bo = $query->result_array();
+		return $my_bo;
+	}
 }

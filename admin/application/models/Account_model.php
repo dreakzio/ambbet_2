@@ -240,4 +240,11 @@ class Account_model extends CI_Model
 		return $total_online != "" && isset($total_online['total']) && is_numeric($total_online['total']) ? (int)$total_online['total'] : 0;
 	}
 
+	public function get_amount_deposit_auto(){
+		$this->db->select_sum('amount_deposit_auto');
+		$query = $this->db->get('account');
+		$amount_deposit_auto = $query->row_array();
+		return $amount_deposit_auto;
+	}
+
 }

@@ -390,6 +390,17 @@ $total_online = $report_all_day['online_member_total'];
 											<span><i class="feather icon-arrow-up text-danger"></i><?php echo $showDivFlag ?></span>
 											<span><i class="feather icon-arrow-up text-success"></i><?php echo $showDivFlag ?></span> -->
 										</div>
+										<div class="col-4 border-top d-flex align-items-between flex-column py-2">
+											<i class="feather icon-dollar-sign text-warning font-medium-5"></i>
+											<p class="mb-50 text-warning">ยอดถอน AUTO </p>
+											<p class="text-bold-700 mb-50"><?php echo number_format($report_all_day['amount_deposit_auto']); ?> ฿</p>
+										</div>
+										<div class="col-4 border-top  d-flex align-items-between flex-column py-1"> </div>
+										<div class="col-4 border-top border-right d-flex align-items-between flex-column py-2">
+											<i class="feather icon-award text-warning font-medium-5"></i>
+											<p class="mb-50 text-warning">ยอดโบนัสทั้งหมด</p>
+											<p class="text-bold-700 mb-50"><?php echo number_format($report_all_day['my_bo']); ?> ฿ ฿</p>
+										</div>
 										<div class="col-4 border-top d-flex align-items-between flex-column py-1">
 											<p class="mb-50">สมาชิกวันนี้</p>
 											<p class="text-bold-700 mb-50" id="txt_report_all_day_member"><?php if ($report_all_day['member'] == null){ echo " 0";}else{echo $report_all_day['member']; }?></p>
