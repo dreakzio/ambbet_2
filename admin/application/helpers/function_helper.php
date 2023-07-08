@@ -273,6 +273,7 @@ function get_data_report_all_day(){
 	$online_member_total = $CI->Account_model->get_total_online_user();
 	$amount_deposit_auto = $CI->Account_model->get_amount_deposit_auto();
 	$my_bo = $CI->Use_promotion_model->point_bonus_all();
+	$my_bo_month = $CI->Use_promotion_model->point_bonus_all_month();
 
 	$data = [
 		'deposit' => $deposit,
@@ -284,7 +285,8 @@ function get_data_report_all_day(){
 		'member_total' =>$member_total,
 		'online_member_total' =>$online_member_total,
 		'amount_deposit_auto' =>$amount_deposit_auto['amount_deposit_auto'],
-		'my_bo' => $my_bo[0]['total_bonus']
+		'my_bo' => $my_bo[0]['total_bonus'],
+		'my_bo_month' => $my_bo_month[0]['total_bonus_month']
 	];
 	$CI->cache->file->save(base64_encode('dashboard_report'),$data, 15);
 	return $data;

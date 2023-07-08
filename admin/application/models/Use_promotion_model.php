@@ -35,8 +35,22 @@ class Use_promotion_model extends CI_Model
 		$this->db->select('
            (SUM(sum_amount) - SUM(amount)) as total_bonus,
         ');
+		$this->db->where('created_at >=', date('Y-m-d 00:00:00'));
+		$this->db->where('created_at <=', date('Y-m-d H:i:s'));
 		$query = $this->db->get('use_promotion');
 		$my_bo = $query->result_array();
 		return $my_bo;
+	}
+
+	public function point_bonus_all_month()
+	{
+		$this->db->select('
+           (SUM(sum_amount) - SUM(amount)) as total_bonus_month,
+        ');
+		$this->db->where('MONTH(created_at)', date('m'));
+		$this->db->where('YEAR(created_at)', date('Y'));
+		$query = $this->db->get('use_promotion');
+		$my_bo_month = $query->result_array();
+		return $my_bo_month;
 	}
 }
