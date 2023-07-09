@@ -392,7 +392,7 @@ $total_online = $report_all_day['online_member_total'];
 										</div>
 										<div class="col-12 border-top d-flex align-items-between flex-column py-2">
 											<i class="feather icon-dollar-sign text-warning font-medium-5"></i>
-											<p class="mb-50 text-warning">ยอดรอฝากคงค้าง </p>
+											<p class="mb-50 text-warning">ยอดรอฝาก </p>
 											<p class="text-bold-700 mb-50"><?php echo number_format($report_all_day['amount_deposit_auto']); ?> ฿</p>
 										</div>
 
