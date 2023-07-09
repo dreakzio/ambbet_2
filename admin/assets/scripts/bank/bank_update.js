@@ -395,6 +395,34 @@ $(document).ready(function() {
 					$("#auto_transfer_bank_number").prop("disabled",false);
 					$("#auto_transfer_bank_acc_name").prop("disabled",false);
 				}
+				$(".form-api").show();
+				$(".header-form-api").show();
+			}else if($('#api_type').val() == "3"){
+				$("#container_auto_transfer").hide();
+				$('#username_label').html('Email login Line Lift');
+				$('#password_label').html('password login Line Lift');
+				$('#status_withdraw').val(0);
+				$('#status_withdraw').find("option:eq(1)").prop("disabled",true);
+
+				$("#start_time_can_not_deposit").prop("readonly",false);
+				$("#end_time_can_not_deposit").prop("readonly",false);
+				$("#message_can_not_deposit").prop("readonly",false);
+				$("#max_amount_withdraw_auto").prop("readonly",true);
+				$(".form-api").hide();
+				$(".header-form-api").hide();
+			}else if($('#api_type').val() == "4"){
+				$("#container_auto_transfer").hide();
+				$('#username_label').html('Email login Line Lift');
+				$('#password_label').html('password login Line Lift');
+				$('#status_withdraw').val(0);
+				$('#status_withdraw').find("option:eq(1)").prop("disabled",true);
+
+				$("#start_time_can_not_deposit").prop("readonly",false);
+				$("#end_time_can_not_deposit").prop("readonly",false);
+				$("#message_can_not_deposit").prop("readonly",false);
+				$("#max_amount_withdraw_auto").prop("readonly",true);
+				$(".form-api").hide();
+				$(".header-form-api").hide();
 			}
 			$("#api_type").find("option").removeAttr("disabled");
 			$("#api_type").parents('.form-group').show();
@@ -411,16 +439,16 @@ $(document).ready(function() {
 				}*/
 			}
 		}else if($('#bank_code').val() == "11"){
-			$('#status_withdraw').val(1);
-			$("#status_withdraw").find("option:eq(0)").prop("disabled",true);
-			$('#api_token_1_label').html('รหัสบัตรประชาชน');
-			$('#api_token_1').attr("placeholder", "รหัสบัตรประชาชน");
-			$('#username').prop("disabled",true);
-			$('#password').prop("disabled",true);
-			$("#api_type").find("option:eq(1)").prop("disabled",true);
-			$("#promptpay_number").prop("disabled",true);
-			$("#promptpay_status").prop("disabled",true);
-			$("#message_can_not_deposit").prop("readonly",true);
+				$('#status_withdraw').val(1);
+				$("#status_withdraw").find("option:eq(0)").prop("disabled",true);
+				$('#api_token_1_label').html('รหัสบัตรประชาชน');
+				$('#api_token_1').attr("placeholder", "รหัสบัตรประชาชน");
+				$('#username').prop("disabled",true);
+				$('#password').prop("disabled",true);
+				$("#api_type").find("option:eq(1)").prop("disabled",true);
+				$("#promptpay_number").prop("disabled",true);
+				$("#promptpay_status").prop("disabled",true);
+				$("#message_can_not_deposit").prop("readonly",true);
 		}
 	}else{
 		$(".form-api").hide();
@@ -503,7 +531,8 @@ $(document).on('change', '#auto_transfer', function(e) {
 	}
 });
 $(document).on('change', '#api_type', function(e) {
-	let value =$(this).val()
+	let value =$(this).val();
+	//console.log($('#bank_code').val());
 	if(value == "1" && ($('#bank_code').val() == "05" || $('#bank_code').val() == "5"
 		|| $('#bank_code').val() == "02" || $('#bank_code').val() == "2"
 		|| $('#bank_code').val() == "3" || $('#bank_code').val() == "03"
@@ -521,6 +550,8 @@ $(document).on('change', '#api_type', function(e) {
 			$("#auto_transfer_bank_number").prop("disabled",false);
 			$("#auto_transfer_bank_acc_name").prop("disabled",false);
 		}
+		$(".form-api").show();
+		$(".header-form-api").show();
 	}else if (value == "3" && ($('#bank_code').val() == "05" || $('#bank_code').val() == "5")){
 		$("#container_auto_transfer").show();
 		$('#username_label').html('Email login Line Lift');
@@ -532,6 +563,20 @@ $(document).on('change', '#api_type', function(e) {
 		$("#end_time_can_not_deposit").prop("readonly",false);
 		$("#message_can_not_deposit").prop("readonly",false);
 		$("#max_amount_withdraw_auto").prop("readonly",true);
+	}else if (value == "4" && ($('#bank_code').val() == "05" || $('#bank_code').val() == "5")){
+		//console.log(value);
+		$("#container_auto_transfer").hide();
+		$('#username_label').html('Email login Line Lift');
+		$('#password_label').html('password login Line Lift');
+		$('#status_withdraw').val(0);
+		$('#status_withdraw').find("option:eq(1)").prop("disabled",true);
+
+		$("#start_time_can_not_deposit").prop("readonly",false);
+		$("#end_time_can_not_deposit").prop("readonly",false);
+		$("#message_can_not_deposit").prop("readonly",false);
+		$("#max_amount_withdraw_auto").prop("readonly",true);
+		$(".form-api").hide();
+		$(".header-form-api").hide();
 	}else{
 		$("#container_auto_transfer").hide();
 	}

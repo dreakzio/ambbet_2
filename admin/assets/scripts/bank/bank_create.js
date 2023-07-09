@@ -187,7 +187,7 @@ $(document).on('click', '#btn_create', function() {
 									confirmButtonText: '',
 								}),
 									Swal.showLoading();
-								$.ajax ({
+									$.ajax ({
 									type: "POST",
 									url: BaseURL +"bank/bank_kkp_confirm_otp",
 									dataType: "json",
@@ -639,6 +639,16 @@ $(document).on('change', '#api_type', function(e) {
 		}
 	}else if (value == "3" && ($('#bank_code').val() == "05" || $('#bank_code').val() == "5")){
 		$("#container_auto_transfer").show();
+		$('#username_label').html('Email login Line Lift');
+		$('#password_label').html('password login Line Lift');
+		$('#status_withdraw').find("option:eq(1)").prop("disabled",true);
+
+		$("#start_time_can_not_deposit").prop("readonly",false);
+		$("#end_time_can_not_deposit").prop("readonly",false);
+		$("#message_can_not_deposit").prop("readonly",false);
+		$("#max_amount_withdraw_auto").prop("readonly",true);
+	}else if (value == "4" && ($('#bank_code').val() == "05" || $('#bank_code').val() == "5")){
+		$("#container_auto_transfer").hide();
 		$('#username_label').html('Email login Line Lift');
 		$('#password_label').html('password login Line Lift');
 		$('#status_withdraw').find("option:eq(1)").prop("disabled",true);
