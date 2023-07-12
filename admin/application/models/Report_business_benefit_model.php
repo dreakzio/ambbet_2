@@ -110,6 +110,7 @@ class Report_business_benefit_model extends CI_Model
 			SUM(withdraw) as sum_withdraw,
 			SUM(withdraw_cnt) as sum_withdraw_cnt,
 			SUM(total) as sum_total,
+			SUM(bonus) as sum_bonus,
 			'.$group_by_process_date.'
         ');
 		if (isset($search['created_at'])) {
