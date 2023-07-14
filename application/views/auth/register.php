@@ -163,6 +163,22 @@
 					</div>
 					<input type="text" class="form-control" id="full_name" maxlength="100" name="full_name" v-model="form.full_name" placeholder="<?php echo $this->lang->line('type_full_name'); ?>">
 				</div>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+					  <span class="input-group-text">
+						<i class="fa fa-bullhorn"></i>
+					  </span>
+					</div>
+					&nbsp;
+					<div class="form-check form-check-inline">ๅ
+						<input class="form-check-input" type="radio" name="auto_accept_bonus" id="auto_accept_bonus" v-model="form.auto_accept_bonus" value="1">
+						<label class="form-check-label" for="inlineRadio1"> <?php echo $this->lang->line('accept_bonus_auto'); ?> </label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="auto_accept_bonus" id="auto_accept_bonus" v-model="form.auto_accept_bonus" value="0">
+						<label class="form-check-label" for="inlineRadio2"> <?php echo $this->lang->line('not_accept_bonus_auto'); ?> </label>
+					</div>
+				</div>
 				<div class="mb-3">
 					<div class="text-center">
 						<small class="text-silver">*<?php echo $this->lang->line('cannot_edit_account'); ?></small>

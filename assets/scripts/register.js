@@ -14,6 +14,7 @@ new Vue({
 				bank_number : '',
 				full_name : '',
 				ref : register_data != null ? register_data.ref : '',
+				auto_accept_bonus : '',
 			}
 		}
 	},
@@ -116,6 +117,10 @@ new Vue({
 			else if (app.form.password.trim().length < 5) {
 				$('#password').focus();
 				sweetAlert2('warning', 'พาสเวิร์ดต้องมี 6 ตัวอักษรขึ้นไป');
+			}
+			else if (app.form.auto_accept_bonus == "") {
+				$('#auto_accept_bonus').focus();
+				sweetAlert2('warning', 'กรุณาเลือกการรับโปรโมชั่น');
 			}
 			else{
 				let register_ref = window.localStorage.getItem("register_ref");
