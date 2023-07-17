@@ -22,6 +22,9 @@ new Vue({
 		this.pre_loader = false
 	},
 	methods: {
+		handleCheckboxChange(value) {
+			this.form.auto_accept_bonus = this.form.auto_accept_bonus === value ? null : value;
+		},
 		sendOtp(){
 			let app =this;
 			if (app.form.phone.trim().length == 0) {

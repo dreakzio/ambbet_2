@@ -165,18 +165,21 @@
 				</div>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
-					  <span class="input-group-text">
-						<i class="fa fa-bullhorn"></i>
-					  </span>
+						<span class="input-group-text">
+							<i class="fas fa-comment-dollar"></i>
+						</span>
 					</div>
-					&nbsp;
-					<div class="form-check form-check-inline">ๅ
-						<input class="form-check-input" type="radio" name="auto_accept_bonus" id="auto_accept_bonus" v-model="form.auto_accept_bonus" value="1">
-						<label class="form-check-label" for="inlineRadio1"> <?php echo $this->lang->line('accept_bonus_auto'); ?> </label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="auto_accept_bonus" id="auto_accept_bonus" v-model="form.auto_accept_bonus" value="0">
-						<label class="form-check-label" for="inlineRadio2"> <?php echo $this->lang->line('not_accept_bonus_auto'); ?> </label>
+					<div class="form-control d-flex flex-column flex-md-row">
+						<div class="form-check ml-3 d-flex align-items-center ">
+							<input class="form-check-input"  type="checkbox" :checked="form.auto_accept_bonus === '1'" @change="handleCheckboxChange('1')" style="transform: scale(1.7);">
+							&nbsp;
+							<label class="form-check-label"> <?php echo $this->lang->line('accept_bonus_auto'); ?> </label>
+						</div>
+						<div class="form-check ml-3 d-flex align-items-center mt-2 mt-md-0">
+							<input class="form-check-input" type="checkbox" :checked="form.auto_accept_bonus === '0'" @change="handleCheckboxChange('0')" style="transform: scale(1.7);">
+							&nbsp;
+							<label class="form-check-label"> <?php echo $this->lang->line('not_accept_bonus_auto'); ?> </label>
+						</div>
 					</div>
 				</div>
 				<div class="mb-3">

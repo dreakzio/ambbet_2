@@ -158,12 +158,12 @@ class Home extends CI_Controller
 			$deposit = $report['sum_deposit'];
 			$withdraw = $report['sum_withdraw'];
 			$total = $report['sum_total'];
-			$bonus = $report['bonus'];
+			$bonus = $report['sum_bonus'];
 			if(array_key_exists($report['created_at'],$reports)){
 				$old_deposit = $reports[$report['created_at']]['deposit'];
 				$old_withdraw = $reports[$report['created_at']]['withdraw'];
 				$old_total = $reports[$report['created_at']]['total'];
-				$old_bonus = $reports[$report['created_at']['bonus']];
+				$old_bonus = $reports[$report['created_at']]['bonus'];
 				$reports[$report['created_at']] = [
 					'deposit' => (float)$old_deposit + (float)$deposit,
 					'withdraw' => (float)$old_withdraw + (float)$withdraw,
