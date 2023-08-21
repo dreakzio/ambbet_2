@@ -50,7 +50,7 @@ class KkpClass
 			$this->updateConfig("device_brand", $device_brands[array_rand($device_brands)]);
 			$this->updateConfig("device_model", $device_models[array_rand($device_models)]);
 		}
-		$this->generateKey();
+		//$this->generateKey();
 		return true;
 	}
 	public function setConfigPath($path = null, $merge = false, $reset = true)
@@ -122,7 +122,7 @@ class KkpClass
 	}
 	public function checkDevice()
 	{
-		$result = $this->request("POST", "/kkpmobileapi/v1/UserManagementAdapter/ACT_CHECK_DEVICE_UUID", array(), array(
+		$result = $this->request("POST", "/kkpmobileapi/v1/UserManagementSuperappAdapter/ACT_CHECK_DEVICE_UUID", array(), array(
 			"actionType" => "",
 			"appVersion" => "",
 			"cisID" => "",
@@ -155,11 +155,16 @@ class KkpClass
 			"deviceId" => $this->config["deviceId"],
 		));
 
-		return $result;
+		if($result["result"]["value"]["customerRefId"] == ""){
+			return 1;
+		}else{
+			return 0;
+		}
 	}
 	public function verifySubIdCard()
 	{
-		$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_VERIFY_SUBSCRIPTION_ID_CARD", array(), array(
+		//$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_VERIFY_SUBSCRIPTION_ID_CARD", array(), array(
+		$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionSuperappAdapter/ACT_VERIFY_SUBSCRIPTION_ID_CARD", array(), array(
 			"actionType" => "",
 			"appVersion" => "",
 			"cisID" => "",
@@ -200,7 +205,8 @@ class KkpClass
 	}
 	public function verifyMypin()
 	{
-		$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_VERIFY_SUBSCRIPTION_MY_PIN", array(), array(
+		//$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_VERIFY_SUBSCRIPTION_MY_PIN", array(), array(
+		$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionSuperappAdapter/ACT_VERIFY_SUBSCRIPTION_MY_PIN", array(), array(
 			"actionType" => "",
 			"appVersion" => "",
 			"cisID" => "",
@@ -241,49 +247,11 @@ class KkpClass
 	}
 	public function RequestOTP()
 	{
-		$this->checkDevice();
-		$this->verifySubIdCard();
-		$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_VERIFY_SUBSCRIPTION_MY_PIN", array(), array(
-			"actionType" => "",
-			"appVersion" => "",
-			"cisID" => "",
-			"clientIP" => "",
-			"developerMessage" => "",
-			"header" =>  array(
-				"channelID" => "RIBMobile",
-				"referenceNo" => "20220926073523379.0",
-				"serviceName" => "KKP_MOBILE",
-				"systemCode" => "RIB",
-				"transactionDate" => "20220926073523",
-				"transactionDateTime" => "2022-09-26T07:35:23.948",
-			),
-			"language" => strval("en"),
-			"idIssueCountryCode" => "NONE",
-			"idNo" => strval($this->config["idCard"]),
-			"idType" => "I",
-			"pin" => strval($this->config["pin"]),
-			"platform" => array(
-				"deviceModel" => $this->config["device_model"],
-				"deviceName" => $this->config["device_model"],
-				"deviceToken" => "deviceToken",
-				"deviceType" => "Android",
-				"deviceUUID" => $this->config["deviceId"],
-				"isIllegal" => "FALSE",
-				"osName" => "Android",
-				"osVersion" => "10",
-				"osname" => "Android",
-				"osversion" => "10",
-
-			),
-			"tokenID" => "",
-			"deviceId" => $this->config["deviceId"],
-		));
-		//print_r($result);
-
-		if (isset($result["result"]["value"]["verifyTransactionId"])) {
-			$resultReqOtp = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_REQUEST_OTP", array(), array(
-				"actionOTP" => "create_pin",
-				"actionType" => "MY_PIN",
+		if($this->checkDevice() == 1){
+			$this->verifySubIdCard();
+			//$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_VERIFY_SUBSCRIPTION_MY_PIN", array(), array(
+			$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionSuperappAdapter/ACT_VERIFY_SUBSCRIPTION_MY_PIN", array(), array(
+				"actionType" => "",
 				"appVersion" => "",
 				"cisID" => "",
 				"clientIP" => "",
@@ -297,10 +265,10 @@ class KkpClass
 					"transactionDateTime" => "2022-09-26T07:35:23.948",
 				),
 				"language" => strval("en"),
+				"idIssueCountryCode" => "NONE",
 				"idNo" => strval($this->config["idCard"]),
 				"idType" => "I",
-				"subscriptionChannel" => "MY_PIN",
-				"verifyTransactionId" => $result["result"]["value"]["verifyTransactionId"],
+				"pin" => strval($this->config["pin"]),
 				"platform" => array(
 					"deviceModel" => $this->config["device_model"],
 					"deviceName" => $this->config["device_model"],
@@ -312,17 +280,61 @@ class KkpClass
 					"osVersion" => "10",
 					"osname" => "Android",
 					"osversion" => "10",
+
 				),
 				"tokenID" => "",
 				"deviceId" => $this->config["deviceId"],
 			));
-			$resultReqOtp["verifyTransactionId"] = $result["result"]["value"]["verifyTransactionId"];
-			return $resultReqOtp;
+			//print_r($result);
+
+			if (isset($result["result"]["value"]["verifyTransactionId"])) {
+				//$resultReqOtp = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_REQUEST_OTP", array(), array(
+				$resultReqOtp = $this->request("POST", "/kkpmobileapi/v1/SubscriptionSuperappAdapter/ACT_REQUEST_OTP", array(), array(
+					"actionOTP" => "create_pin",
+					"actionType" => "MY_PIN",
+					"appVersion" => "",
+					"cisID" => "",
+					"clientIP" => "",
+					"developerMessage" => "",
+					"header" =>  array(
+						"channelID" => "RIBMobile",
+						"referenceNo" => "20220926073523379.0",
+						"serviceName" => "KKP_MOBILE",
+						"systemCode" => "RIB",
+						"transactionDate" => "20220926073523",
+						"transactionDateTime" => "2022-09-26T07:35:23.948",
+					),
+					"language" => strval("en"),
+					"idNo" => strval($this->config["idCard"]),
+					"idType" => "I",
+					"subscriptionChannel" => "MY_PIN",
+					"verifyTransactionId" => $result["result"]["value"]["verifyTransactionId"],
+					"platform" => array(
+						"deviceModel" => $this->config["device_model"],
+						"deviceName" => $this->config["device_model"],
+						"deviceToken" => "deviceToken",
+						"deviceType" => "Android",
+						"deviceUUID" => $this->config["deviceId"],
+						"isIllegal" => "FALSE",
+						"osName" => "Android",
+						"osVersion" => "10",
+						"osname" => "Android",
+						"osversion" => "10",
+					),
+					"tokenID" => "",
+					"deviceId" => $this->config["deviceId"],
+				));
+				$resultReqOtp["verifyTransactionId"] = $result["result"]["value"]["verifyTransactionId"];
+				return $resultReqOtp;
+			}
+		}else{
+			return array("error" => "กรุณาลบอุปกรณ์บนมือถือการทำรายการ",);
 		}
 	}
 	public function SummitOTP($otp, $referenceNO, $verifyTransactionId)
 	{
-		$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_VERIFY_OTP", array(), array(
+		//$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionAdapter/ACT_VERIFY_OTP", array(), array(
+		$result = $this->request("POST", "/kkpmobileapi/v1/SubscriptionSuperappAdapter/ACT_VERIFY_OTP", array(), array(
 			"actionOTP" => "verify_pin",
 			"actionType" => "MY_PIN",
 			"appVersion" => "",
@@ -365,7 +377,7 @@ class KkpClass
 	}
 	public function LoginPin()
 	{
-		$result = $this->request("POST", "/kkpmobileapi/v1/authenticationAdapter/ACT_VERIFY_MY_PIN", array(), array(
+		$result = $this->request("POST", "/kkpmobileapi/v1/authenticationSuperappAdapter/ACT_VERIFY_MY_PIN", array(), array(
 			"actionType" => "",
 			"appVersion" => "",
 			"cisID" => "",
@@ -436,25 +448,10 @@ class KkpClass
 			),
 			"tokenID" => "",
 		));
+		if (isset($result["result"]["value"][0]["myAccountID"])) $this->config["myAccountID"] = $result["result"]["value"][0]["myAccountID"];
+		if (isset($result["result"]["value"][0]["myAccountNumber"])) $this->config["myAccountNumber"] = $result["result"]["value"][0]["myAccountNumber"];
 
-		if($result['error_response']['responseStatus']['httpStatusCode']!=''){
-			if($this->curr_re_try < 3){
-				//echo "test";
-				$this->LoginPin();
-				$this->summary();
-				$this->curr_re_try++;
-			}else{
-				return $result;
-			}
-		}else{
-			if (isset($result["result"]["value"][0]["myAccountID"])) $this->config["myAccountID"] = $result["result"]["value"][0]["myAccountID"];
-			if (isset($result["result"]["value"][0]["myAccountNumber"])) $this->config["myAccountNumber"] = $result["result"]["value"][0]["myAccountNumber"];
-			$this->updateConfig("sessionToken", $this->config["access_token"]);
-			$this->updateConfig("myAccountID", $result["result"]["value"][0]["myAccountID"]);
-			$this->updateConfig("myAccountNumber", $result["result"]["value"][0]["myAccountNumber"]);
-
-			return $result;
-		}
+		return $result;
 	}
 	public function setPublicKey()
 	{
@@ -535,20 +532,7 @@ class KkpClass
 				"statementDateTo" =>  date("d/m/Y"),
 			),
 		));
-		//print_r($result);
-		if($result['error_response']['responseStatus']['httpStatusCode']!=''){
-			if($this->curr_re_try <2){
-				//	echo "test";
-				$this->LoginPin();
-				$this->getTransaction();
-				$this->curr_re_try++;
-			}else{
-				return $result;
-			}
-		}else{
-			return $result;
-		}
-
+		return $result;
 	}
 	public function buildHeaders($array)
 	{
@@ -636,13 +620,9 @@ class KkpClass
 			"tokenID" => "",
 			"deviceId" => $this->config["deviceId"],
 		));
-
 		if (isset($result["result"]["value"]["accessToken"])) $this->config["access_token"] = $result["result"]["value"]["accessToken"];
 		if (isset($result["result"]["value"]["sessionToken"])) $this->config["sessionToken"] = $result["result"]["value"]["sessionToken"];
-		//echo date("d/m/Y");
 		return $result;
-
-
 	}
 	public function verifyTransferEwallet($ewalletID,$amount)
 	{
@@ -736,7 +716,6 @@ class KkpClass
 			"tokenID" => "",
 			"deviceId" => $this->config["deviceId"],
 		));
-
 		if (isset($result["result"]["value"]["accessToken"])) $this->config["access_token"] = $result["result"]["value"]["accessToken"];
 		if (isset($result["result"]["value"]["sessionToken"])) $this->config["sessionToken"] = $result["result"]["value"]["sessionToken"];
 		return $result;
@@ -818,7 +797,7 @@ class KkpClass
 		return $result;
 	}
 
-	public function GENERATE_STATEMENT($accountNumber, $start_month)
+	public function GENERATE_STATEMENT($accountNumber, $start_month, $year)
 	{
 		$address = $this->ADDRESS_STATEMENT($accountNumber);
 		$result = $this->request("POST", "/kkpmobileapi/v1/StatementAdapter/GENERATE_STATEMENT", array("Authorization" => "Bearer " . $this->config["access_token"]), array(
@@ -847,8 +826,8 @@ class KkpClass
 				"osversion" => "10",
 			),
 			"myAcctNo" => $accountNumber,
-			"statementDateFrom" => "01/".$start_month."/2022",
-			"statementDateTo" => cal_days_in_month(CAL_GREGORIAN,$start_month,2023)."/".$start_month."/2022",
+			"statementDateFrom" => "01/".$start_month."/".$year,
+			"statementDateTo" => cal_days_in_month(CAL_GREGORIAN,$start_month,$year)."/".$start_month."/".$year,
 			"addressLanguageRequest" => "th",
 			"address" => array(
 				"addrNumber" => $address["result"]["value"]["address"]["addrNumber"],
@@ -901,5 +880,98 @@ class KkpClass
 		return $result;
 	}
 
+	###########################################################
+	public function getTransaction6($page = 1, $pageSize = 20)
+	{
+		$myAcctId = $this->summary()["result"]["value"][0]["myAccountID"];
+		$result = $this->request("POST", "/kkpmobileapi/v1/AccountManagementAdapter/ACT_MY_ACCOUNT_INQUIRY_CASA_STATEMENT", array("Authorization" => "Bearer " . $this->config["access_token"]), array(
+			"actionType" => "",
+			"appVersion" => "",
+			"cisID" => "",
+			"clientIP" => "",
+			"developerMessage" => "",
+			"header" =>  array(
+				"channelID" => "RIBMobile",
+				"referenceNo" => "20230804185158360.0",
+				"serviceName" => "KKP_MOBILE",
+				"systemCode" => "RIB",
+				"transactionDate" => "20230804185158",
+				"transactionDateTime" => "2023-08-04T18:51:58.932",
+			),
+			"inquiryAccountStatement" =>  array(
+				"filterType" => "ALL",
+				"myAcctId" => $myAcctId,
+				"statementDateFrom" => $futureDate = date("01/m/Y", strtotime("-6 months")),
+				"statementDateTo" =>  date("d/m/Y"),
+			),
+			"language" => strval("en"),
+			"paging" =>  array(
+				"page" => $page,
+				"pageSize" => $pageSize,
+			),
+			"platform" => array(
+				"deviceModel" => $this->config["device_model"],
+				"deviceName" => $this->config["device_model"],
+				"deviceToken" => "deviceToken",
+				"deviceType" => "Android",
+				"deviceUUID" => $this->config["deviceId"],
+				"isIllegal" => "FALSE",
+				"osName" => "Android",
+				"osVersion" => "9",
+				"osname" => "Android",
+				"osversion" => "9",
+			),
+			"tokenID" => "",
+			"deviceId" => $this->config["deviceId"],
+		));
+		return $result;
+	}
+	public function Set_accesstoken($access_token)
+	{
+		$this->config["access_token"] = $access_token;
+		$this->config["myAccountID"] = "602857";
+		$this->config["deviceId"] = "4486bc1a-32ad-35ed-b262-82727643e59f";
+		$this->config["device_model"] = "Samsung SM-G955N";
+		$this->config["pin"] = "085624";
+		return $this->config["access_token"];
+	}
+
+	##############################################################################
+	// OPPTION NEWS
+	##############################################################################
+	public function CHECK_DEVICE1()
+	{
+		$result = $this->request("POST", "/kkpmobileapi/v1/UserManagementSuperappAdapter/ACT_CHECK_DEVICE_UUID", array(), array(
+			"actionType" => "",
+			"appVersion" => "",
+			"cisID" => "",
+			"clientIP" => "",
+			"developerMessage" => "",
+			"header" =>  array(
+				"channelID" => "RIBMobile",
+				"referenceNo" => "20230804185158360.0",
+				"serviceName" => "KKP_MOBILE",
+				"systemCode" => "RIB",
+				"transactionDate" => "20230804185158",
+				"transactionDateTime" => "2023-08-04T18:51:58.932",
+			),
+			"language" => strval("en"),
+			"platform" => array(
+				"deviceModel" => $this->config["device_model"],
+				"deviceName" => $this->config["device_model"],
+				"deviceToken" => "deviceToken",
+				"deviceType" => "Android",
+				"deviceUUID" => $this->config["deviceId"],
+				"isIllegal" => "FALSE",
+				"osName" => "Android",
+				"osVersion" => "9",
+				"osname" => "Android",
+				"osversion" => "9",
+			),
+			"tokenID" => "",
+			"deviceId" => $this->config["deviceId"],
+		));
+		return $result;
+	}
 
 }
