@@ -164,5 +164,6 @@
     $lang['withdraw_money'] = "ทำรายการถอนเงิน";
     $lang['withdraw_history_20'] = "ประวัติการถอน (20 รายการล่าสุด)";
     $lang['winrate'] = "แสดงเปอร์เซ็นการชนะ";
-
+    $lang['accept_bonus_auto'] = "รับโปรโมชั่นอัตโนมัติ";
+	$lang['not_accept_bonus_auto'] = "ไม่รับโปรโมชั่นอัตโนมัติ";
 ?>

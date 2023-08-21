@@ -123,6 +123,13 @@ class Account extends CI_Controller
 		if($post['bank'] == "10"){
 			$post['bank_number'] = $post['phone'];
 		}
+		if($post['auto_accept_bonus'] == ""){
+			echo json_encode([
+				'message' => 'กรุณาเลือกโปรโมชั่น',
+				'error' => true
+			]);
+			exit();
+		}
 		if(
 		empty($post['phone'])
 		){
@@ -328,6 +335,7 @@ class Account extends CI_Controller
 			'password' => md5($post['password']),
 			'phone' => trim(strip_tags($post['phone'])),
 			'full_name' => trim(strip_tags($post['full_name'])),
+			'auto_accept_bonus' => $post['auto_accept_bonus'],
 			'bank' => $post['bank'],
 			'bank_number' => trim(strip_tags($post['bank_number'])),
 			'line_id' => '',
@@ -392,7 +400,8 @@ class Account extends CI_Controller
 			'rank' => $account['rank'],
 			'member_username' => $account['account_agent_username'],
 			'member_password' => $account['account_agent_password'],
-			'account_agent_id' => $account['account_agent_id']
+			'account_agent_id' => $account['account_agent_id'],
+			'auto_accept_bonus' => $account['auto_accept_bonus']
 		];
 	}
 	public function change_password_user()

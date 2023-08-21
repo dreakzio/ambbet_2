@@ -158,20 +158,24 @@ class Home extends CI_Controller
 			$deposit = $report['sum_deposit'];
 			$withdraw = $report['sum_withdraw'];
 			$total = $report['sum_total'];
+			$bonus = $report['sum_bonus'];
 			if(array_key_exists($report['created_at'],$reports)){
 				$old_deposit = $reports[$report['created_at']]['deposit'];
 				$old_withdraw = $reports[$report['created_at']]['withdraw'];
 				$old_total = $reports[$report['created_at']]['total'];
+				$old_bonus = $reports[$report['created_at']]['bonus'];
 				$reports[$report['created_at']] = [
 					'deposit' => (float)$old_deposit + (float)$deposit,
 					'withdraw' => (float)$old_withdraw + (float)$withdraw,
 					'total' => (float)$old_total + (float)$total,
+					'bonus' => (float)$old_bonus + (float)$bonus,
 				];
 			}else{
 				$reports[$report['created_at']] = [
 					'deposit' => (float)$deposit,
 					'withdraw' => (float)$withdraw,
 					'total' => (float)$total,
+					'bonus' => (float)$bonus,
 				];
 			}
 		}
@@ -185,6 +189,7 @@ class Home extends CI_Controller
 						'deposit'=>$reports[$day_indata]['deposit'],
 						'withdraw'=>$reports[$day_indata]['withdraw'],
 						'total'=>$reports[$day_indata]['total'],
+						'bonus'=>$reports[$day_indata]['bonus'],
 					];
 				}else{
 					$data[] = [
@@ -192,6 +197,7 @@ class Home extends CI_Controller
 						'deposit'=>0.00,
 						'withdraw'=>0.00,
 						'total'=>0.00,
+						'bonus'=>0.00,
 					];
 				}
 			}
@@ -221,20 +227,24 @@ class Home extends CI_Controller
 			$deposit = $report['sum_deposit'];
 			$withdraw = $report['sum_withdraw'];
 			$total = $report['sum_total'];
+			$bonus = $report['sum_bonus'];
 			if(array_key_exists($report['created_at'],$reports)){
 				$old_deposit = $reports[$report['created_at']]['deposit'];
 				$old_withdraw = $reports[$report['created_at']]['withdraw'];
 				$old_total = $reports[$report['created_at']]['total'];
+				$old_bonus = $reports[$report['created_at']]['bonus'];
 				$reports[$report['created_at']] = [
 					'deposit' => (float)$old_deposit + (float)$deposit,
 					'withdraw' => (float)$old_withdraw + (float)$withdraw,
 					'total' => (float)$old_total + (float)$total,
+					'bonus' => (float)$old_bonus + (float)$bonus,
 				];
 			}else{
 				$reports[$report['created_at']] = [
 					'deposit' => (float)$deposit,
 					'withdraw' => (float)$withdraw,
 					'total' => (float)$total,
+					'bonus' => (float)$bonus
 				];
 			}
 		}
@@ -248,6 +258,7 @@ class Home extends CI_Controller
 						'deposit'=>$reports[$month_indata]['deposit'],
 						'withdraw'=>$reports[$month_indata]['withdraw'],
 						'total'=>$reports[$month_indata]['total'],
+						'bonus'=>$reports[$month_indata]['bonus'],
 					];
 				}else{
 					$data[] = [
@@ -255,6 +266,7 @@ class Home extends CI_Controller
 						'deposit'=>0.00,
 						'withdraw'=>0.00,
 						'total'=>0.00,
+						'bonus'=>0.00,
 					];
 				}
 			}

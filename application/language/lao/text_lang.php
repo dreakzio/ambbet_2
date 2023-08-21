@@ -164,5 +164,6 @@
     $lang['withdraw_money'] = "ຖອນເງິນ";
     $lang['withdraw_history_20'] = "ປະຫວັດການຖອນເງິນ (20 ທຸລະກຳຫຼ້າສຸດ)";
     $lang['winrate'] = "ສະແດງອັດຕາສ່ວນຊະນະ";
-
+    $lang['accept_bonus_auto'] = "ຮັບໂປຣໂມຊັນອັດຕະໂນມັດ";
+	$lang['not_accept_bonus_auto'] = "ບໍ່ມີການສົ່ງເສີມອັດຕະໂນມັດ";
 ?>

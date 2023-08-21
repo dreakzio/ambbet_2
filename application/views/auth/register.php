@@ -163,6 +163,25 @@
 					</div>
 					<input type="text" class="form-control" id="full_name" maxlength="100" name="full_name" v-model="form.full_name" placeholder="<?php echo $this->lang->line('type_full_name'); ?>">
 				</div>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">
+							<i class="fas fa-comment-dollar"></i>
+						</span>
+					</div>
+					<div class="form-control d-flex flex-column flex-md-row">
+						<div class="form-check ml-3 d-flex align-items-center ">
+							<input class="form-check-input"  type="checkbox" :checked="form.auto_accept_bonus === '1'" @change="handleCheckboxChange('1')" style="transform: scale(1.7);">
+							&nbsp;
+							<label class="form-check-label"> <?php echo $this->lang->line('accept_bonus_auto'); ?> </label>
+						</div>
+						<div class="form-check ml-3 d-flex align-items-center mt-2 mt-md-0">
+							<input class="form-check-input" type="checkbox" :checked="form.auto_accept_bonus === '0'" @change="handleCheckboxChange('0')" style="transform: scale(1.7);">
+							&nbsp;
+							<label class="form-check-label"> <?php echo $this->lang->line('not_accept_bonus_auto'); ?> </label>
+						</div>
+					</div>
+				</div>
 				<div class="mb-3">
 					<div class="text-center">
 						<small class="text-silver">*<?php echo $this->lang->line('cannot_edit_account'); ?></small>

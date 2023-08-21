@@ -946,6 +946,7 @@ $total_online = $report_all_day['online_member_total'];
 												<th>วันที่</th>
 												<th class="text-right">ยอดฝาก</th>
 												<th class="text-right">ยอดถอน</th>
+												<th class="text-right">โบนัส</th>
 												<th class="text-right">กำไรสุทธิ</th>
 											</tr>
 											</thead>
@@ -978,10 +979,14 @@ $total_online = $report_all_day['online_member_total'];
 																	var parts_total = parseFloat(value.total).toFixed(2).split(".");
 																	var total = parts_total[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
 																		(parts_total[1] ? "." + parts_total[1] : "");
+																	var parts_bonus = parseFloat(value.bonus).toFixed(2).split(".");
+																	var bonus = parts_bonus[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
+																		(parts_bonus[1] ? "." + parts_bonus[1] : "");
 																	$("#table-summary-per-day > tbody").append("<tr>" +
 																		"<td>"+value.day+"</td>" +
 																		"<td class='text-right'>"+deposit+"</td>" +
 																		"<td  class='text-right'>"+withdraw+"</td>" +
+																		"<td  class='text-right'>"+bonus+"</td>" +
 																		"<td  class='text-right'>"+total+"</td>" +
 																		"</tr>" +
 																		"");
@@ -1019,6 +1024,7 @@ $total_online = $report_all_day['online_member_total'];
 												<th>เดือน</th>
 												<th class="text-right">ยอดฝาก</th>
 												<th class="text-right">ยอดถอน</th>
+												<th class="text-right">โบนัส</th>
 												<th class="text-right">กำไรสุทธิ</th>
 											</tr>
 											</thead>
@@ -1051,10 +1057,14 @@ $total_online = $report_all_day['online_member_total'];
 																	var parts_total = parseFloat(value.total).toFixed(2).split(".");
 																	var total = parts_total[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
 																		(parts_total[1] ? "." + parts_total[1] : "");
+																	var parts_bonus = parseFloat(value.bonus).toFixed(2).split(".");
+																	var bonus = parts_bonus[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
+																		(parts_bonus[1] ? "." + parts_bonus[1] : "");
 																	$("#table-summary-per-month > tbody").append("<tr>" +
 																		"<td>"+value.month+"</td>" +
 																		"<td class='text-right'>"+deposit+"</td>" +
 																		"<td  class='text-right'>"+withdraw+"</td>" +
+																		"<td  class='text-right'>"+bonus+"</td>" +
 																		"<td  class='text-right'>"+total+"</td>" +
 																		"</tr>" +
 																		"");

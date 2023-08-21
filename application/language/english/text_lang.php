@@ -164,5 +164,6 @@
     $lang['withdraw_money'] = "Withdraw money";
     $lang['withdraw_history_20'] = "Withdrawal history (last 20 transactions)";
     $lang['winrate'] = "Shows winrate";
-
+    $lang['accept_bonus_auto'] = "Receive promotions automatically";
+	$lang['not_accept_bonus_auto'] = "No automatic promotion";
 ?>
