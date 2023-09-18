@@ -275,6 +275,10 @@ function get_data_report_all_day(){
 	$my_bo = $CI->Use_promotion_model->point_bonus_all();
 	$my_bo_month = $CI->Use_promotion_model->point_bonus_all_month();
 
+	$facebook_used = $CI->Account_model->used_facebook();
+	$google_used = $CI->Account_model->used_google();
+	$tel_used = $CI->Account_model->used_tel();
+
 	$data = [
 		'deposit' => $deposit,
 		'withdraw' => $withdraw,
@@ -286,7 +290,10 @@ function get_data_report_all_day(){
 		'online_member_total' =>$online_member_total,
 		'amount_deposit_auto' =>$amount_deposit_auto['amount_deposit_auto'],
 		'my_bo' => $my_bo[0]['total_bonus'],
-		'my_bo_month' => $my_bo_month[0]['total_bonus_month']
+		'my_bo_month' => $my_bo_month[0]['total_bonus_month'],
+		'facebook_used' => $facebook_used,
+		'google_used' => $google_used,
+		'tel_used' => $tel_used
 	];
 	$CI->cache->file->save(base64_encode('dashboard_report'),$data, 15);
 	return $data;
