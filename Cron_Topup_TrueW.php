@@ -9,7 +9,7 @@ $before_date = date('d/m/Y',(strtotime ( '-1 day' , strtotime ( date("Y-m-d")) )
 $before_date_chk = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( date("Y-m-d")) ) ));
 ob_start('ob_gzhandler');
 require('conn_cron.php');
-require('lib/TMNOoo.php');
+require('lib/Truewallet.php');
 require ('lib/send_line_message.php');
 
 //Check line notify active
@@ -129,20 +129,18 @@ while($rs =$con_bank_check->fetch_assoc() ){
 				//$TMNOne->setData($truewallet['username'], $truewallet['bank_number'], $truewallet['api_token_2'], $truewallet['password']);
 				//$TMNOne->loginWithPin6($truewallet['api_token_1']); //Login เข้าระบบ Wallet ด้วย PIN
 
-				$_TMN = array();
+				$_TMN = [];
 				$_TMN['tmn_key_id'] = $truewallet['username']; //Key ID จากระบบ TMNOne
-				$_TMN['mobile_number'] = $truewallet['bank_number']; //เบอร์ Wallet
+				$_TMN['username'] = $truewallet['bank_number']; //เบอร์ Wallet
 				$_TMN['login_token'] = $truewallet['api_token_2']; //login_token จากขั้นตอนการเพิ่มเบอร์ Wallet
 				$_TMN['pin'] = $truewallet['api_token_1']; //อย่าลืมใส่ PIN 6 หลักของ Wallet
 				$_TMN['tmn_id'] = $truewallet['password']; //tmn_id จากขั้นตอนการเพิ่มเบอร์ Wallet
 
-				$TMNOoo = new TMNOoo();
-				//$TMNOoo->setProxy('zproxy.lum-superproxy.io:22225', 'brd-customer-hl_ebdb3c0e-zone-data_center-country-th', '0pi1xakwwrg5'); //เปิดใช้งาน HTTP Proxy สำหรับเชื่อมต่อกับระบบของ Wallet
+				$TMNOoo = new Truewallet($_TMN);
 				$random_limit = 20;
-				//$TMNOoo->Login();
-				$TMNOoo->setData($_TMN['tmn_key_id'], $_TMN['mobile_number'], $_TMN['login_token'], $_TMN['tmn_id']);
-				$TMNOoo->loginWithPin6($_TMN['pin']);
+				$TMNOoo->Login($_TMN['pin']);
 				$balance =  $TMNOoo->GetBalance();
+				//print_r($balance);
 				$obj_con_cron->autocommit(true);
 				if(!empty($balance) && isset($balance['data']) && isset($balance['data']['current_balance'])){
 					$obj_con_cron->query("UPDATE `bank` SET `balance` = '".str_replace(',', '', $balance['data']['current_balance'])."',`updated_at` = '".date('Y-m-d H:i:s')."' WHERE `bank`.`bank_number` = '".$truewallet['bank_number']."'");
@@ -154,11 +152,10 @@ while($rs =$con_bank_check->fetch_assoc() ){
 				}else{
 					echo json_encode(['status'=>true,"message" => "Bank truewallet for deposit available : ".$truewallet['bank_number']]);
 					//$trans = $TMNOne->fetchTransactionHistory(date('Y-m-d',time()-86400), date('Y-m-d',time()+86400),$random_limit);
-					$trans = $TMNOoo->fetchTransactionHistory(date('Y-m-d',time()-86400), date('Y-m-d',time()+86400),$random_limit,1);
-
+					$trans = $TMNOoo->GetTransaction(date('Y-m-d',time()-7776000), date('Y-m-d',time()+7776000),$random_limit,1);
 					/*echo json_encode($trans);
 					exit();*/
-
+					//print_r($trans);
 					if(isset($trans["data"]) && isset($trans["data"]['total']) && $trans["data"]['total'] >= 0 ){
 						if (isset($trans['code']) && $trans['code'] !== "" && $trans['code'] == "HTC-200") {
 							$trans["data"]["activities"] = array_reverse($trans["data"]["activities"]);
@@ -171,10 +168,12 @@ while($rs =$con_bank_check->fetch_assoc() ){
 								$report_id = $report['report_id'];
 								$sql_report_sms = "SELECT id FROM `report_smses` where report_id = '".$report_id."' and is_bot_running = '1' and config_api_id = '".$truewallet['id']."'";
 								$con_check_report_sms = $obj_con_cron->query($sql_report_sms);
+								//var_dump($con_check_report_sms);
 								$check_report_sms = $con_check_report_sms->num_rows;
 								if($check_report_sms == 0){
 									//$data = $TMNOne->fetchTransactionInfo($report["report_id"]);
-									$data = $TMNOoo->fetchTransactionInfo($report["report_id"]);
+									$data = $TMNOoo->GetTransactionReport($report["report_id"]);
+									//print_r($data);
 									if((isset($data['code']) && $data['code'] == "HTC-200") || isset($data['transaction_id']) || (isset($data['cached']) && $data['cached'])){
 										if(isset($data['transaction_id']) || (isset($data['cached']) && $data['cached'])){
 											$data = [
