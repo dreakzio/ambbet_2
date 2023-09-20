@@ -450,6 +450,25 @@ $total_online = $report_all_day['online_member_total'];
 										<h2 class="text-bold-700" id="txt_report_all_day_member_total"><?php echo $report_all_day['member_total']; ?></h2>
 										<p class="mb-0 line-ellipsis">จำนวนสมาชิกทั้งหมด</p>
 									</div>
+									<br>
+									<div class="col-4 border-top d-flex align-items-between flex-column py-1">
+										<div class="avatar-content">
+											<i class="feather icon-facebook text-info font-medium-5"></i>
+										</div>
+										<p class="text-bold-700 mb-50" id="txt_report_all_day_member"><?php if ($report_all_day['facebook_used'] == null){ echo " 0";}else{echo $report_all_day['facebook_used']; }?></p>
+									</div>
+									<div class="col-4 border-top d-flex align-items-between flex-column py-1">
+										<div class="avatar-content">
+											<i class="feather icon-phone text-info font-medium-5"></i>
+										</div>
+										<p class="text-bold-700 mb-50" id="txt_report_all_day_deposit_count"><?php if ($report_all_day['tel_used'] == null){ echo " 0";}else{echo $report_all_day['tel_used']; }?></p>
+									</div>
+									<div class="col-4 border-top d-flex align-items-between flex-column py-1">
+										<div class="avatar-content">
+											<i class="fa fa-google" aria-hidden="true" style="color: rgb(0, 207, 232);"></i>
+										</div>
+										<p class="text-bold-700 mb-50" id="txt_report_all_day_withdraw_count"><?php if ($report_all_day['google_used'] == null){ echo " 0";}else{echo $report_all_day['google_used']; }?></p>
+									</div>
 								</div>
 							</div>
 						</div>

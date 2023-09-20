@@ -97,7 +97,26 @@ function dataTable() {
 			// },
 			{
 				className: 'text-center',
-				data: 'username'
+				render: function(data, type, full, meta) {
+					let html = "";
+					let {
+						social_userid,
+						username
+					} = full;
+					let conv_social_userid = JSON.stringify(social_userid);
+					let cleaned_social = conv_social_userid.replace(/_([^ ]+)|"/g, '');
+
+					if (cleaned_social != null) {
+						if (cleaned_social == "google") {
+							html = "<i class=\"fa fa-google\" style='background-color: rgb(255, 140, 0);'  aria-hidden=\"true\"></i> " + username;
+						} else if (cleaned_social == "facebook") {
+							html = "<i class=\"fa fa-facebook-official\" style='background-color: rgb(0, 0, 255);' aria-hidden=\"true\"></i> " + username;
+						} else {
+							html = "<i class=\"fa fa-phone-square\" style='background-color: rgb(0, 255, 0);' aria-hidden=\"true\"></i> " + username;
+						}
+					}
+					return html;
+				}
 			},
 			{
 				className: 'text-center',

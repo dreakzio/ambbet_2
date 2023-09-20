@@ -145,7 +145,8 @@ class User_model extends CI_Model
          account.is_auto_withdraw,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at,
          account_agent.username as account_agent_username,
-         account_agent.password as account_agent_password
+         account_agent.password as account_agent_password,
+		 account.social_userid
        ',false);
 		}else{
 			$this->db->select('
@@ -171,6 +172,7 @@ class User_model extends CI_Model
          account.rank_point_sum,
          account.ref_transaction_id,
          account.is_auto_withdraw,
+		 account.social_userid,
          DATE_FORMAT( account.created_at, "%Y-%m-%d") as created_at
        ');
 		}

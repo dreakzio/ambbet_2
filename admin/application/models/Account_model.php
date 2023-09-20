@@ -247,4 +247,58 @@ class Account_model extends CI_Model
 		return $amount_deposit_auto;
 	}
 
+	public function used_facebook() {
+		$sql = "SELECT COUNT(*) as total_occurrences
+            FROM (
+                SELECT social_userid
+                FROM account
+                WHERE social_userid LIKE '%facebook%'
+            ) AS filtered_data";
+
+		$query = $this->db->query($sql);
+
+		if ($query->num_rows() > 0) {
+			$row = $query->row();
+			return $row->total_occurrences;
+		} else {
+			return 0;
+		}
+	}
+
+	public function used_google() {
+		$sql = "SELECT COUNT(*) as total_occurrences
+            FROM (
+                SELECT social_userid
+                FROM account
+                WHERE social_userid LIKE '%google%'
+            ) AS filtered_data";
+
+		$query = $this->db->query($sql);
+
+		if ($query->num_rows() > 0) {
+			$row = $query->row();
+			return $row->total_occurrences;
+		} else {
+			return 0;
+		}
+	}
+
+	public function used_tel() {
+		$sql = "SELECT COUNT(*) as total_occurrences
+            FROM (
+                SELECT social_userid
+                FROM account
+                WHERE social_userid IS NULL OR social_userid = ''
+            ) AS filtered_data";
+
+		$query = $this->db->query($sql);
+
+		if ($query->num_rows() > 0) {
+			$row = $query->row();
+			return $row->total_occurrences;
+		} else {
+			return 0;
+		}
+	}
+
 }
