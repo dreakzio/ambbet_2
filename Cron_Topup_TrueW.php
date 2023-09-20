@@ -538,7 +538,6 @@ while($rs =$con_bank_check->fetch_assoc() ){
 			echo json_encode(['status'=>false,"message" => "Bank Truewallet ".$truewallet['bank_number']." Error Exception ".$ex->getMessage()]);
 		}
 	}
-
 }
 $chk_duplicate_date_and_hour_minute = [];
 //}
